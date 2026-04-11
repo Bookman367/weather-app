@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Spray Forecast</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.5; }
+        input, select, button { padding: 12px; margin: 10px 0; width: 100%; font-size: 16px; }
+        button { background: #0066cc; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0055aa; }
+        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; white-space: pre-wrap; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>Weather Spray Forecast</h1>
+    <label>Location (city, state or lat,long):</label>
+    <input type="text" id="location" placeholder="Sioux City, IA" value="Sioux City, IA">
+    
+    <label>Herbicide Type:</label>
+    <select id="herbicide">
+        <option value="general">General</option>
+        <option value="2,4-D Amine">2,4-D Amine</option>
+        <option value="Dicamba">Dicamba</option>
+        <option value="GrazonNext HL">GrazonNext HL</option>
+        <option value="Grazon P+D">Grazon P+D</option>
+    </select>
+    
+    <button onclick="getForecast()">Get Spray Recommendation</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function getForecast() {
+            const loc = document.getElementById('location').value.trim();
+            const herb = document.getElementById('herbicide').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = 'Contacting Hermes backend...';
+
+            try {
+                const response = await fetch('http://100.125.88.55:5000/forecast', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ location: loc, herbicide: herb })
+                });
+                if (!response.ok) throw new Error('Backend error: ' + response.status);
+                const data = await response.text();
+                resultDiv.textContent = data;
+            } catch (e) {
+                resultDiv.textContent = 'Error reaching Hermes: ' + e.message + '\nMake sure the backend is running on Oracle.';
+            }
+        }
+    </script>
+</body>
+</html>
