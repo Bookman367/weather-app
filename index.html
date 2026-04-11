@@ -3,785 +3,826 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Spray Weather Forecast</title>
+  <title>Hero Weather — Spray Forecast</title>
   <style>
-    /* ── Reset & Base ───────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #0f0f0f;
-      --bg2:         #1a1a1a;
-      --bg3:         #242424;
-      --bg4:         #2e2e2e;
-      --border:      #333;
-      --text:        #e8e8e8;
-      --text-dim:    #888;
-      --text-muted:  #555;
       --green:       #3ddc84;
-      --green-dim:   #1e6b41;
+      --green-glow:  rgba(61,220,132,0.25);
       --yellow:      #ffc107;
-      --yellow-dim:  #6b4f00;
-      --red:         #ff4444;
-      --red-dim:     #6b1010;
-      --blue:        #4fa3e3;
-      --blue-dim:    #1a3d5c;
-      --orange:      #ff8c42;
-      --teal:        #26d7c4;
-      --accent:      #4fa3e3;
-      --radius:      10px;
-      --radius-sm:   6px;
+      --yellow-glow: rgba(255,193,7,0.2);
+      --red:         #ff4d4d;
+      --red-glow:    rgba(255,77,77,0.25);
+      --glass-bg:    rgba(255,255,255,0.09);
+      --glass-bg2:   rgba(255,255,255,0.05);
+      --glass-border:rgba(255,255,255,0.18);
+      --glass-shadow:0 8px 32px rgba(0,0,0,0.4);
+      --blur:        blur(14px);
+      --text:        #ffffff;
+      --text-dim:    rgba(255,255,255,0.6);
+      --text-muted:  rgba(255,255,255,0.35);
+      --radius:      20px;
+      --radius-sm:   12px;
+      --radius-pill: 50px;
     }
 
-    html { height: 100%; }
-    body {
-      background: var(--bg);
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 14px;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════
+       BACKGROUND — sunset field + overlay
+    ═══════════════════════════════════════════════ */
+    body {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(8,15,30,0.72) 0%,
+          rgba(15,25,50,0.55) 30%,
+          rgba(40,20,8,0.50) 70%,
+          rgba(20,10,5,0.75) 100%
+        ),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&auto=format&fit=crop&q=80') center/cover no-repeat fixed;
       min-height: 100vh;
-      padding-bottom: 40px;
+      padding: 0 0 60px 0;
     }
 
-    /* ── Header ─────────────────────────────────────────────── */
-    .header {
-      background: linear-gradient(135deg, #0d1b2a 0%, #1a2f48 100%);
-      border-bottom: 1px solid #1e3a5a;
-      padding: 16px 20px 12px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.6);
+    /* Drone silhouette watermark */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 80px;
+      right: -20px;
+      width: 260px;
+      height: 160px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 160' fill='rgba(255,255,255,0.04)'%3E%3Ccircle cx='65' cy='80' r='12'/%3E%3Ccircle cx='195' cy='80' r='12'/%3E%3Ccircle cx='130' cy='30' r='12'/%3E%3Ccircle cx='130' cy='130' r='12'/%3E%3Crect x='58' y='77' width='144' height='6' rx='3'/%3E%3Crect x='127' y='23' width='6' height='114' rx='3'/%3E%3Ccircle cx='130' cy='80' r='22'/%3E%3C/svg%3E") center/contain no-repeat;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .header-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
+    /* ═══════════════════════════════════════════════
+       GLASS CARD MIXIN
+    ═══════════════════════════════════════════════ */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      box-shadow: var(--glass-shadow);
     }
 
-    .header-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: #e8f4ff;
-      letter-spacing: 0.3px;
+    .glass-sm {
+      background: var(--glass-bg2);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
     }
 
-    .header-subtitle {
-      font-size: 11px;
-      color: var(--text-dim);
-      margin-top: 2px;
+    /* ═══════════════════════════════════════════════
+       LAYOUT WRAPPER
+    ═══════════════════════════════════════════════ */
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 18px;
+      position: relative;
+      z-index: 1;
     }
 
-    /* ── Search Form ─────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════
+       HEADER — Search + Location Hero
+    ═══════════════════════════════════════════════ */
     .search-row {
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
     }
 
-    .search-input-wrap {
-      position: relative;
+    .search-wrap {
       flex: 1;
-      min-width: 180px;
+      position: relative;
     }
 
-    .search-input-wrap .geo-btn {
+    .search-wrap .search-icon {
       position: absolute;
-      right: 8px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--accent);
-      cursor: pointer;
-      font-size: 16px;
-      padding: 4px;
-      line-height: 1;
+      font-size: 15px;
+      opacity: 0.5;
+      pointer-events: none;
     }
 
-    input[type="text"], select {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid #334;
-      border-radius: var(--radius-sm);
+    .search-input {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
       color: var(--text);
-      font-size: 14px;
-      padding: 9px 12px;
-      outline: none;
-      transition: border-color 0.2s;
+      font-size: 15px;
+      padding: 12px 16px 12px 40px;
       width: 100%;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
     }
 
-    input[type="text"]:focus, select:focus {
-      border-color: var(--accent);
-      background: rgba(79,163,227,0.08);
+    .search-input::placeholder { color: rgba(255,255,255,0.45); }
+    .search-input:focus {
+      border-color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.14);
     }
 
-    select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      padding-right: 28px;
-      cursor: pointer;
-      min-width: 160px;
-    }
-
-    select option { background: #1a1a2e; }
-
-    .search-btn {
-      background: linear-gradient(135deg, #1a5fa8, #2176d4);
-      border: none;
+    .geo-btn {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
       border-radius: var(--radius-sm);
       color: white;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 9px 20px;
-      white-space: nowrap;
-      transition: opacity 0.2s;
+      font-size: 18px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
     }
 
-    .search-btn:hover { opacity: 0.85; }
-    .search-btn:active { opacity: 0.7; }
-    .search-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .geo-btn:hover { background: rgba(255,255,255,0.18); }
 
-    /* ── Location Bar ────────────────────────────────────────── */
-    .location-bar {
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-      padding: 8px 20px;
+    /* Product selector row */
+    .product-row {
+      margin-bottom: 20px;
+    }
+
+    .product-select {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      color: var(--text);
+      font-size: 14px;
+      padding: 10px 36px 10px 18px;
+      width: 100%;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='rgba(255,255,255,0.5)' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+
+    .product-select option { background: #1a2535; color: white; }
+
+    /* Location Hero */
+    .hero-location {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .hero-left {}
+    .hero-label {
       font-size: 12px;
       color: var(--text-dim);
-      flex-wrap: wrap;
-      gap: 6px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
     }
-
-    .location-name {
-      color: var(--text);
-      font-weight: 600;
-      font-size: 13px;
+    .hero-city {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
     }
-
-    .product-tag {
-      background: rgba(79,163,227,0.15);
-      border: 1px solid rgba(79,163,227,0.3);
-      border-radius: 20px;
-      color: var(--accent);
+    .hero-coords {
       font-size: 11px;
-      padding: 2px 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .hero-icon {
+      font-size: 52px;
+      line-height: 1;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
     }
 
-    /* ── Summary Bar ─────────────────────────────────────────── */
-    .summary-bar {
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 20px;
+    /* ═══════════════════════════════════════════════
+       SPRAY STATUS COMMAND CENTER
+    ═══════════════════════════════════════════════ */
+    .command-center {
+      padding: 20px 20px 22px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glow behind the card based on status */
+    .command-center::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      opacity: 0.15;
+      transition: background 0.5s;
+      pointer-events: none;
+    }
+    .command-center.status-favorable::before { background: radial-gradient(ellipse at 50% 0%, var(--green) 0%, transparent 70%); }
+    .command-center.status-caution::before   { background: radial-gradient(ellipse at 50% 0%, var(--yellow) 0%, transparent 70%); }
+    .command-center.status-no-good::before   { background: radial-gradient(ellipse at 50% 0%, var(--red) 0%, transparent 70%); }
+
+    .cc-header {
       display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
     }
 
-    .summary-pill {
+    .cc-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .cc-status-text {
+      font-size: 20px;
+      font-weight: 700;
+      transition: color 0.4s;
+    }
+    .cc-status-text.favorable { color: var(--green); }
+    .cc-status-text.caution   { color: var(--yellow); }
+    .cc-status-text.no-good   { color: var(--red); }
+
+    .status-pills {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+
+    .status-pill {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: var(--bg3);
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 12px;
+      background: rgba(0,0,0,0.25);
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px 5px 8px;
+      white-space: nowrap;
     }
-
-    .summary-pill .dot {
+    .pill-dot {
       width: 8px; height: 8px;
       border-radius: 50%;
       flex-shrink: 0;
     }
+    .pill-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .pill-dot.red   { background: var(--red);   box-shadow: 0 0 6px var(--red); }
 
-    .best-window {
-      margin-left: auto;
+    /* The Big Three */
+    .big-three {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .metric-card {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm);
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    .metric-icon { font-size: 20px; margin-bottom: 4px; }
+    .metric-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .metric-value {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text);
+    }
+    .metric-unit {
       font-size: 11px;
       color: var(--text-dim);
+      margin-left: 2px;
+    }
+    .metric-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.3;
     }
 
-    .best-window strong { color: var(--green); }
+    /* Delta T color coding */
+    .metric-value.dt-optimal { color: var(--green); }
+    .metric-value.dt-caution { color: var(--yellow); }
+    .metric-value.dt-bad     { color: var(--red); }
 
-    /* ── Tab Bar ─────────────────────────────────────────────── */
-    .tab-bar {
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
+    /* ═══════════════════════════════════════════════
+       HOURLY SPRAY WINDOW
+    ═══════════════════════════════════════════════ */
+    .spray-window {
+      padding: 18px 18px 20px;
+      margin-bottom: 14px;
+    }
+
+    .sw-header {
       display: flex;
-      padding: 0 20px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
     }
 
-    .tab-btn {
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--text-dim);
-      cursor: pointer;
+    .sw-title {
       font-size: 13px;
-      font-weight: 600;
-      padding: 12px 20px 9px;
-      transition: color 0.2s, border-color 0.2s;
+      font-weight: 700;
       letter-spacing: 0.3px;
     }
-
-    .tab-btn.active {
-      border-bottom-color: var(--accent);
-      color: var(--accent);
+    .sw-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
 
-    /* ── Loading & Error ─────────────────────────────────────── */
-    .loading-state {
+    .sw-tabs {
+      display: flex;
+      gap: 6px;
+    }
+    .sw-tab {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-pill);
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      transition: all 0.2s;
+    }
+    .sw-tab.active {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
+      color: var(--text);
+    }
+
+    /* Spray color bar */
+    .spray-bar-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+    }
+
+    .spray-bar-track {
+      display: flex;
+      gap: 3px;
+      min-width: max-content;
+    }
+
+    .spray-segment {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      width: 36px;
+    }
+
+    .spray-block {
+      border-radius: 6px;
+      height: 40px;
+      width: 100%;
+      position: relative;
+      transition: transform 0.15s;
+      cursor: pointer;
+    }
+    .spray-block:hover { transform: scaleY(1.15); }
+    .spray-block.favorable { background: linear-gradient(180deg, #3ddc84, #26a85f); box-shadow: 0 2px 8px rgba(61,220,132,0.35); }
+    .spray-block.caution   { background: linear-gradient(180deg, #ffc107, #e09000); box-shadow: 0 2px 8px rgba(255,193,7,0.35); }
+    .spray-block.no-good   { background: linear-gradient(180deg, #ff4d4d, #cc2222); box-shadow: 0 2px 8px rgba(255,77,77,0.35); }
+
+    .spray-time {
+      font-size: 9px;
+      color: var(--text-muted);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .spray-time.bold { color: var(--text-dim); font-weight: 600; }
+
+    /* Gradient summary bar (thin) */
+    .spray-gradient-bar {
+      height: 6px;
+      border-radius: 3px;
+      margin: 4px 0 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════
+       EXTENDED FORECAST BUTTONS
+    ═══════════════════════════════════════════════ */
+    .ext-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .ext-btn {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-pill);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 13px 10px;
+      text-align: center;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .ext-btn:hover  { background: rgba(255,255,255,0.14); }
+    .ext-btn:active { transform: scale(0.97); }
+    .ext-btn .btn-icon { font-size: 16px; display: block; margin-bottom: 3px; }
+
+    /* ═══════════════════════════════════════════════
+       MODAL (Extended views)
+    ═══════════════════════════════════════════════ */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 20px 12px 40px;
+    }
+    .modal-backdrop.open { display: block; }
+
+    .modal-card {
+      background: rgba(15,25,45,0.96);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius);
+      max-width: 520px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+    }
+    .modal-title { font-size: 15px; font-weight: 700; }
+    .modal-close {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-body { padding: 16px; overflow-x: auto; }
+
+    /* Hourly modal table */
+    .h-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 480px; }
+    .h-table th {
+      background: rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-dim);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 8px 10px;
+      text-align: left;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .h-table td {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 9px 10px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .h-table tr:hover td { background: rgba(255,255,255,0.04); }
+
+    .status-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-dot::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.favorable { color: var(--green); }
+    .status-dot.favorable::before { background: var(--green); }
+    .status-dot.caution   { color: var(--yellow); }
+    .status-dot.caution::before   { background: var(--yellow); }
+    .status-dot.no-good   { color: var(--red); }
+    .status-dot.no-good::before   { background: var(--red); }
+
+    /* Daily modal cards */
+    .daily-list { display: flex; flex-direction: column; gap: 8px; }
+    .daily-row {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-left: 4px solid transparent;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+    }
+    .daily-row.favorable { border-left-color: var(--green); }
+    .daily-row.caution   { border-left-color: var(--yellow); }
+    .daily-row.no-good   { border-left-color: var(--red); }
+
+    .dr-day  { font-size: 14px; font-weight: 700; min-width: 36px; }
+    .dr-date { font-size: 11px; color: var(--text-dim); min-width: 52px; }
+    .dr-icon { font-size: 24px; }
+    .dr-temps { display: flex; flex-direction: column; font-size: 12px; min-width: 40px; }
+    .dr-high { color: #ff8c42; font-weight: 700; }
+    .dr-low  { color: #4fa3e3; }
+    .dr-meta { flex: 1; font-size: 11px; color: var(--text-dim); }
+    .dr-spray { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
+    .dr-spray.favorable { color: var(--green); background: rgba(61,220,132,0.15); }
+    .dr-spray.caution   { color: var(--yellow); background: rgba(255,193,7,0.15); }
+    .dr-spray.no-good   { color: var(--red);   background: rgba(255,77,77,0.15); }
+
+    /* ═══════════════════════════════════════════════
+       BOTTOM CARDS — Humidity & Precip
+    ═══════════════════════════════════════════════ */
+    .bottom-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .bottom-card {
+      padding: 16px;
+    }
+
+    .bc-icon { font-size: 26px; margin-bottom: 8px; }
+    .bc-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .bc-value {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .bc-unit { font-size: 14px; color: var(--text-dim); }
+    .bc-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    /* Humidity arc */
+    .humidity-arc {
+      margin: 4px 0 0;
+    }
+    .humidity-arc svg { width: 100%; max-width: 110px; }
+
+    /* Precip bar */
+    .precip-bar-bg {
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      height: 6px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .precip-bar-fill {
+      background: linear-gradient(90deg, #4fa3e3, #2176d4);
+      border-radius: 4px;
+      height: 100%;
+      transition: width 0.8s ease;
+    }
+
+    /* ═══════════════════════════════════════════════
+       PRODUCT THRESHOLDS STRIP
+    ═══════════════════════════════════════════════ */
+    .thresh-strip {
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+    .thresh-header {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .thresh-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .thresh-item {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 11px;
+    }
+    .thresh-item-label { color: var(--text-muted); font-size: 10px; margin-bottom: 2px; }
+    .thresh-item-val   { color: var(--text); font-weight: 600; }
+
+    /* ═══════════════════════════════════════════════
+       LOADING / ERROR / EMPTY
+    ═══════════════════════════════════════════════ */
+    .loading-overlay {
       text-align: center;
       padding: 60px 20px;
-      color: var(--text-dim);
     }
-
     .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid var(--bg3);
-      border-top-color: var(--accent);
+      width: 40px; height: 40px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: rgba(255,255,255,0.7);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 16px;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .error-state {
-      background: rgba(255,68,68,0.08);
-      border: 1px solid rgba(255,68,68,0.25);
+    .error-card {
+      background: rgba(255,77,77,0.1);
+      border: 1px solid rgba(255,77,77,0.3);
       border-radius: var(--radius);
-      color: #ff8888;
-      margin: 20px;
-      padding: 16px 20px;
+      color: #ffaaaa;
+      padding: 18px 20px;
       font-size: 13px;
+      margin-bottom: 14px;
     }
 
-    .empty-state {
+    .empty-hero {
       text-align: center;
-      padding: 80px 20px;
+      padding: 40px 20px;
+    }
+    .empty-hero .big-icon { font-size: 60px; margin-bottom: 14px; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5)); }
+    .empty-hero p { font-size: 15px; color: var(--text-dim); line-height: 1.7; }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════ */
+    .footer {
+      text-align: center;
+      font-size: 10px;
       color: var(--text-muted);
+      padding-top: 10px;
     }
 
-    .empty-state .big-icon { font-size: 48px; margin-bottom: 12px; }
-    .empty-state p { font-size: 14px; line-height: 1.6; }
-
-    /* ══════════════════════════════════════════════════════════
-       HOURLY VIEW
-    ══════════════════════════════════════════════════════════ */
-    #view-hourly { padding: 0; overflow: hidden; }
-
-    .hourly-scroll-wrap {
-      overflow-x: auto;
-      overflow-y: visible;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 10px;
-    }
-
-    .hourly-grid {
-      display: grid;
-      grid-template-columns: 110px repeat(var(--col-count, 24), 80px);
-      min-width: max-content;
-    }
-
-    /* Row label column */
-    .row-label {
-      align-items: center;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-      border-right: 1px solid #2a2a3a;
-      color: var(--text-dim);
-      display: flex;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      padding: 0 10px;
-      text-transform: uppercase;
-      position: sticky;
-      left: 0;
-      z-index: 10;
-    }
-
-    .row-label.header-label {
-      background: #131320;
-      border-bottom: 2px solid #2a2a4a;
-      font-size: 11px;
-      color: #5a7a9a;
-    }
-
-    /* Data cell base */
-    .cell {
-      border-bottom: 1px solid var(--border);
-      border-right: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 56px;
-      padding: 6px 4px;
-      text-align: center;
-    }
-
-    /* Time header row */
-    .time-cell {
-      background: #131320;
-      border-bottom: 2px solid #2a2a4a;
-      flex-direction: column;
-      gap: 2px;
-      min-height: 52px;
-    }
-
-    .time-cell .day-label {
-      color: #5a7a9a;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .time-cell .hour-label {
-      color: #c0d8f0;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .time-cell.new-day {
-      border-left: 2px solid #2a4a6a;
-    }
-
-    /* Condition icon row */
-    .cond-cell { min-height: 52px; background: var(--bg2); }
-    .cond-icon { font-size: 24px; line-height: 1; }
-    .cloud-pct { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
-
-    /* Spray status row */
-    .spray-cell {
-      min-height: 64px;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .spray-cell.favorable { background: rgba(61,220,132,0.06); }
-    .spray-cell.caution   { background: rgba(255,193,7,0.06); }
-    .spray-cell.no-good   { background: rgba(255,68,68,0.06); }
-
-    .spray-nozzle {
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    .spray-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-    }
-
-    .spray-cell.favorable .spray-label { color: var(--green); }
-    .spray-cell.caution   .spray-label { color: var(--yellow); }
-    .spray-cell.no-good   .spray-label { color: var(--red); }
-
-    /* Delta-T row */
-    .deltat-cell { min-height: 48px; }
-    .deltat-val { font-size: 13px; font-weight: 600; }
-    .deltat-val.optimal { color: var(--green); }
-    .deltat-val.caution { color: var(--yellow); }
-    .deltat-val.bad     { color: var(--red); }
-    .deltat-sub { font-size: 9px; color: var(--text-muted); }
-
-    /* Precip row */
-    .precip-cell { min-height: 60px; }
-
-    .precip-ring {
-      position: relative;
-      width: 40px; height: 40px;
-    }
-
-    .precip-ring svg {
-      transform: rotate(-90deg);
-      width: 40px; height: 40px;
-    }
-
-    .precip-ring .ring-bg { fill: none; stroke: var(--bg4); stroke-width: 4; }
-    .precip-ring .ring-fill {
-      fill: none;
-      stroke-width: 4;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.5s;
-    }
-
-    .precip-ring .ring-text {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text);
-      transform: none;
-    }
-
-    /* Rain accumulation row */
-    .rain-cell { min-height: 60px; padding: 4px 2px; }
-    .rain-graph {
-      width: 100%;
-      height: 48px;
-    }
-
-    /* Temperature row */
-    .temp-cell { min-height: 80px; flex-direction: column; gap: 2px; }
-    .temp-graph { width: 100%; height: 50px; }
-    .temp-vals { display: flex; gap: 6px; font-size: 10px; flex-wrap: wrap; justify-content: center; }
-    .temp-air { color: var(--orange); font-weight: 600; }
-    .temp-dew { color: var(--teal); font-weight: 600; }
-    .temp-rh  { color: var(--text-dim); font-size: 9px; }
-
-    /* Wind row */
-    .wind-cell { min-height: 64px; gap: 3px; }
-
-    .wind-arrow {
-      font-size: 16px;
-      line-height: 1;
-      display: block;
-    }
-
-    .wind-bars {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      width: 56px;
-    }
-
-    .wind-bar-wrap {
-      align-items: center;
-      display: flex;
-      gap: 4px;
-      font-size: 9px;
-    }
-
-    .wind-bar-bg {
-      background: var(--bg4);
-      border-radius: 2px;
-      flex: 1;
-      height: 5px;
-      overflow: hidden;
-    }
-
-    .wind-bar-fill {
-      border-radius: 2px;
-      height: 100%;
-      transition: width 0.5s;
-    }
-
-    .wind-bar-fill.sust { background: #4fa3e3; }
-    .wind-bar-fill.gust { background: #2176d4; }
-
-    .wind-speed-text {
-      color: var(--text-dim);
-      font-size: 9px;
-      text-align: center;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       DAILY VIEW
-    ══════════════════════════════════════════════════════════ */
-    #view-daily { padding: 12px 16px; }
-
-    .daily-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      display: grid;
-      grid-template-columns: 80px 1fr auto;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
-      overflow: hidden;
-      padding: 14px 16px;
-      position: relative;
-      transition: background 0.2s;
-    }
-
-    .daily-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 4px;
-    }
-
-    .daily-card.favorable::before { background: var(--green); }
-    .daily-card.caution::before   { background: var(--yellow); }
-    .daily-card.no-good::before   { background: var(--red); }
-
-    .daily-date-col {
-      text-align: left;
-    }
-
-    .daily-dow {
-      color: var(--text);
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .daily-date {
-      color: var(--text-dim);
-      font-size: 11px;
-      margin-top: 2px;
-    }
-
-    .daily-middle {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .daily-icon { font-size: 28px; line-height: 1; }
-
-    .daily-temps {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .daily-high {
-      color: #ff8c42;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .daily-low {
-      color: #4fa3e3;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .daily-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 11px;
-      color: var(--text-dim);
-    }
-
-    .daily-meta span { display: flex; align-items: center; gap: 4px; }
-
-    .daily-spray-col {
-      text-align: center;
-      min-width: 70px;
-    }
-
-    .spray-badge {
-      border-radius: var(--radius-sm);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .spray-badge.favorable {
-      background: var(--green-dim);
-      color: var(--green);
-      border: 1px solid rgba(61,220,132,0.25);
-    }
-
-    .spray-badge.caution {
-      background: var(--yellow-dim);
-      color: var(--yellow);
-      border: 1px solid rgba(255,193,7,0.25);
-    }
-
-    .spray-badge.no-good {
-      background: var(--red-dim);
-      color: var(--red);
-      border: 1px solid rgba(255,68,68,0.25);
-    }
-
-    .daily-cond-text {
-      color: var(--text-dim);
-      font-size: 11px;
-      margin-top: 4px;
-    }
-
-    /* ── Product Info Panel ──────────────────────────────────── */
-    .product-panel {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin: 12px 16px;
-      overflow: hidden;
-    }
-
-    .product-panel-header {
-      background: var(--bg3);
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-dim);
-      user-select: none;
-    }
-
-    .product-panel-body {
-      display: none;
-      padding: 12px 14px;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .product-panel-body.open { display: flex; }
-
-    .thresh-chip {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 11px;
-      padding: 4px 10px;
-      color: var(--text-dim);
-    }
-
-    .thresh-chip strong { color: var(--text); }
-
-    .product-notes {
-      width: 100%;
-      color: var(--text-dim);
-      font-size: 11px;
-      font-style: italic;
-      padding-top: 4px;
-    }
-
-    /* ── Tooltip ─────────────────────────────────────────────── */
-    .tooltip-wrap {
-      position: relative;
-    }
-
-    .tooltip-wrap:hover .tooltip-box {
-      display: block;
-    }
-
-    .tooltip-box {
-      display: none;
-      position: absolute;
-      bottom: calc(100% + 6px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: #111;
-      border: 1px solid #333;
-      border-radius: var(--radius-sm);
-      color: #ddd;
-      font-size: 11px;
-      line-height: 1.5;
-      padding: 8px 10px;
-      white-space: nowrap;
-      z-index: 200;
-      pointer-events: none;
-      max-width: 200px;
-      white-space: normal;
-      text-align: left;
-    }
-
-    .tooltip-box::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 5px solid transparent;
-      border-top-color: #333;
-    }
-
-    /* ── Mini canvas charts helper ───────────────────────────── */
-    canvas { display: block; }
-
-    /* ── Responsive ──────────────────────────────────────────── */
-    @media (max-width: 600px) {
-      .header { padding: 12px 14px 10px; }
-      .header-title { font-size: 15px; }
-      .search-row { gap: 6px; }
-      .tab-btn { padding: 10px 14px 7px; font-size: 12px; }
-      .daily-card { grid-template-columns: 70px 1fr auto; gap: 8px; padding: 12px; }
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════ */
+    @media (min-width: 500px) {
+      .app { padding: 28px 24px; }
+      .hero-city { font-size: 38px; }
     }
   </style>
 </head>
 <body>
+<div class="app">
 
-<!-- ── HEADER ────────────────────────────────────────────── -->
-<div class="header">
-  <div class="header-top">
-    <div>
-      <div class="header-title">🌾 Spray Weather Forecast</div>
-      <div class="header-subtitle">Ag-focused • Product label thresholds • 96h hourly + 7-day outlook</div>
+  <!-- ── SEARCH BAR ──────────────────────────────── -->
+  <div class="search-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input
+        class="search-input"
+        id="loc-input"
+        type="text"
+        placeholder="City, State  ·  Zip  ·  Lat, Lon"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      />
+    </div>
+    <button class="geo-btn" id="geo-btn" title="Use my location">🧭</button>
+  </div>
+
+  <!-- ── PRODUCT SELECTOR ───────────────────────── -->
+  <div class="product-row">
+    <select class="product-select" id="herb-select">
+      <option value="general">🌾 General Ag Guidelines</option>
+      <option value="2,4-D Amine">🧪 2,4-D Amine</option>
+      <option value="Dicamba">🧪 Dicamba (Clarity)</option>
+      <option value="GrazonNext HL">🧪 GrazonNext HL</option>
+      <option value="Grazon P+D">🧪 Grazon P+D</option>
+      <option value="Roundup (Glyphosate)">🧪 Roundup / Glyphosate</option>
+      <option value="Tordon 22K">🧪 Tordon 22K</option>
+      <option value="Remedy Ultra">🧪 Remedy Ultra</option>
+    </select>
+  </div>
+
+  <!-- ── DYNAMIC CONTENT ────────────────────────── -->
+  <div id="app-content">
+    <div class="empty-hero">
+      <div class="big-icon">🌾</div>
+      <p>Enter a location above to see<br>your ag spray weather forecast.</p>
     </div>
   </div>
-  <div class="search-row">
-    <div class="search-input-wrap">
-      <input type="text" id="loc-input" placeholder="City, State  /  Zip  /  Lat, Lon" autocomplete="off" />
-      <button class="geo-btn" id="geo-btn" title="Use my location">📍</button>
+
+  <div class="footer" id="app-footer"></div>
+</div>
+
+<!-- ── HOURLY EXTENDED MODAL ──────────────────── -->
+<div class="modal-backdrop" id="modal-hourly">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span class="modal-title">⏱ Hourly Extended Forecast (96h)</span>
+      <button class="modal-close" onclick="closeModal('modal-hourly')">✕</button>
     </div>
-    <select id="herb-select">
-      <option value="general">General (Ag Guidelines)</option>
-      <option value="2,4-D Amine">2,4-D Amine</option>
-      <option value="Dicamba">Dicamba</option>
-      <option value="GrazonNext HL">GrazonNext HL</option>
-      <option value="Grazon P+D">Grazon P+D</option>
-      <option value="Roundup (Glyphosate)">Roundup / Glyphosate</option>
-      <option value="Tordon 22K">Tordon 22K</option>
-      <option value="Remedy Ultra">Remedy Ultra</option>
-    </select>
-    <button class="search-btn" id="search-btn" onclick="doSearch()">Search</button>
+    <div class="modal-body">
+      <div id="modal-hourly-body">Loading…</div>
+    </div>
   </div>
 </div>
 
-<!-- ── MAIN CONTENT ──────────────────────────────────────── -->
-<div id="app-body">
-  <div class="empty-state">
-    <div class="big-icon">🌤️</div>
-    <p>Enter a location above to get your<br>ag-focused spray weather forecast.</p>
+<!-- ── DAILY EXTENDED MODAL ───────────────────── -->
+<div class="modal-backdrop" id="modal-daily">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span class="modal-title">📅 7-Day Outlook</span>
+      <button class="modal-close" onclick="closeModal('modal-daily')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-daily-body">Loading…</div>
+    </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 //  APP STATE
-// ═══════════════════════════════════════════════════════════
-let state = {
-  data: null,
-  tab: 'hourly',
-  loading: false
-};
+// ═══════════════════════════════════════════════
+let state = { data: null };
 
-const WIND_MAX_SCALE = 30; // mph, for wind bar 100% width
-
-// ═══════════════════════════════════════════════════════════
-//  SEARCH & DATA FETCH
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+//  SEARCH & FETCH
+// ═══════════════════════════════════════════════
 async function doSearch() {
-  const loc = document.getElementById('loc-input').value.trim();
+  const loc  = document.getElementById('loc-input').value.trim();
   const herb = document.getElementById('herb-select').value;
-  if (!loc) {
-    document.getElementById('loc-input').focus();
-    return;
-  }
+  if (!loc) { document.getElementById('loc-input').focus(); return; }
+  sessionStorage.setItem('lastLocation', loc);
+  sessionStorage.setItem('lastHerbicide', herb);
   await fetchAndRender(loc, herb);
 }
 
 async function fetchAndRender(loc, herb) {
-  state.loading = true;
-  renderLoading();
-
+  showLoading();
   try {
     const params = new URLSearchParams({ location: loc, herbicide: herb });
     const resp = await fetch(`/api/forecast?${params}`);
@@ -790,391 +831,395 @@ async function fetchAndRender(loc, herb) {
       throw new Error(err.error || `Server error ${resp.status}`);
     }
     state.data = await resp.json();
-    state.tab = state.tab || 'hourly';
-    renderApp();
+    renderAll();
   } catch (e) {
-    renderError(e.message);
-  } finally {
-    state.loading = false;
+    showError(e.message);
   }
 }
 
-// ── Geolocation ────────────────────────────────────────────
+// ── Geolocation ──────────────────────────────
 document.getElementById('geo-btn').addEventListener('click', () => {
-  if (!navigator.geolocation) {
-    alert('Geolocation not supported by your browser.');
-    return;
-  }
+  if (!navigator.geolocation) { alert('Geolocation not supported.'); return; }
   const btn = document.getElementById('geo-btn');
   btn.textContent = '⏳';
   navigator.geolocation.getCurrentPosition(
     pos => {
-      const coords = `${pos.coords.latitude.toFixed(4)},${pos.coords.longitude.toFixed(4)}`;
+      const coords = `${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`;
       document.getElementById('loc-input').value = coords;
-      btn.textContent = '📍';
+      btn.textContent = '🧭';
       doSearch();
     },
-    err => {
-      btn.textContent = '📍';
-      alert('Could not get location: ' + err.message);
-    },
+    err => { btn.textContent = '🧭'; alert('Could not get location: ' + err.message); },
     { timeout: 10000 }
   );
 });
 
-// Enter key triggers search
-document.getElementById('loc-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doSearch();
+document.getElementById('loc-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+document.getElementById('herb-select').addEventListener('change', () => {
+  if (state.data) {
+    const loc = document.getElementById('loc-input').value.trim();
+    const herb = document.getElementById('herb-select').value;
+    if (loc) fetchAndRender(loc, herb);
+  }
 });
 
-// ═══════════════════════════════════════════════════════════
-//  RENDER STATES
-// ═══════════════════════════════════════════════════════════
-function renderLoading() {
-  document.getElementById('app-body').innerHTML = `
-    <div class="loading-state">
+// ═══════════════════════════════════════════════
+//  LOADING / ERROR STATES
+// ═══════════════════════════════════════════════
+function showLoading() {
+  document.getElementById('app-content').innerHTML = `
+    <div class="loading-overlay glass">
       <div class="spinner"></div>
-      <div>Fetching forecast…</div>
+      <div style="color:rgba(255,255,255,0.6);font-size:14px">Fetching forecast…</div>
     </div>`;
+  document.getElementById('app-footer').textContent = '';
 }
 
-function renderError(msg) {
-  document.getElementById('app-body').innerHTML = `
-    <div class="error-state">⚠️ &nbsp;${escHtml(msg)}</div>`;
+function showError(msg) {
+  document.getElementById('app-content').innerHTML =
+    `<div class="error-card">⚠️ &nbsp;${esc(msg)}</div>`;
 }
 
-function renderApp() {
+// ═══════════════════════════════════════════════
+//  MAIN RENDER
+// ═══════════════════════════════════════════════
+function renderAll() {
   const d = state.data;
-  const appBody = document.getElementById('app-body');
+  const now = d.hourly[0];   // current conditions = first hourly slot
+  const status = now.spray.status;
 
-  const summaryPct = (count, total) => total ? Math.round(count / total * 100) : 0;
-  const total = d.summary.favorable_hours + d.summary.caution_hours + d.summary.no_good_hours;
+  // Delta-T classification
+  const dt     = now.delta_t;
+  const dtCls  = dt < 2 ? 'dt-bad' : dt > 8 ? 'dt-bad' : dt < 3 || dt > 7 ? 'dt-caution' : 'dt-optimal';
+  const dtDesc = dt < 2 ? 'Inversion Risk' : dt > 8 ? 'Evaporation Risk' : dt < 4 ? 'Marginal' : 'Optimal';
 
-  const bestWinHTML = d.summary.best_window_hours > 0
-    ? `Best window: <strong>${d.summary.best_window_hours}h</strong> favorable starting ${fmtTime(d.summary.best_window_start)}`
-    : 'No extended favorable window in 96h';
+  const statusLabel = status === 'favorable' ? 'Good to Spray'
+                    : status === 'caution'   ? 'Apply with Caution'
+                    : 'Conditions Restricted';
 
-  appBody.innerHTML = `
-    <div class="location-bar">
-      <div>
-        <span class="location-name">📍 ${escHtml(d.location.display)}</span>
-        <span style="color:var(--text-muted);margin-left:8px;font-size:11px">${d.location.lat.toFixed(4)}, ${d.location.lon.toFixed(4)}</span>
-      </div>
-      <span class="product-tag">🧪 ${escHtml(d.product.name)}</span>
-    </div>
+  const first24 = d.hourly.slice(0, 24);
 
-    <div class="summary-bar">
-      <span class="summary-pill">
-        <span class="dot" style="background:var(--green)"></span>
-        <strong style="color:var(--green)">${d.summary.favorable_hours}</strong>
-        <span style="color:var(--text-dim)">Favorable</span>
-      </span>
-      <span class="summary-pill">
-        <span class="dot" style="background:var(--yellow)"></span>
-        <strong style="color:var(--yellow)">${d.summary.caution_hours}</strong>
-        <span style="color:var(--text-dim)">Caution</span>
-      </span>
-      <span class="summary-pill">
-        <span class="dot" style="background:var(--red)"></span>
-        <strong style="color:var(--red)">${d.summary.no_good_hours}</strong>
-        <span style="color:var(--text-dim)">No Good</span>
-      </span>
-      <span class="best-window">${bestWinHTML}</span>
-    </div>
-
-    <div class="tab-bar">
-      <button class="tab-btn ${state.tab==='hourly'?'active':''}" onclick="switchTab('hourly')">⏱ Hourly (96h)</button>
-      <button class="tab-btn ${state.tab==='daily'?'active':''}" onclick="switchTab('daily')">📅 7-Day Outlook</button>
-    </div>
-
-    <div id="view-hourly" style="display:${state.tab==='hourly'?'block':'none'}">
-      ${buildHourlyView(d)}
-    </div>
-
-    <div id="view-daily" style="display:${state.tab==='daily'?'block':'none'}">
-      ${buildProductPanel(d.product)}
-      ${buildDailyView(d)}
-    </div>
+  document.getElementById('app-content').innerHTML = `
+    ${renderHeroLocation(d, now)}
+    ${renderCommandCenter(now, d.product, status, statusLabel, dt, dtCls, dtDesc)}
+    ${renderSprayWindow(first24)}
+    ${renderExtButtons()}
+    ${renderBottomCards(now)}
+    ${renderThreshStrip(d.product)}
   `;
 
-  // Draw mini-charts on canvas elements
-  requestAnimationFrame(() => drawAllCharts(d));
+  // Post-render: draw gradient summary bar
+  renderGradientBar(first24);
+
+  document.getElementById('app-footer').innerHTML =
+    `Data: Open-Meteo · Geocoder: Nominatim · ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
 }
 
-function switchTab(tab) {
-  state.tab = tab;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    if (b.textContent.toLowerCase().includes(tab === 'hourly' ? 'hourly' : '7-day'))
-      b.classList.add('active');
-  });
-  document.getElementById('view-hourly').style.display = tab === 'hourly' ? 'block' : 'none';
-  document.getElementById('view-daily').style.display  = tab === 'daily'  ? 'block' : 'none';
-}
-
-// ═══════════════════════════════════════════════════════════
-//  HOURLY GRID BUILDER
-// ═══════════════════════════════════════════════════════════
-function buildHourlyView(d) {
-  const hours = d.hourly;
-  const n = hours.length;
-
-  // Row label + n data cells per row
-  let rows = {
-    time:   ['<div class="row-label header-label">Time</div>'],
-    cond:   ['<div class="row-label">Cond.</div>'],
-    spray:  ['<div class="row-label">Spray<br>Status</div>'],
-    deltat: ['<div class="row-label">Delta-T<br>(°C)</div>'],
-    precip: ['<div class="row-label">Precip<br>%</div>'],
-    rain:   ['<div class="row-label">Rain<br>(in)</div>'],
-    temp:   ['<div class="row-label">Temp &<br>Dew Pt</div>'],
-    wind:   ['<div class="row-label">Wind</div>'],
-  };
-
-  let prevDay = null;
-  hours.forEach((h, i) => {
-    const dt = new Date(h.time);
-    const hour12 = dt.getHours() % 12 || 12;
-    const ampm = dt.getHours() < 12 ? 'am' : 'pm';
-    const day = dt.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
-    const isNewDay = day !== prevDay;
-    prevDay = day;
-
-    const newDayCls = isNewDay ? ' new-day' : '';
-
-    // Time
-    rows.time.push(`<div class="cell time-cell${newDayCls}">
-      <span class="day-label">${isNewDay ? day : ''}</span>
-      <span class="hour-label">${hour12}${ampm}</span>
-    </div>`);
-
-    // Condition
-    rows.cond.push(`<div class="cell cond-cell">
-      <span class="cond-icon">${h.condition.icon}</span>
-      <span class="cloud-pct">${h.cloud_pct}%</span>
-    </div>`);
-
-    // Spray status
-    const sprayReasonTip = h.spray.reasons.length
-      ? h.spray.reasons.slice(0, 3).join('\n')
-      : 'Conditions OK';
-    const nozzleEmoji = h.spray.status === 'favorable' ? '🟢' : h.spray.status === 'caution' ? '🟡' : '🔴';
-    const sprayLabelText = h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'Favorable';
-    rows.spray.push(`<div class="cell spray-cell ${h.spray.status} tooltip-wrap" title="${escAttr(sprayReasonTip)}">
-      <span class="spray-nozzle">${nozzleEmoji}</span>
-      <span class="spray-label">${sprayLabelText}</span>
-    </div>`);
-
-    // Delta-T
-    const dtVal = h.delta_t;
-    const dtCls = dtVal < 2 ? 'bad' : dtVal > 8 ? 'bad' : dtVal < 3 || dtVal > 7 ? 'caution' : 'optimal';
-    rows.deltat.push(`<div class="cell deltat-cell">
-      <span class="deltat-val ${dtCls}">${dtVal.toFixed(1)}</span>
-      <span class="deltat-sub">${dtCls === 'optimal' ? 'Optimal' : dtCls === 'caution' ? 'Marginal' : dtVal < 2 ? 'Inv.Risk' : 'Evap.Risk'}</span>
-    </div>`);
-
-    // Precip % ring
-    const pPct = Math.min(100, h.precip_pct);
-    const circumference = 2 * Math.PI * 16; // r=16
-    const offset = circumference - (pPct / 100) * circumference;
-    const ringColor = pPct >= 50 ? '#ff4444' : pPct >= 25 ? '#ffc107' : '#4fa3e3';
-    rows.precip.push(`<div class="cell precip-cell">
-      <div class="precip-ring">
-        <svg viewBox="0 0 40 40">
-          <circle class="ring-bg" cx="20" cy="20" r="16"/>
-          <circle class="ring-fill" cx="20" cy="20" r="16"
-            stroke="${ringColor}"
-            stroke-dasharray="${circumference}"
-            stroke-dashoffset="${offset.toFixed(2)}"/>
-        </svg>
-        <div class="ring-text">${pPct}%</div>
-      </div>
-    </div>`);
-
-    // Rain accumulation — mini bar (drawn as canvas later)
-    rows.rain.push(`<div class="cell rain-cell">
-      <canvas class="rain-bar" width="76" height="48" data-precip="${h.precip_in}" data-idx="${i}"></canvas>
-    </div>`);
-
-    // Temperature
-    rows.temp.push(`<div class="cell temp-cell">
-      <div class="temp-vals">
-        <span class="temp-air">${Math.round(h.temp_f)}°F</span>
-        <span class="temp-dew">${Math.round(h.dew_f)}°D</span>
-        <span class="temp-rh">RH ${h.rh}%</span>
-      </div>
-    </div>`);
-
-    // Wind
-    const wPct = Math.min(100, (h.wind_mph / WIND_MAX_SCALE) * 100).toFixed(0);
-    const gPct = Math.min(100, (h.gust_mph / WIND_MAX_SCALE) * 100).toFixed(0);
-    const arrowDeg = h.wind_dir_deg || 0;
-    rows.wind.push(`<div class="cell wind-cell">
-      <span class="wind-arrow" style="transform:rotate(${arrowDeg}deg);display:inline-block">↑</span>
-      <div class="wind-bars">
-        <div class="wind-bar-wrap">
-          <div class="wind-bar-bg"><div class="wind-bar-fill sust" style="width:${wPct}%"></div></div>
-        </div>
-        <div class="wind-bar-wrap">
-          <div class="wind-bar-bg"><div class="wind-bar-fill gust" style="width:${gPct}%"></div></div>
-        </div>
-      </div>
-      <span class="wind-speed-text">${h.wind_dir} ${Math.round(h.wind_mph)}/<span style="color:#2176d4">${Math.round(h.gust_mph)}</span></span>
-    </div>`);
-  });
-
-  // Assemble grid
-  const colCount = n;
-  const allCells = Object.values(rows).flat().join('');
-
-  return `<div class="hourly-scroll-wrap">
-    <div class="hourly-grid" style="--col-count:${colCount}">
-      ${allCells}
+// ── Hero Location ────────────────────────────
+function renderHeroLocation(d, now) {
+  const city = d.location.display;
+  const icon = now.condition.icon;
+  return `<div class="hero-location">
+    <div class="hero-left">
+      <div class="hero-label">Hero Weather</div>
+      <div class="hero-city">${esc(city)}</div>
+      <div class="hero-coords">${d.location.lat.toFixed(4)}, ${d.location.lon.toFixed(4)}</div>
     </div>
+    <div class="hero-icon">${icon}</div>
   </div>`;
 }
 
-// ═══════════════════════════════════════════════════════════
-//  DAILY VIEW BUILDER
-// ═══════════════════════════════════════════════════════════
-function buildDailyView(d) {
-  return d.daily.map(day => {
-    const dt = new Date(day.date + 'T12:00:00');
-    const dow  = dt.toLocaleDateString('en-US', { weekday: 'long' });
-    const date = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const sprayLabel = day.spray.status === 'no-good' ? 'No Good' : day.spray.status === 'caution' ? 'Caution' : 'Favorable';
+// ── Command Center ───────────────────────────
+function renderCommandCenter(now, product, status, statusLabel, dt, dtCls, dtDesc) {
+  return `<div class="command-center glass status-${status}">
+    <div class="cc-header">
+      <div>
+        <div class="cc-title">Spray Status Command Center</div>
+        <div class="cc-status-text ${status}">${statusLabel}</div>
+      </div>
+      <div class="status-pills">
+        <div class="status-pill"><span class="pill-dot green"></span>Good to Spray</div>
+        <div class="status-pill"><span class="pill-dot red"></span>Conditions Restricted</div>
+      </div>
+    </div>
 
-    return `<div class="daily-card ${day.spray.status}">
-      <div class="daily-date-col">
-        <div class="daily-dow">${dow.slice(0,3)}</div>
-        <div class="daily-date">${date}</div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px">
+      The Big Three Metrics
+    </div>
+
+    <div class="big-three">
+      <!-- Wind -->
+      <div class="metric-card">
+        <div class="metric-icon">💨</div>
+        <div class="metric-label">Wind</div>
+        <div class="metric-value">${Math.round(now.wind_mph)}<span class="metric-unit">mph</span></div>
+        <div class="metric-sub">${now.wind_dir} · Drift management</div>
       </div>
-      <div class="daily-middle">
-        <span class="daily-icon">${day.condition.icon}</span>
-        <div class="daily-temps">
-          <span class="daily-high">${Math.round(day.temp_max_f)}°</span>
-          <span class="daily-low">${Math.round(day.temp_min_f)}°</span>
-        </div>
-        <div class="daily-meta">
-          <span>💧 ${day.precip_pct}% precip</span>
-          <span>💨 ${Math.round(day.wind_max_mph)} / ${Math.round(day.gust_max_mph)} mph</span>
-          <span style="color:var(--text-muted)">${day.condition.desc}</span>
-        </div>
+
+      <!-- Delta T -->
+      <div class="metric-card">
+        <div class="metric-icon">🌡</div>
+        <div class="metric-label">Delta-T</div>
+        <div class="metric-value ${dtCls}">${dt.toFixed(1)}<span class="metric-unit">°C</span></div>
+        <div class="metric-sub">${dtDesc} · Core Ag metric</div>
       </div>
-      <div class="daily-spray-col">
-        <div class="spray-badge ${day.spray.status}">${sprayLabel}</div>
-        ${day.spray.reasons.length ? `<div class="daily-cond-text" title="${escAttr(day.spray.reasons.join('; '))}">${escHtml(day.spray.reasons[0] || '')}</div>` : ''}
+
+      <!-- Gusts -->
+      <div class="metric-card">
+        <div class="metric-icon">🌬</div>
+        <div class="metric-label">Gusts</div>
+        <div class="metric-value">${Math.round(now.gust_mph)}<span class="metric-unit">mph</span></div>
+        <div class="metric-sub">Max ${product.thresholds.max_gust_mph} mph limit</div>
       </div>
+    </div>
+
+    ${now.spray.reasons.length ? `<div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.45);line-height:1.5">
+      ⚠️ ${now.spray.reasons.slice(0,2).map(esc).join(' · ')}
+    </div>` : `<div style="margin-top:12px;font-size:11px;color:rgba(61,220,132,0.7)">✅ All conditions within label thresholds</div>`}
+  </div>`;
+}
+
+// ── Spray Window (24h bar) ───────────────────
+function renderSprayWindow(hours) {
+  const segments = hours.map((h, i) => {
+    const dt   = new Date(h.time);
+    const hr   = dt.getHours();
+    const hr12 = hr % 12 || 12;
+    const ampm = hr < 12 ? 'a' : 'p';
+    const bold = (hr === 0 || hr === 6 || hr === 12 || hr === 18);
+    return `<div class="spray-segment">
+      <div class="spray-block ${h.spray.status}" title="${esc(h.spray.status + ': ' + (h.spray.reasons[0] || 'OK'))}"></div>
+      <div class="spray-time ${bold?'bold':''}">${hr12}${ampm}</div>
     </div>`;
   }).join('');
-}
 
-// ═══════════════════════════════════════════════════════════
-//  PRODUCT PANEL
-// ═══════════════════════════════════════════════════════════
-function buildProductPanel(product) {
-  const t = product.thresholds;
-  return `<div class="product-panel">
-    <div class="product-panel-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').textContent=this.nextElementSibling.classList.contains('open')?'▲':'▼'">
-      <span>🧪 ${escHtml(product.name)} — Label Thresholds</span>
-      <span class="chevron">▼</span>
+  return `<div class="spray-window glass">
+    <div class="sw-header">
+      <div>
+        <div class="sw-title">⏱ Hourly Spray Window</div>
+        <div class="sw-subtitle">Next 24 hours · Tap blocks for detail</div>
+      </div>
+      <div class="sw-tabs">
+        <div class="sw-tab active">24h</div>
+      </div>
     </div>
-    <div class="product-panel-body">
-      <span class="thresh-chip">💨 Wind max: <strong>${t.max_wind_mph} mph</strong></span>
-      <span class="thresh-chip">💨 Gust max: <strong>${t.max_gust_mph} mph</strong></span>
-      <span class="thresh-chip">🌡 Temp: <strong>${t.min_temp_f}–${t.max_temp_f}°F</strong></span>
-      <span class="thresh-chip">💦 RH: <strong>${t.min_rh}–${t.max_rh}%</strong></span>
-      <span class="thresh-chip">🌧 Precip: <strong>&lt;${t.max_precip_pct}%</strong></span>
-      <span class="thresh-chip">🌡 Delta-T: <strong>${t.delta_t_range}</strong></span>
-      <div class="product-notes">📋 ${escHtml(product.notes)}</div>
+    <div class="spray-gradient-bar" id="gradient-bar"></div>
+    <div class="spray-bar-wrap">
+      <div class="spray-bar-track">${segments}</div>
     </div>
   </div>`;
 }
 
-// ═══════════════════════════════════════════════════════════
-//  MINI CHART DRAWING (rain bars)
-// ═══════════════════════════════════════════════════════════
-function drawAllCharts(d) {
-  // Rain accumulation bars
-  document.querySelectorAll('canvas.rain-bar').forEach(canvas => {
-    const idx = parseInt(canvas.dataset.idx);
-    const val = parseFloat(canvas.dataset.precip) || 0;
-    drawRainBar(canvas, val, d.hourly);
+function renderGradientBar(hours) {
+  const bar = document.getElementById('gradient-bar');
+  if (!bar) return;
+  const stops = hours.map((h, i) => {
+    const pct = (i / (hours.length - 1) * 100).toFixed(1);
+    const col = h.spray.status === 'favorable' ? '#3ddc84'
+              : h.spray.status === 'caution'   ? '#ffc107'
+              : '#ff4d4d';
+    return `${col} ${pct}%`;
   });
+  bar.style.background = `linear-gradient(90deg, ${stops.join(', ')})`;
 }
 
-function drawRainBar(canvas, val, allHours) {
-  const ctx = canvas.getContext('2d');
-  const w = canvas.width, h = canvas.height;
-  ctx.clearRect(0, 0, w, h);
-
-  // Max precip across all hours for scale
-  const maxVal = Math.max(0.01, ...allHours.map(h => h.precip_in || 0));
-
-  const barH = Math.max(2, (val / maxVal) * (h - 12));
-  const y = h - barH;
-
-  // Bar
-  const grad = ctx.createLinearGradient(0, y, 0, h);
-  grad.addColorStop(0, '#4fa3e3');
-  grad.addColorStop(1, '#1a4a7a');
-  ctx.fillStyle = grad;
-  ctx.beginPath();
-  ctx.roundRect(8, y, w - 16, barH, [2, 2, 0, 0]);
-  ctx.fill();
-
-  // Value text
-  if (val > 0) {
-    ctx.fillStyle = '#888';
-    ctx.font = '9px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(val.toFixed(2), w / 2, h - barH - 2);
-  }
+// ── Extended Forecast Buttons ────────────────
+function renderExtButtons() {
+  return `<div class="ext-buttons">
+    <button class="ext-btn" onclick="openModal('modal-hourly')">
+      <span class="btn-icon">⏱</span>Hourly Extended Forecast
+    </button>
+    <button class="ext-btn" onclick="openModal('modal-daily')">
+      <span class="btn-icon">📅</span>Daily Extended Forecast
+    </button>
+  </div>`;
 }
 
-// ═══════════════════════════════════════════════════════════
+// ── Bottom Cards ─────────────────────────────
+function renderBottomCards(now) {
+  const rh = now.rh;
+  const precip = now.precip_pct;
+  const precipColor = precip >= 50 ? '#ff4d4d' : precip >= 25 ? '#ffc107' : '#4fa3e3';
+
+  // SVG arc for humidity
+  const arcR = 28;
+  const arcC = 36;
+  const arcCircum = 2 * Math.PI * arcR;
+  const arcFill   = arcCircum * (rh / 100) * 0.75; // 75% of circle = 270deg
+  const arcOffset  = arcCircum - arcFill;
+  const rhColor = rh < 30 ? '#ff4d4d' : rh < 45 ? '#ffc107' : '#3ddc84';
+
+  return `<div class="bottom-cards">
+    <div class="bottom-card glass">
+      <div class="bc-icon">💧</div>
+      <div class="bc-title">Humidity</div>
+      <div class="bc-value">${rh}<span class="bc-unit">%</span></div>
+      <svg class="humidity-arc" viewBox="0 0 72 42" style="margin-top:8px">
+        <circle cx="${arcC}" cy="38" r="${arcR}" fill="none"
+          stroke="rgba(255,255,255,0.1)" stroke-width="5"
+          stroke-dasharray="${(arcCircum*0.75).toFixed(1)}"
+          stroke-dashoffset="0"
+          stroke-linecap="round"
+          transform="rotate(135 ${arcC} 38)"/>
+        <circle cx="${arcC}" cy="38" r="${arcR}" fill="none"
+          stroke="${rhColor}" stroke-width="5"
+          stroke-dasharray="${arcCircum.toFixed(1)}"
+          stroke-dashoffset="${arcOffset.toFixed(1)}"
+          stroke-linecap="round"
+          transform="rotate(135 ${arcC} 38)"/>
+      </svg>
+      <div class="bc-sub">Relative humidity<br>${rh < 30 ? '⚠ Too low — drift risk' : rh > 90 ? '⚠ Too high' : 'Within optimal range'}</div>
+    </div>
+
+    <div class="bottom-card glass">
+      <div class="bc-icon">🌧</div>
+      <div class="bc-title">Precipitation</div>
+      <div class="bc-value">${precip}<span class="bc-unit">%</span></div>
+      <div class="precip-bar-bg" style="margin-top:14px">
+        <div class="precip-bar-fill" style="width:${precip}%;background:linear-gradient(90deg,${precipColor},${precipColor}99)"></div>
+      </div>
+      <div class="bc-sub">Chance of rain<br>${precip >= 50 ? '⚠ Rain likely — avoid spray' : precip >= 25 ? '⚠ Moderate rain risk' : 'Low precipitation risk'}</div>
+    </div>
+  </div>`;
+}
+
+// ── Thresholds Strip ─────────────────────────
+function renderThreshStrip(product) {
+  const t = product.thresholds;
+  const items = [
+    { label: 'Max Wind',  val: `${t.max_wind_mph} mph` },
+    { label: 'Max Gust',  val: `${t.max_gust_mph} mph` },
+    { label: 'Temp Range',val: `${t.min_temp_f}–${t.max_temp_f}°F` },
+    { label: 'RH Range',  val: `${t.min_rh}–${t.max_rh}%` },
+    { label: 'Max Precip',val: `<${t.max_precip_pct}%` },
+    { label: 'Delta-T',   val: t.delta_t_range },
+  ];
+  return `<div class="thresh-strip glass">
+    <div class="thresh-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'grid':'none'">
+      <span>🧪 ${esc(product.name)} Label Limits</span>
+      <span style="color:rgba(255,255,255,0.4);font-size:14px">▾</span>
+    </div>
+    <div class="thresh-grid">
+      ${items.map(it => `<div class="thresh-item">
+        <div class="thresh-item-label">${it.label}</div>
+        <div class="thresh-item-val">${it.val}</div>
+      </div>`).join('')}
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:10px;line-height:1.4">
+      📋 ${esc(product.notes || '')}
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  MODALS
+// ═══════════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (!state.data) return;
+  if (id === 'modal-hourly') renderHourlyModal();
+  if (id === 'modal-daily')  renderDailyModal();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+document.querySelectorAll('.modal-backdrop').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); });
+});
+
+function renderHourlyModal() {
+  const hours = state.data.hourly;
+  const rows = hours.map(h => {
+    const dt = new Date(h.time);
+    const timeStr = dt.toLocaleDateString('en-US', {weekday:'short',month:'short',day:'numeric'}) + ' ' +
+                    dt.toLocaleTimeString('en-US', {hour:'numeric',hour12:true});
+    const dtV = h.delta_t;
+    const dtCls = dtV < 2 || dtV > 8 ? 'dt-bad' : dtV < 3 || dtV > 7 ? 'dt-caution' : 'dt-optimal';
+    const reason = h.spray.reasons[0] || '—';
+    return `<tr>
+      <td style="color:rgba(255,255,255,0.6);font-size:11px">${timeStr}</td>
+      <td>${h.condition.icon} <span style="font-size:10px;color:rgba(255,255,255,0.4)">${h.cloud_pct}%</span></td>
+      <td>${Math.round(h.temp_f)}°F</td>
+      <td style="color:#4fa3e3">${Math.round(h.dew_f)}°</td>
+      <td style="color:var(--text-dim)">${h.rh}%</td>
+      <td class="${dtCls}" style="font-weight:600">${dtV.toFixed(1)}</td>
+      <td>${Math.round(h.wind_mph)} <span style="color:rgba(255,255,255,0.4);font-size:10px">${h.wind_dir}</span></td>
+      <td style="color:#2176d4">${Math.round(h.gust_mph)}</td>
+      <td>${h.precip_pct}%</td>
+      <td><span class="status-dot ${h.spray.status}">${h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'OK'}</span></td>
+      <td style="color:rgba(255,255,255,0.35);font-size:10px;max-width:150px;white-space:normal">${esc(reason)}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('modal-hourly-body').innerHTML = `
+    <table class="h-table">
+      <thead><tr>
+        <th>Time</th><th>Cond</th><th>Temp</th><th>Dew</th>
+        <th>RH</th><th>ΔT°C</th><th>Wind</th><th>Gust</th>
+        <th>Precip</th><th>Status</th><th>Note</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function renderDailyModal() {
+  const days = state.data.daily;
+  const cards = days.map(day => {
+    const dt  = new Date(day.date + 'T12:00:00');
+    const dow  = dt.toLocaleDateString('en-US', {weekday:'short'});
+    const date = dt.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    const sprayLabel = day.spray.status === 'no-good' ? 'No Good'
+                     : day.spray.status === 'caution' ? 'Caution' : 'Favorable';
+    const reason = day.spray.reasons[0] || '';
+    return `<div class="daily-row ${day.spray.status}">
+      <div class="dr-day">${dow}</div>
+      <div class="dr-date">${date}</div>
+      <div class="dr-icon">${day.condition.icon}</div>
+      <div class="dr-temps">
+        <span class="dr-high">${Math.round(day.temp_max_f)}°</span>
+        <span class="dr-low">${Math.round(day.temp_min_f)}°</span>
+      </div>
+      <div class="dr-meta">
+        💨 ${Math.round(day.wind_max_mph)}/${Math.round(day.gust_max_mph)} mph
+        &nbsp;·&nbsp; 🌧 ${day.precip_pct}%
+        ${reason ? `<br><span style="font-size:10px;color:rgba(255,255,255,0.3)">${esc(reason)}</span>` : ''}
+      </div>
+      <div class="dr-spray ${day.spray.status}">${sprayLabel}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('modal-daily-body').innerHTML = `<div class="daily-list">${cards}</div>`;
+}
+
+// ═══════════════════════════════════════════════
 //  UTILS
-// ═══════════════════════════════════════════════════════════
-function escHtml(str) {
-  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ═══════════════════════════════════════════════
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function escAttr(str) {
-  return String(str || '').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/\n/g,'&#10;');
-}
-
-function fmtTime(iso) {
-  if (!iso) return 'N/A';
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-      + ' ' + d.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
-  } catch { return iso; }
-}
-
-// ── Auto-load if location pre-filled ─────────────────────
+// ═══════════════════════════════════════════════
+//  AUTO-RESTORE SESSION
+// ═══════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
-  // If user navigated back or has stored location, trigger search
-  const savedLoc = sessionStorage.getItem('lastLocation');
+  const savedLoc  = sessionStorage.getItem('lastLocation');
   const savedHerb = sessionStorage.getItem('lastHerbicide');
   if (savedLoc) {
     document.getElementById('loc-input').value = savedLoc;
     if (savedHerb) document.getElementById('herb-select').value = savedHerb;
-    doSearch();
+    fetchAndRender(savedLoc, savedHerb || 'general');
   }
 });
 
-// Save last search to session
-const origFetch = fetchAndRender;
-window.fetchAndRender = async function(loc, herb) {
-  sessionStorage.setItem('lastLocation', loc);
-  sessionStorage.setItem('lastHerbicide', herb);
-  return origFetch(loc, herb);
-};
-
-// Bind the function globally
-window.doSearch = doSearch;
-window.switchTab = switchTab;
+window.doSearch   = doSearch;
+window.openModal  = openModal;
+window.closeModal = closeModal;
 </script>
 </body>
 </html>
