@@ -12,7 +12,14 @@ export default async function handler(req, res) {
   // Load products
   let products;
   try {
-    const productsData = await fetch('https://raw.githubusercontent.com/Bookman367/weather-app/main/products.json').then(r => r.json());
+    // Static products (herbicide DB)
+const products = {
+  general: {name: "General Herbicide", restrictions: {min_temp_f:50, max_temp_f:90, max_wind_mph:15, max_precip_pct:30}, notes: "Generic criteria"},
+  "2_4_d_amine": {name: "2,4-D Amine", restrictions: {min_temp_f:60, max_temp_f:85, max_wind_mph:15}, notes: "Common broadleaf killer"},
+  dicamba: {name: "Dicamba (Clarity)", restrictions: {min_temp_f:65, max_wind_mph:10}, notes: "Volatile; wind-sensitive"},
+  "grazon_next_hl": {name: "GrazonNext HL", restrictions: {min_temp_f:55, max_temp_f:90, min_rh_pct:40, max_rh_pct:85, max_wind_mph:10, max_gust_mph:15, max_precip_pct:20}, notes: "Avoid drift; temps >90 volatile (EPA label)", epa_url: "https://www3.epa.gov/pesticides/chem_search/ppls/000100-01221-20210405.pdf"},
+  "grazon_p_d": {name: "Grazon P+D", restrictions: {min_temp_f:60, max_wind_mph:12, max_gust_mph:18}, notes: "Picloram + 2,4-D for broadleaf"}
+};
     products = productsData.products;
   } catch {
     return res.status(500).json({ error: 'Products load failed' });
@@ -25,7 +32,11 @@ export default async function handler(req, res) {
   // Geocode
   let lat, lon;
   try {
-    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&limit=1`);
+    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&limit=1`, {
+  headers: {
+    'User-Agent': 'weather-spray-app/1.0 (contact@example.com)'
+  }
+});
     const geoData = await geoRes.json();
     if (geoData.length === 0) throw new Error('Location not found');
     lat = parseFloat(geoData[0].lat);
