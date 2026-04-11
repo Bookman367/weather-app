@@ -1,55 +1,1180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Spray Forecast</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.5; }
-        input, select, button { padding: 12px; margin: 10px 0; width: 100%; font-size: 16px; }
-        button { background: #0066cc; color: white; border: none; cursor: pointer; }
-        button:hover { background: #0055aa; }
-        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; white-space: pre-wrap; background: #f9f9f9; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Spray Weather Forecast</title>
+  <style>
+    /* ── Reset & Base ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0f0f0f;
+      --bg2:         #1a1a1a;
+      --bg3:         #242424;
+      --bg4:         #2e2e2e;
+      --border:      #333;
+      --text:        #e8e8e8;
+      --text-dim:    #888;
+      --text-muted:  #555;
+      --green:       #3ddc84;
+      --green-dim:   #1e6b41;
+      --yellow:      #ffc107;
+      --yellow-dim:  #6b4f00;
+      --red:         #ff4444;
+      --red-dim:     #6b1010;
+      --blue:        #4fa3e3;
+      --blue-dim:    #1a3d5c;
+      --orange:      #ff8c42;
+      --teal:        #26d7c4;
+      --accent:      #4fa3e3;
+      --radius:      10px;
+      --radius-sm:   6px;
+    }
+
+    html { height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    .header {
+      background: linear-gradient(135deg, #0d1b2a 0%, #1a2f48 100%);
+      border-bottom: 1px solid #1e3a5a;
+      padding: 16px 20px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.6);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #e8f4ff;
+      letter-spacing: 0.3px;
+    }
+
+    .header-subtitle {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* ── Search Form ─────────────────────────────────────────── */
+    .search-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .search-input-wrap .geo-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    input[type="text"], select {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid #334;
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 14px;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input[type="text"]:focus, select:focus {
+      border-color: var(--accent);
+      background: rgba(79,163,227,0.08);
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+      cursor: pointer;
+      min-width: 160px;
+    }
+
+    select option { background: #1a1a2e; }
+
+    .search-btn {
+      background: linear-gradient(135deg, #1a5fa8, #2176d4);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 20px;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+
+    .search-btn:hover { opacity: 0.85; }
+    .search-btn:active { opacity: 0.7; }
+    .search-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Location Bar ────────────────────────────────────────── */
+    .location-bar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .location-name {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .product-tag {
+      background: rgba(79,163,227,0.15);
+      border: 1px solid rgba(79,163,227,0.3);
+      border-radius: 20px;
+      color: var(--accent);
+      font-size: 11px;
+      padding: 2px 10px;
+    }
+
+    /* ── Summary Bar ─────────────────────────────────────────── */
+    .summary-bar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .summary-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+    }
+
+    .summary-pill .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .best-window {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .best-window strong { color: var(--green); }
+
+    /* ── Tab Bar ─────────────────────────────────────────────── */
+    .tab-bar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      padding: 0 20px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 12px 20px 9px;
+      transition: color 0.2s, border-color 0.2s;
+      letter-spacing: 0.3px;
+    }
+
+    .tab-btn.active {
+      border-bottom-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Loading & Error ─────────────────────────────────────── */
+    .loading-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+    }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--bg3);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-state {
+      background: rgba(255,68,68,0.08);
+      border: 1px solid rgba(255,68,68,0.25);
+      border-radius: var(--radius);
+      color: #ff8888;
+      margin: 20px;
+      padding: 16px 20px;
+      font-size: 13px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state .big-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; line-height: 1.6; }
+
+    /* ══════════════════════════════════════════════════════════
+       HOURLY VIEW
+    ══════════════════════════════════════════════════════════ */
+    #view-hourly { padding: 0; overflow: hidden; }
+
+    .hourly-scroll-wrap {
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 10px;
+    }
+
+    .hourly-grid {
+      display: grid;
+      grid-template-columns: 110px repeat(var(--col-count, 24), 80px);
+      min-width: max-content;
+    }
+
+    /* Row label column */
+    .row-label {
+      align-items: center;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid #2a2a3a;
+      color: var(--text-dim);
+      display: flex;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 0 10px;
+      text-transform: uppercase;
+      position: sticky;
+      left: 0;
+      z-index: 10;
+    }
+
+    .row-label.header-label {
+      background: #131320;
+      border-bottom: 2px solid #2a2a4a;
+      font-size: 11px;
+      color: #5a7a9a;
+    }
+
+    /* Data cell base */
+    .cell {
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 56px;
+      padding: 6px 4px;
+      text-align: center;
+    }
+
+    /* Time header row */
+    .time-cell {
+      background: #131320;
+      border-bottom: 2px solid #2a2a4a;
+      flex-direction: column;
+      gap: 2px;
+      min-height: 52px;
+    }
+
+    .time-cell .day-label {
+      color: #5a7a9a;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .time-cell .hour-label {
+      color: #c0d8f0;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .time-cell.new-day {
+      border-left: 2px solid #2a4a6a;
+    }
+
+    /* Condition icon row */
+    .cond-cell { min-height: 52px; background: var(--bg2); }
+    .cond-icon { font-size: 24px; line-height: 1; }
+    .cloud-pct { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+    /* Spray status row */
+    .spray-cell {
+      min-height: 64px;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spray-cell.favorable { background: rgba(61,220,132,0.06); }
+    .spray-cell.caution   { background: rgba(255,193,7,0.06); }
+    .spray-cell.no-good   { background: rgba(255,68,68,0.06); }
+
+    .spray-nozzle {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .spray-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .spray-cell.favorable .spray-label { color: var(--green); }
+    .spray-cell.caution   .spray-label { color: var(--yellow); }
+    .spray-cell.no-good   .spray-label { color: var(--red); }
+
+    /* Delta-T row */
+    .deltat-cell { min-height: 48px; }
+    .deltat-val { font-size: 13px; font-weight: 600; }
+    .deltat-val.optimal { color: var(--green); }
+    .deltat-val.caution { color: var(--yellow); }
+    .deltat-val.bad     { color: var(--red); }
+    .deltat-sub { font-size: 9px; color: var(--text-muted); }
+
+    /* Precip row */
+    .precip-cell { min-height: 60px; }
+
+    .precip-ring {
+      position: relative;
+      width: 40px; height: 40px;
+    }
+
+    .precip-ring svg {
+      transform: rotate(-90deg);
+      width: 40px; height: 40px;
+    }
+
+    .precip-ring .ring-bg { fill: none; stroke: var(--bg4); stroke-width: 4; }
+    .precip-ring .ring-fill {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s;
+    }
+
+    .precip-ring .ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text);
+      transform: none;
+    }
+
+    /* Rain accumulation row */
+    .rain-cell { min-height: 60px; padding: 4px 2px; }
+    .rain-graph {
+      width: 100%;
+      height: 48px;
+    }
+
+    /* Temperature row */
+    .temp-cell { min-height: 80px; flex-direction: column; gap: 2px; }
+    .temp-graph { width: 100%; height: 50px; }
+    .temp-vals { display: flex; gap: 6px; font-size: 10px; flex-wrap: wrap; justify-content: center; }
+    .temp-air { color: var(--orange); font-weight: 600; }
+    .temp-dew { color: var(--teal); font-weight: 600; }
+    .temp-rh  { color: var(--text-dim); font-size: 9px; }
+
+    /* Wind row */
+    .wind-cell { min-height: 64px; gap: 3px; }
+
+    .wind-arrow {
+      font-size: 16px;
+      line-height: 1;
+      display: block;
+    }
+
+    .wind-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 56px;
+    }
+
+    .wind-bar-wrap {
+      align-items: center;
+      display: flex;
+      gap: 4px;
+      font-size: 9px;
+    }
+
+    .wind-bar-bg {
+      background: var(--bg4);
+      border-radius: 2px;
+      flex: 1;
+      height: 5px;
+      overflow: hidden;
+    }
+
+    .wind-bar-fill {
+      border-radius: 2px;
+      height: 100%;
+      transition: width 0.5s;
+    }
+
+    .wind-bar-fill.sust { background: #4fa3e3; }
+    .wind-bar-fill.gust { background: #2176d4; }
+
+    .wind-speed-text {
+      color: var(--text-dim);
+      font-size: 9px;
+      text-align: center;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       DAILY VIEW
+    ══════════════════════════════════════════════════════════ */
+    #view-daily { padding: 12px 16px; }
+
+    .daily-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      padding: 14px 16px;
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .daily-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+    }
+
+    .daily-card.favorable::before { background: var(--green); }
+    .daily-card.caution::before   { background: var(--yellow); }
+    .daily-card.no-good::before   { background: var(--red); }
+
+    .daily-date-col {
+      text-align: left;
+    }
+
+    .daily-dow {
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .daily-date {
+      color: var(--text-dim);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .daily-middle {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .daily-icon { font-size: 28px; line-height: 1; }
+
+    .daily-temps {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .daily-high {
+      color: #ff8c42;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .daily-low {
+      color: #4fa3e3;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .daily-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .daily-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .daily-spray-col {
+      text-align: center;
+      min-width: 70px;
+    }
+
+    .spray-badge {
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .spray-badge.favorable {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(61,220,132,0.25);
+    }
+
+    .spray-badge.caution {
+      background: var(--yellow-dim);
+      color: var(--yellow);
+      border: 1px solid rgba(255,193,7,0.25);
+    }
+
+    .spray-badge.no-good {
+      background: var(--red-dim);
+      color: var(--red);
+      border: 1px solid rgba(255,68,68,0.25);
+    }
+
+    .daily-cond-text {
+      color: var(--text-dim);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    /* ── Product Info Panel ──────────────────────────────────── */
+    .product-panel {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 12px 16px;
+      overflow: hidden;
+    }
+
+    .product-panel-header {
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      user-select: none;
+    }
+
+    .product-panel-body {
+      display: none;
+      padding: 12px 14px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .product-panel-body.open { display: flex; }
+
+    .thresh-chip {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      padding: 4px 10px;
+      color: var(--text-dim);
+    }
+
+    .thresh-chip strong { color: var(--text); }
+
+    .product-notes {
+      width: 100%;
+      color: var(--text-dim);
+      font-size: 11px;
+      font-style: italic;
+      padding-top: 4px;
+    }
+
+    /* ── Tooltip ─────────────────────────────────────────────── */
+    .tooltip-wrap {
+      position: relative;
+    }
+
+    .tooltip-wrap:hover .tooltip-box {
+      display: block;
+    }
+
+    .tooltip-box {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      border: 1px solid #333;
+      border-radius: var(--radius-sm);
+      color: #ddd;
+      font-size: 11px;
+      line-height: 1.5;
+      padding: 8px 10px;
+      white-space: nowrap;
+      z-index: 200;
+      pointer-events: none;
+      max-width: 200px;
+      white-space: normal;
+      text-align: left;
+    }
+
+    .tooltip-box::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #333;
+    }
+
+    /* ── Mini canvas charts helper ───────────────────────────── */
+    canvas { display: block; }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .header { padding: 12px 14px 10px; }
+      .header-title { font-size: 15px; }
+      .search-row { gap: 6px; }
+      .tab-btn { padding: 10px 14px 7px; font-size: 12px; }
+      .daily-card { grid-template-columns: 70px 1fr auto; gap: 8px; padding: 12px; }
+    }
+  </style>
 </head>
 <body>
-    <h1>Weather Spray Forecast</h1>
-    <label>Location (city, state or lat,long):</label>
-    <input type="text" id="location" placeholder="Sioux City, IA" value="Sioux City, IA">
-    
-    <label>Herbicide Type:</label>
-    <select id="herbicide">
-        <option value="general">General</option>
-        <option value="2,4-D Amine">2,4-D Amine</option>
-        <option value="Dicamba">Dicamba</option>
-        <option value="GrazonNext HL">GrazonNext HL</option>
-        <option value="Grazon P+D">Grazon P+D</option>
+
+<!-- ── HEADER ────────────────────────────────────────────── -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-title">🌾 Spray Weather Forecast</div>
+      <div class="header-subtitle">Ag-focused • Product label thresholds • 96h hourly + 7-day outlook</div>
+    </div>
+  </div>
+  <div class="search-row">
+    <div class="search-input-wrap">
+      <input type="text" id="loc-input" placeholder="City, State  /  Zip  /  Lat, Lon" autocomplete="off" />
+      <button class="geo-btn" id="geo-btn" title="Use my location">📍</button>
+    </div>
+    <select id="herb-select">
+      <option value="general">General (Ag Guidelines)</option>
+      <option value="2,4-D Amine">2,4-D Amine</option>
+      <option value="Dicamba">Dicamba</option>
+      <option value="GrazonNext HL">GrazonNext HL</option>
+      <option value="Grazon P+D">Grazon P+D</option>
+      <option value="Roundup (Glyphosate)">Roundup / Glyphosate</option>
+      <option value="Tordon 22K">Tordon 22K</option>
+      <option value="Remedy Ultra">Remedy Ultra</option>
     </select>
-    
-    <button onclick="getForecast()">Get Spray Recommendation</button>
-    
-    <div id="result"></div>
+    <button class="search-btn" id="search-btn" onclick="doSearch()">Search</button>
+  </div>
+</div>
 
-    <script>
-        async function getForecast() {
-            const loc = document.getElementById('location').value.trim();
-            const herb = document.getElementById('herbicide').value;
-            const resultDiv = document.getElementById('result');
-            resultDiv.textContent = 'Contacting Hermes backend...';
+<!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+<div id="app-body">
+  <div class="empty-state">
+    <div class="big-icon">🌤️</div>
+    <p>Enter a location above to get your<br>ag-focused spray weather forecast.</p>
+  </div>
+</div>
 
-            try {
-                const response = await fetch('/api/forecast', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ location: loc, herbicide: herb })
-                });
-                if (!response.ok) throw new Error('Backend error: ' + response.status);
-                const data = await response.text();
-                resultDiv.textContent = data;
-            } catch (e) {
-                resultDiv.textContent = 'Error: ' + e.message + '\n(Check your internet connection or refresh the page.)';
-            }
-        }
-    </script>
+<script>
+// ═══════════════════════════════════════════════════════════
+//  APP STATE
+// ═══════════════════════════════════════════════════════════
+let state = {
+  data: null,
+  tab: 'hourly',
+  loading: false
+};
+
+const WIND_MAX_SCALE = 30; // mph, for wind bar 100% width
+
+// ═══════════════════════════════════════════════════════════
+//  SEARCH & DATA FETCH
+// ═══════════════════════════════════════════════════════════
+async function doSearch() {
+  const loc = document.getElementById('loc-input').value.trim();
+  const herb = document.getElementById('herb-select').value;
+  if (!loc) {
+    document.getElementById('loc-input').focus();
+    return;
+  }
+  await fetchAndRender(loc, herb);
+}
+
+async function fetchAndRender(loc, herb) {
+  state.loading = true;
+  renderLoading();
+
+  try {
+    const params = new URLSearchParams({ location: loc, herbicide: herb });
+    const resp = await fetch(`/api/forecast?${params}`);
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({ error: `HTTP ${resp.status}` }));
+      throw new Error(err.error || `Server error ${resp.status}`);
+    }
+    state.data = await resp.json();
+    state.tab = state.tab || 'hourly';
+    renderApp();
+  } catch (e) {
+    renderError(e.message);
+  } finally {
+    state.loading = false;
+  }
+}
+
+// ── Geolocation ────────────────────────────────────────────
+document.getElementById('geo-btn').addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    alert('Geolocation not supported by your browser.');
+    return;
+  }
+  const btn = document.getElementById('geo-btn');
+  btn.textContent = '⏳';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const coords = `${pos.coords.latitude.toFixed(4)},${pos.coords.longitude.toFixed(4)}`;
+      document.getElementById('loc-input').value = coords;
+      btn.textContent = '📍';
+      doSearch();
+    },
+    err => {
+      btn.textContent = '📍';
+      alert('Could not get location: ' + err.message);
+    },
+    { timeout: 10000 }
+  );
+});
+
+// Enter key triggers search
+document.getElementById('loc-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER STATES
+// ═══════════════════════════════════════════════════════════
+function renderLoading() {
+  document.getElementById('app-body').innerHTML = `
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <div>Fetching forecast…</div>
+    </div>`;
+}
+
+function renderError(msg) {
+  document.getElementById('app-body').innerHTML = `
+    <div class="error-state">⚠️ &nbsp;${escHtml(msg)}</div>`;
+}
+
+function renderApp() {
+  const d = state.data;
+  const appBody = document.getElementById('app-body');
+
+  const summaryPct = (count, total) => total ? Math.round(count / total * 100) : 0;
+  const total = d.summary.favorable_hours + d.summary.caution_hours + d.summary.no_good_hours;
+
+  const bestWinHTML = d.summary.best_window_hours > 0
+    ? `Best window: <strong>${d.summary.best_window_hours}h</strong> favorable starting ${fmtTime(d.summary.best_window_start)}`
+    : 'No extended favorable window in 96h';
+
+  appBody.innerHTML = `
+    <div class="location-bar">
+      <div>
+        <span class="location-name">📍 ${escHtml(d.location.display)}</span>
+        <span style="color:var(--text-muted);margin-left:8px;font-size:11px">${d.location.lat.toFixed(4)}, ${d.location.lon.toFixed(4)}</span>
+      </div>
+      <span class="product-tag">🧪 ${escHtml(d.product.name)}</span>
+    </div>
+
+    <div class="summary-bar">
+      <span class="summary-pill">
+        <span class="dot" style="background:var(--green)"></span>
+        <strong style="color:var(--green)">${d.summary.favorable_hours}</strong>
+        <span style="color:var(--text-dim)">Favorable</span>
+      </span>
+      <span class="summary-pill">
+        <span class="dot" style="background:var(--yellow)"></span>
+        <strong style="color:var(--yellow)">${d.summary.caution_hours}</strong>
+        <span style="color:var(--text-dim)">Caution</span>
+      </span>
+      <span class="summary-pill">
+        <span class="dot" style="background:var(--red)"></span>
+        <strong style="color:var(--red)">${d.summary.no_good_hours}</strong>
+        <span style="color:var(--text-dim)">No Good</span>
+      </span>
+      <span class="best-window">${bestWinHTML}</span>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn ${state.tab==='hourly'?'active':''}" onclick="switchTab('hourly')">⏱ Hourly (96h)</button>
+      <button class="tab-btn ${state.tab==='daily'?'active':''}" onclick="switchTab('daily')">📅 7-Day Outlook</button>
+    </div>
+
+    <div id="view-hourly" style="display:${state.tab==='hourly'?'block':'none'}">
+      ${buildHourlyView(d)}
+    </div>
+
+    <div id="view-daily" style="display:${state.tab==='daily'?'block':'none'}">
+      ${buildProductPanel(d.product)}
+      ${buildDailyView(d)}
+    </div>
+  `;
+
+  // Draw mini-charts on canvas elements
+  requestAnimationFrame(() => drawAllCharts(d));
+}
+
+function switchTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.textContent.toLowerCase().includes(tab === 'hourly' ? 'hourly' : '7-day'))
+      b.classList.add('active');
+  });
+  document.getElementById('view-hourly').style.display = tab === 'hourly' ? 'block' : 'none';
+  document.getElementById('view-daily').style.display  = tab === 'daily'  ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  HOURLY GRID BUILDER
+// ═══════════════════════════════════════════════════════════
+function buildHourlyView(d) {
+  const hours = d.hourly;
+  const n = hours.length;
+
+  // Row label + n data cells per row
+  let rows = {
+    time:   ['<div class="row-label header-label">Time</div>'],
+    cond:   ['<div class="row-label">Cond.</div>'],
+    spray:  ['<div class="row-label">Spray<br>Status</div>'],
+    deltat: ['<div class="row-label">Delta-T<br>(°C)</div>'],
+    precip: ['<div class="row-label">Precip<br>%</div>'],
+    rain:   ['<div class="row-label">Rain<br>(in)</div>'],
+    temp:   ['<div class="row-label">Temp &<br>Dew Pt</div>'],
+    wind:   ['<div class="row-label">Wind</div>'],
+  };
+
+  let prevDay = null;
+  hours.forEach((h, i) => {
+    const dt = new Date(h.time);
+    const hour12 = dt.getHours() % 12 || 12;
+    const ampm = dt.getHours() < 12 ? 'am' : 'pm';
+    const day = dt.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
+    const isNewDay = day !== prevDay;
+    prevDay = day;
+
+    const newDayCls = isNewDay ? ' new-day' : '';
+
+    // Time
+    rows.time.push(`<div class="cell time-cell${newDayCls}">
+      <span class="day-label">${isNewDay ? day : ''}</span>
+      <span class="hour-label">${hour12}${ampm}</span>
+    </div>`);
+
+    // Condition
+    rows.cond.push(`<div class="cell cond-cell">
+      <span class="cond-icon">${h.condition.icon}</span>
+      <span class="cloud-pct">${h.cloud_pct}%</span>
+    </div>`);
+
+    // Spray status
+    const sprayReasonTip = h.spray.reasons.length
+      ? h.spray.reasons.slice(0, 3).join('\n')
+      : 'Conditions OK';
+    const nozzleEmoji = h.spray.status === 'favorable' ? '🟢' : h.spray.status === 'caution' ? '🟡' : '🔴';
+    const sprayLabelText = h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'Favorable';
+    rows.spray.push(`<div class="cell spray-cell ${h.spray.status} tooltip-wrap" title="${escAttr(sprayReasonTip)}">
+      <span class="spray-nozzle">${nozzleEmoji}</span>
+      <span class="spray-label">${sprayLabelText}</span>
+    </div>`);
+
+    // Delta-T
+    const dtVal = h.delta_t;
+    const dtCls = dtVal < 2 ? 'bad' : dtVal > 8 ? 'bad' : dtVal < 3 || dtVal > 7 ? 'caution' : 'optimal';
+    rows.deltat.push(`<div class="cell deltat-cell">
+      <span class="deltat-val ${dtCls}">${dtVal.toFixed(1)}</span>
+      <span class="deltat-sub">${dtCls === 'optimal' ? 'Optimal' : dtCls === 'caution' ? 'Marginal' : dtVal < 2 ? 'Inv.Risk' : 'Evap.Risk'}</span>
+    </div>`);
+
+    // Precip % ring
+    const pPct = Math.min(100, h.precip_pct);
+    const circumference = 2 * Math.PI * 16; // r=16
+    const offset = circumference - (pPct / 100) * circumference;
+    const ringColor = pPct >= 50 ? '#ff4444' : pPct >= 25 ? '#ffc107' : '#4fa3e3';
+    rows.precip.push(`<div class="cell precip-cell">
+      <div class="precip-ring">
+        <svg viewBox="0 0 40 40">
+          <circle class="ring-bg" cx="20" cy="20" r="16"/>
+          <circle class="ring-fill" cx="20" cy="20" r="16"
+            stroke="${ringColor}"
+            stroke-dasharray="${circumference}"
+            stroke-dashoffset="${offset.toFixed(2)}"/>
+        </svg>
+        <div class="ring-text">${pPct}%</div>
+      </div>
+    </div>`);
+
+    // Rain accumulation — mini bar (drawn as canvas later)
+    rows.rain.push(`<div class="cell rain-cell">
+      <canvas class="rain-bar" width="76" height="48" data-precip="${h.precip_in}" data-idx="${i}"></canvas>
+    </div>`);
+
+    // Temperature
+    rows.temp.push(`<div class="cell temp-cell">
+      <div class="temp-vals">
+        <span class="temp-air">${Math.round(h.temp_f)}°F</span>
+        <span class="temp-dew">${Math.round(h.dew_f)}°D</span>
+        <span class="temp-rh">RH ${h.rh}%</span>
+      </div>
+    </div>`);
+
+    // Wind
+    const wPct = Math.min(100, (h.wind_mph / WIND_MAX_SCALE) * 100).toFixed(0);
+    const gPct = Math.min(100, (h.gust_mph / WIND_MAX_SCALE) * 100).toFixed(0);
+    const arrowDeg = h.wind_dir_deg || 0;
+    rows.wind.push(`<div class="cell wind-cell">
+      <span class="wind-arrow" style="transform:rotate(${arrowDeg}deg);display:inline-block">↑</span>
+      <div class="wind-bars">
+        <div class="wind-bar-wrap">
+          <div class="wind-bar-bg"><div class="wind-bar-fill sust" style="width:${wPct}%"></div></div>
+        </div>
+        <div class="wind-bar-wrap">
+          <div class="wind-bar-bg"><div class="wind-bar-fill gust" style="width:${gPct}%"></div></div>
+        </div>
+      </div>
+      <span class="wind-speed-text">${h.wind_dir} ${Math.round(h.wind_mph)}/<span style="color:#2176d4">${Math.round(h.gust_mph)}</span></span>
+    </div>`);
+  });
+
+  // Assemble grid
+  const colCount = n;
+  const allCells = Object.values(rows).flat().join('');
+
+  return `<div class="hourly-scroll-wrap">
+    <div class="hourly-grid" style="--col-count:${colCount}">
+      ${allCells}
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  DAILY VIEW BUILDER
+// ═══════════════════════════════════════════════════════════
+function buildDailyView(d) {
+  return d.daily.map(day => {
+    const dt = new Date(day.date + 'T12:00:00');
+    const dow  = dt.toLocaleDateString('en-US', { weekday: 'long' });
+    const date = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const sprayLabel = day.spray.status === 'no-good' ? 'No Good' : day.spray.status === 'caution' ? 'Caution' : 'Favorable';
+
+    return `<div class="daily-card ${day.spray.status}">
+      <div class="daily-date-col">
+        <div class="daily-dow">${dow.slice(0,3)}</div>
+        <div class="daily-date">${date}</div>
+      </div>
+      <div class="daily-middle">
+        <span class="daily-icon">${day.condition.icon}</span>
+        <div class="daily-temps">
+          <span class="daily-high">${Math.round(day.temp_max_f)}°</span>
+          <span class="daily-low">${Math.round(day.temp_min_f)}°</span>
+        </div>
+        <div class="daily-meta">
+          <span>💧 ${day.precip_pct}% precip</span>
+          <span>💨 ${Math.round(day.wind_max_mph)} / ${Math.round(day.gust_max_mph)} mph</span>
+          <span style="color:var(--text-muted)">${day.condition.desc}</span>
+        </div>
+      </div>
+      <div class="daily-spray-col">
+        <div class="spray-badge ${day.spray.status}">${sprayLabel}</div>
+        ${day.spray.reasons.length ? `<div class="daily-cond-text" title="${escAttr(day.spray.reasons.join('; '))}">${escHtml(day.spray.reasons[0] || '')}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PRODUCT PANEL
+// ═══════════════════════════════════════════════════════════
+function buildProductPanel(product) {
+  const t = product.thresholds;
+  return `<div class="product-panel">
+    <div class="product-panel-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chevron').textContent=this.nextElementSibling.classList.contains('open')?'▲':'▼'">
+      <span>🧪 ${escHtml(product.name)} — Label Thresholds</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="product-panel-body">
+      <span class="thresh-chip">💨 Wind max: <strong>${t.max_wind_mph} mph</strong></span>
+      <span class="thresh-chip">💨 Gust max: <strong>${t.max_gust_mph} mph</strong></span>
+      <span class="thresh-chip">🌡 Temp: <strong>${t.min_temp_f}–${t.max_temp_f}°F</strong></span>
+      <span class="thresh-chip">💦 RH: <strong>${t.min_rh}–${t.max_rh}%</strong></span>
+      <span class="thresh-chip">🌧 Precip: <strong>&lt;${t.max_precip_pct}%</strong></span>
+      <span class="thresh-chip">🌡 Delta-T: <strong>${t.delta_t_range}</strong></span>
+      <div class="product-notes">📋 ${escHtml(product.notes)}</div>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MINI CHART DRAWING (rain bars)
+// ═══════════════════════════════════════════════════════════
+function drawAllCharts(d) {
+  // Rain accumulation bars
+  document.querySelectorAll('canvas.rain-bar').forEach(canvas => {
+    const idx = parseInt(canvas.dataset.idx);
+    const val = parseFloat(canvas.dataset.precip) || 0;
+    drawRainBar(canvas, val, d.hourly);
+  });
+}
+
+function drawRainBar(canvas, val, allHours) {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  // Max precip across all hours for scale
+  const maxVal = Math.max(0.01, ...allHours.map(h => h.precip_in || 0));
+
+  const barH = Math.max(2, (val / maxVal) * (h - 12));
+  const y = h - barH;
+
+  // Bar
+  const grad = ctx.createLinearGradient(0, y, 0, h);
+  grad.addColorStop(0, '#4fa3e3');
+  grad.addColorStop(1, '#1a4a7a');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.roundRect(8, y, w - 16, barH, [2, 2, 0, 0]);
+  ctx.fill();
+
+  // Value text
+  if (val > 0) {
+    ctx.fillStyle = '#888';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(val.toFixed(2), w / 2, h - barH - 2);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════════════════
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function escAttr(str) {
+  return String(str || '').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/\n/g,'&#10;');
+}
+
+function fmtTime(iso) {
+  if (!iso) return 'N/A';
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+      + ' ' + d.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+  } catch { return iso; }
+}
+
+// ── Auto-load if location pre-filled ─────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  // If user navigated back or has stored location, trigger search
+  const savedLoc = sessionStorage.getItem('lastLocation');
+  const savedHerb = sessionStorage.getItem('lastHerbicide');
+  if (savedLoc) {
+    document.getElementById('loc-input').value = savedLoc;
+    if (savedHerb) document.getElementById('herb-select').value = savedHerb;
+    doSearch();
+  }
+});
+
+// Save last search to session
+const origFetch = fetchAndRender;
+window.fetchAndRender = async function(loc, herb) {
+  sessionStorage.setItem('lastLocation', loc);
+  sessionStorage.setItem('lastHerbicide', herb);
+  return origFetch(loc, herb);
+};
+
+// Bind the function globally
+window.doSearch = doSearch;
+window.switchTab = switchTab;
+</script>
 </body>
 </html>
