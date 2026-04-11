@@ -5,71 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Hero Weather — Spray Forecast</title>
   <style>
-    /* ═══════════════════════════════════════════════
-       RESET & BASE
-    ═══════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:       #3ddc84;
-      --green-glow:  rgba(61,220,132,0.25);
-      --yellow:      #ffc107;
-      --yellow-glow: rgba(255,193,7,0.2);
-      --red:         #ff4d4d;
-      --red-glow:    rgba(255,77,77,0.25);
-      --glass-bg:    rgba(255,255,255,0.09);
-      --glass-bg2:   rgba(255,255,255,0.05);
-      --glass-border:rgba(255,255,255,0.18);
-      --glass-shadow:0 8px 32px rgba(0,0,0,0.4);
-      --blur:        blur(14px);
-      --text:        #ffffff;
-      --text-dim:    rgba(255,255,255,0.6);
-      --text-muted:  rgba(255,255,255,0.35);
-      --radius:      20px;
-      --radius-sm:   12px;
-      --radius-pill: 50px;
+      --green:        #3ddc84;
+      --yellow:       #ffc107;
+      --red:          #ff4d4d;
+      --orange:       #ff8c42;
+      --blue:         #4fa3e3;
+      --teal:         #26d7c4;
+      --glass-bg:     rgba(255,255,255,0.09);
+      --glass-bg2:    rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.18);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      --blur:         blur(14px);
+      --text:         #ffffff;
+      --text-dim:     rgba(255,255,255,0.6);
+      --text-muted:   rgba(255,255,255,0.35);
+      --radius:       20px;
+      --radius-sm:    12px;
+      --radius-pill:  50px;
     }
 
     html, body {
-      height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
       color: var(--text);
       overflow-x: hidden;
     }
 
-    /* ═══════════════════════════════════════════════
-       BACKGROUND — sunset field + overlay
-    ═══════════════════════════════════════════════ */
+    /* ── Background ───────────────────────────────────────── */
     body {
       background:
-        linear-gradient(
-          180deg,
-          rgba(8,15,30,0.72) 0%,
+        linear-gradient(180deg,
+          rgba(8,15,30,0.72)  0%,
           rgba(15,25,50,0.55) 30%,
-          rgba(40,20,8,0.50) 70%,
-          rgba(20,10,5,0.75) 100%
-        ),
-        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&auto=format&fit=crop&q=80') center/cover no-repeat fixed;
+          rgba(40,20,8,0.50)  70%,
+          rgba(20,10,5,0.75)  100%),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&auto=format&fit=crop&q=80')
+        center/cover no-repeat fixed;
       min-height: 100vh;
-      padding: 0 0 60px 0;
+      padding-bottom: 60px;
     }
 
-    /* Drone silhouette watermark */
     body::after {
       content: '';
       position: fixed;
-      bottom: 80px;
-      right: -20px;
-      width: 260px;
-      height: 160px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 160' fill='rgba(255,255,255,0.04)'%3E%3Ccircle cx='65' cy='80' r='12'/%3E%3Ccircle cx='195' cy='80' r='12'/%3E%3Ccircle cx='130' cy='30' r='12'/%3E%3Ccircle cx='130' cy='130' r='12'/%3E%3Crect x='58' y='77' width='144' height='6' rx='3'/%3E%3Crect x='127' y='23' width='6' height='114' rx='3'/%3E%3Ccircle cx='130' cy='80' r='22'/%3E%3C/svg%3E") center/contain no-repeat;
+      bottom: 80px; right: -20px;
+      width: 260px; height: 160px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 160' fill='rgba(255,255,255,0.04)'%3E%3Ccircle cx='65' cy='80' r='12'/%3E%3Ccircle cx='195' cy='80' r='12'/%3E%3Ccircle cx='130' cy='30' r='12'/%3E%3Ccircle cx='130' cy='130' r='12'/%3E%3Crect x='58' y='77' width='144' height='6' rx='3'/%3E%3Crect x='127' y='23' width='6' height='114' rx='3'/%3E%3Ccircle cx='130' cy='80' r='22'/%3E%3C/svg%3E")
+        center/contain no-repeat;
       pointer-events: none;
       z-index: 0;
     }
 
-    /* ═══════════════════════════════════════════════
-       GLASS CARD MIXIN
-    ═══════════════════════════════════════════════ */
+    /* ── Glass helper ─────────────────────────────────────── */
     .glass {
       background: var(--glass-bg);
       backdrop-filter: var(--blur);
@@ -79,653 +68,306 @@
       box-shadow: var(--glass-shadow);
     }
 
-    .glass-sm {
-      background: var(--glass-bg2);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-sm);
-    }
-
-    /* ═══════════════════════════════════════════════
-       LAYOUT WRAPPER
-    ═══════════════════════════════════════════════ */
+    /* ── Layout ───────────────────────────────────────────── */
     .app {
       max-width: 480px;
       margin: 0 auto;
-      padding: 20px 18px;
+      padding: 20px 16px;
       position: relative;
       z-index: 1;
     }
 
-    /* ═══════════════════════════════════════════════
-       HEADER — Search + Location Hero
-    ═══════════════════════════════════════════════ */
-    .search-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 22px;
-    }
+    /* ── Search ───────────────────────────────────────────── */
+    .search-row { display: flex; gap: 10px; margin-bottom: 12px; }
 
-    .search-wrap {
-      flex: 1;
-      position: relative;
-    }
-
-    .search-wrap .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
+    .search-wrap { flex: 1; position: relative; }
+    .search-icon {
+      position: absolute; left: 14px; top: 50%;
       transform: translateY(-50%);
-      font-size: 15px;
-      opacity: 0.5;
-      pointer-events: none;
+      font-size: 15px; opacity: 0.5; pointer-events: none;
     }
-
     .search-input {
       background: rgba(255,255,255,0.1);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-pill);
-      color: var(--text);
-      font-size: 15px;
+      color: var(--text); font-size: 15px;
       padding: 12px 16px 12px 40px;
-      width: 100%;
-      outline: none;
+      width: 100%; outline: none;
       transition: border-color 0.2s, background 0.2s;
       -webkit-appearance: none;
     }
-
     .search-input::placeholder { color: rgba(255,255,255,0.45); }
-    .search-input:focus {
-      border-color: rgba(255,255,255,0.45);
-      background: rgba(255,255,255,0.14);
-    }
+    .search-input:focus { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.14); }
 
     .geo-btn {
       background: rgba(255,255,255,0.1);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-sm);
-      color: white;
-      cursor: pointer;
-      font-size: 18px;
-      padding: 0 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      flex-shrink: 0;
+      color: white; cursor: pointer; font-size: 18px;
+      padding: 0 14px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.2s;
     }
-
     .geo-btn:hover { background: rgba(255,255,255,0.18); }
-
-    /* Product selector row */
-    .product-row {
-      margin-bottom: 20px;
-    }
 
     .product-select {
       background: rgba(255,255,255,0.1);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-pill);
-      color: var(--text);
-      font-size: 14px;
+      color: var(--text); font-size: 14px;
       padding: 10px 36px 10px 18px;
-      width: 100%;
-      outline: none;
-      cursor: pointer;
-      appearance: none;
+      width: 100%; outline: none; cursor: pointer; appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='rgba(255,255,255,0.5)' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-    }
-
-    .product-select option { background: #1a2535; color: white; }
-
-    /* Location Hero */
-    .hero-location {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+      background-repeat: no-repeat; background-position: right 14px center;
       margin-bottom: 20px;
     }
+    .product-select option { background: #1a2535; color: white; }
 
-    .hero-left {}
-    .hero-label {
-      font-size: 12px;
-      color: var(--text-dim);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 4px;
+    /* ── Hero Location ────────────────────────────────────── */
+    .hero-location {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 20px;
     }
-    .hero-city {
-      font-size: 32px;
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.5px;
-    }
-    .hero-coords {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    .hero-icon {
-      font-size: 52px;
-      line-height: 1;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-    }
+    .hero-label  { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+    .hero-city   { font-size: 32px; font-weight: 700; line-height: 1.1; letter-spacing: -0.5px; }
+    .hero-coords { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .hero-icon   { font-size: 52px; line-height: 1; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
 
-    /* ═══════════════════════════════════════════════
-       SPRAY STATUS COMMAND CENTER
-    ═══════════════════════════════════════════════ */
-    .command-center {
-      padding: 20px 20px 22px;
+    /* ── INVERSION ALERT CARD (Task 8) ───────────────────── */
+    .inversion-alert {
+      background: rgba(255,77,77,0.12);
+      border: 1px solid rgba(255,77,77,0.4);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
       margin-bottom: 14px;
-      position: relative;
-      overflow: hidden;
+      display: flex; gap: 12px; align-items: flex-start;
     }
+    .inv-icon  { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .inv-title { font-size: 13px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+    .inv-body  { font-size: 12px; color: rgba(255,200,200,0.85); line-height: 1.5; }
 
-    /* Glow behind the card based on status */
+    /* ── COMMAND CENTER ───────────────────────────────────── */
+    .command-center {
+      padding: 20px 20px 22px; margin-bottom: 14px;
+      position: relative; overflow: hidden;
+    }
     .command-center::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius);
-      opacity: 0.15;
-      transition: background 0.5s;
-      pointer-events: none;
+      content: ''; position: absolute; inset: 0;
+      border-radius: var(--radius); opacity: 0.15;
+      transition: background 0.5s; pointer-events: none;
     }
     .command-center.status-favorable::before { background: radial-gradient(ellipse at 50% 0%, var(--green) 0%, transparent 70%); }
     .command-center.status-caution::before   { background: radial-gradient(ellipse at 50% 0%, var(--yellow) 0%, transparent 70%); }
     .command-center.status-no-good::before   { background: radial-gradient(ellipse at 50% 0%, var(--red) 0%, transparent 70%); }
 
-    .cc-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-
-    .cc-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 4px;
-    }
-
-    .cc-status-text {
-      font-size: 20px;
-      font-weight: 700;
-      transition: color 0.4s;
-    }
+    .cc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .cc-title  { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
+    .cc-status-text { font-size: 20px; font-weight: 700; transition: color 0.4s; }
     .cc-status-text.favorable { color: var(--green); }
     .cc-status-text.caution   { color: var(--yellow); }
     .cc-status-text.no-good   { color: var(--red); }
 
-    .status-pills {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: flex-end;
-    }
-
+    .status-pills { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
     .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(0,0,0,0.25);
-      border-radius: var(--radius-pill);
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(0,0,0,0.25); border-radius: var(--radius-pill);
       border: 1px solid rgba(255,255,255,0.1);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 5px 12px 5px 8px;
-      white-space: nowrap;
+      font-size: 11px; font-weight: 600; padding: 5px 12px 5px 8px; white-space: nowrap;
     }
-    .pill-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .pill-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
     .pill-dot.red   { background: var(--red);   box-shadow: 0 0 6px var(--red); }
 
-    /* The Big Three */
-    .big-three {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-top: 6px;
-    }
-
+    /* Big Three grid */
+    .big-three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 6px; }
     .metric-card {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius-sm);
-      padding: 12px 10px;
-      text-align: center;
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm); padding: 12px 10px; text-align: center;
+    }
+    .metric-icon  { font-size: 20px; margin-bottom: 4px; }
+    .metric-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+    .metric-value { font-size: 22px; font-weight: 700; line-height: 1; color: var(--text); }
+    .metric-unit  { font-size: 11px; color: var(--text-dim); margin-left: 2px; }
+    .metric-sub   { font-size: 10px; color: var(--text-muted); margin-top: 4px; line-height: 1.3; }
+
+    /* Wind arrow direction (Task 5) */
+    .wind-arrow-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; color: var(--text-dim);
+      margin-top: 5px;
+    }
+    .wind-dir-arrow {
+      display: inline-block; font-size: 14px;
+      transition: transform 0.5s;
     }
 
-    .metric-icon { font-size: 20px; margin-bottom: 4px; }
-    .metric-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 6px;
-    }
-    .metric-value {
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1;
-      color: var(--text);
-    }
-    .metric-unit {
-      font-size: 11px;
-      color: var(--text-dim);
-      margin-left: 2px;
-    }
-    .metric-sub {
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      line-height: 1.3;
-    }
-
-    /* Delta T color coding */
+    /* Delta-T color coding */
     .metric-value.dt-optimal { color: var(--green); }
     .metric-value.dt-caution { color: var(--yellow); }
     .metric-value.dt-bad     { color: var(--red); }
 
-    /* ═══════════════════════════════════════════════
-       HOURLY SPRAY WINDOW
-    ═══════════════════════════════════════════════ */
-    .spray-window {
-      padding: 18px 18px 20px;
-      margin-bottom: 14px;
+    /* Delta-T dual display (Task 2) */
+    .dt-dual { display: flex; flex-direction: column; gap: 1px; align-items: center; }
+    .dt-primary { font-size: 20px; font-weight: 700; line-height: 1; }
+    .dt-secondary { font-size: 11px; color: var(--text-muted); }
+
+    /* Feels-like badge (Task 2) */
+    .feels-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      font-size: 11px; color: var(--text-dim);
+      padding: 3px 8px; margin-top: 6px;
     }
 
-    .sw-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
+    /* Rain countdown chip (Task 4) */
+    .rain-countdown {
+      margin-top: 12px;
+      background: rgba(79,163,227,0.12);
+      border: 1px solid rgba(79,163,227,0.3);
+      border-radius: 10px;
+      padding: 9px 14px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px;
     }
+    .rain-countdown .rc-icon { font-size: 18px; }
+    .rain-countdown .rc-label { color: var(--text-dim); }
+    .rain-countdown .rc-val { font-weight: 700; color: var(--blue); }
+    .rain-countdown.urgent { background: rgba(255,77,77,0.12); border-color: rgba(255,77,77,0.3); }
+    .rain-countdown.urgent .rc-val { color: var(--red); }
 
-    .sw-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-    }
-    .sw-subtitle {
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .sw-tabs {
-      display: flex;
-      gap: 6px;
-    }
+    /* ── SPRAY WINDOW ─────────────────────────────────────── */
+    .spray-window { padding: 18px 18px 20px; margin-bottom: 14px; }
+    .sw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .sw-title  { font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
+    .sw-subtitle { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .sw-tabs   { display: flex; gap: 6px; }
     .sw-tab {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: var(--radius-pill);
-      color: var(--text-dim);
-      cursor: pointer;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 5px 12px;
-      transition: all 0.2s;
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-pill); color: var(--text-dim);
+      cursor: pointer; font-size: 11px; font-weight: 600; padding: 5px 12px; transition: all 0.2s;
     }
-    .sw-tab.active {
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.3);
-      color: var(--text);
-    }
+    .sw-tab.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: var(--text); }
 
-    /* Spray color bar */
-    .spray-bar-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin-bottom: 6px;
-      padding-bottom: 4px;
-    }
+    .spray-gradient-bar { height: 6px; border-radius: 3px; margin: 4px 0 12px; }
 
-    .spray-bar-track {
-      display: flex;
-      gap: 3px;
-      min-width: max-content;
-    }
-
-    .spray-segment {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-      width: 36px;
-    }
-
+    .spray-bar-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 6px; padding-bottom: 4px; }
+    .spray-bar-track { display: flex; gap: 3px; min-width: max-content; }
+    .spray-segment { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; width: 36px; }
     .spray-block {
-      border-radius: 6px;
-      height: 40px;
-      width: 100%;
-      position: relative;
-      transition: transform 0.15s;
-      cursor: pointer;
+      border-radius: 6px; height: 40px; width: 100%;
+      transition: transform 0.15s; cursor: pointer; position: relative;
     }
     .spray-block:hover { transform: scaleY(1.15); }
-    .spray-block.favorable { background: linear-gradient(180deg, #3ddc84, #26a85f); box-shadow: 0 2px 8px rgba(61,220,132,0.35); }
-    .spray-block.caution   { background: linear-gradient(180deg, #ffc107, #e09000); box-shadow: 0 2px 8px rgba(255,193,7,0.35); }
-    .spray-block.no-good   { background: linear-gradient(180deg, #ff4d4d, #cc2222); box-shadow: 0 2px 8px rgba(255,77,77,0.35); }
-
-    .spray-time {
-      font-size: 9px;
-      color: var(--text-muted);
-      text-align: center;
-      white-space: nowrap;
-    }
+    .spray-block.favorable { background: linear-gradient(180deg,#3ddc84,#26a85f); box-shadow: 0 2px 8px rgba(61,220,132,0.35); }
+    .spray-block.caution   { background: linear-gradient(180deg,#ffc107,#e09000); box-shadow: 0 2px 8px rgba(255,193,7,0.35); }
+    .spray-block.no-good   { background: linear-gradient(180deg,#ff4d4d,#cc2222); box-shadow: 0 2px 8px rgba(255,77,77,0.35); }
+    .spray-time { font-size: 9px; color: var(--text-muted); text-align: center; white-space: nowrap; }
     .spray-time.bold { color: var(--text-dim); font-weight: 600; }
 
-    /* Gradient summary bar (thin) */
-    .spray-gradient-bar {
-      height: 6px;
-      border-radius: 3px;
-      margin: 4px 0 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* ═══════════════════════════════════════════════
-       EXTENDED FORECAST BUTTONS
-    ═══════════════════════════════════════════════ */
-    .ext-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
+    /* ── EXT BUTTONS ──────────────────────────────────────── */
+    .ext-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
     .ext-btn {
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: var(--radius-pill);
-      color: var(--text);
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 13px 10px;
-      text-align: center;
-      transition: background 0.2s, transform 0.1s;
+      background: rgba(255,255,255,0.08); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-pill);
+      color: var(--text); cursor: pointer; font-size: 12px; font-weight: 600;
+      padding: 13px 10px; text-align: center; transition: background 0.2s, transform 0.1s;
     }
     .ext-btn:hover  { background: rgba(255,255,255,0.14); }
     .ext-btn:active { transform: scale(0.97); }
     .ext-btn .btn-icon { font-size: 16px; display: block; margin-bottom: 3px; }
 
-    /* ═══════════════════════════════════════════════
-       MODAL (Extended views)
-    ═══════════════════════════════════════════════ */
+    /* ── BOTTOM CARDS ─────────────────────────────────────── */
+    .bottom-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    .bottom-card  { padding: 16px; }
+    .bc-icon  { font-size: 26px; margin-bottom: 8px; }
+    .bc-title { font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+    .bc-value { font-size: 30px; font-weight: 700; line-height: 1; }
+    .bc-unit  { font-size: 14px; color: var(--text-dim); }
+    .bc-sub   { font-size: 11px; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
+    .precip-bar-bg   { background: rgba(255,255,255,0.1); border-radius: 4px; height: 6px; margin-top: 8px; overflow: hidden; }
+    .precip-bar-fill { border-radius: 4px; height: 100%; transition: width 0.8s ease; }
+    .humidity-arc    { margin: 4px 0 0; }
+    .humidity-arc svg { width: 100%; max-width: 110px; }
+
+    /* ── THRESH STRIP ─────────────────────────────────────── */
+    .thresh-strip  { padding: 14px 16px; margin-bottom: 14px; }
+    .thresh-header { font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
+    .thresh-grid   { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .thresh-item   { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 8px 10px; font-size: 11px; }
+    .thresh-item-label { color: var(--text-muted); font-size: 10px; margin-bottom: 2px; }
+    .thresh-item-val   { color: var(--text); font-weight: 600; font-size: 12px; }
+    .thresh-notes  { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 10px; line-height: 1.5; }
+
+    /* ── MODAL ────────────────────────────────────────────── */
     .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 1000;
-      overflow-y: auto;
-      padding: 20px 12px 40px;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      z-index: 1000; overflow-y: auto; padding: 20px 12px 40px;
     }
     .modal-backdrop.open { display: block; }
+    .modal-card { background: rgba(15,25,45,0.96); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius); max-width: 560px; margin: 0 auto; overflow: hidden; }
+    .modal-header { background: rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; }
+    .modal-title  { font-size: 15px; font-weight: 700; }
+    .modal-close  { background: rgba(255,255,255,0.1); border: none; border-radius: 50%; color: white; cursor: pointer; font-size: 18px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+    .modal-body   { padding: 16px; overflow-x: auto; }
 
-    .modal-card {
-      background: rgba(15,25,45,0.96);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: var(--radius);
-      max-width: 520px;
-      margin: 0 auto;
-      overflow: hidden;
-    }
-
-    .modal-header {
-      background: rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 20px;
-    }
-    .modal-title { font-size: 15px; font-weight: 700; }
-    .modal-close {
-      background: rgba(255,255,255,0.1);
-      border: none;
-      border-radius: 50%;
-      color: white;
-      cursor: pointer;
-      font-size: 18px;
-      width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .modal-body { padding: 16px; overflow-x: auto; }
-
-    /* Hourly modal table */
-    .h-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 480px; }
-    .h-table th {
-      background: rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      color: var(--text-dim);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      padding: 8px 10px;
-      text-align: left;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .h-table td {
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      padding: 9px 10px;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
+    /* Hourly table (Task 6 — wider, better mobile) */
+    .h-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .h-table th { background: rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.08); color: var(--text-dim); font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 8px 8px; text-align: left; text-transform: uppercase; white-space: nowrap; }
+    .h-table td { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 8px; vertical-align: middle; white-space: nowrap; }
     .h-table tr:hover td { background: rgba(255,255,255,0.04); }
+    .h-table .new-day-row td { border-top: 2px solid rgba(255,255,255,0.1); }
+    .h-table .day-divider td { background: rgba(255,255,255,0.04); font-size: 11px; font-weight: 700; color: var(--text-dim); letter-spacing: 0.5px; padding: 5px 8px; }
 
-    .status-dot {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .status-dot::before {
-      content: '';
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .status-dot.favorable { color: var(--green); }
-    .status-dot.favorable::before { background: var(--green); }
-    .status-dot.caution   { color: var(--yellow); }
-    .status-dot.caution::before   { background: var(--yellow); }
-    .status-dot.no-good   { color: var(--red); }
-    .status-dot.no-good::before   { background: var(--red); }
+    /* Precip cell — show hundredths clearly (Task 3) */
+    .precip-in-cell { font-size: 11px; }
+    .precip-in-cell .pin-val { font-weight: 600; }
+    .precip-in-cell .pin-unit { color: var(--text-muted); font-size: 10px; }
 
-    /* Daily modal cards */
+    .status-dot { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; }
+    .status-dot::before { content: ''; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .status-dot.favorable { color: var(--green); } .status-dot.favorable::before { background: var(--green); }
+    .status-dot.caution   { color: var(--yellow); } .status-dot.caution::before   { background: var(--yellow); }
+    .status-dot.no-good   { color: var(--red); }   .status-dot.no-good::before   { background: var(--red); }
+
+    /* Daily modal (Task 10 — sunrise/sunset added) */
     .daily-list { display: flex; flex-direction: column; gap: 8px; }
     .daily-row {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-left: 4px solid transparent;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      border-left: 4px solid transparent; border-radius: var(--radius-sm);
+      display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; flex-wrap: wrap;
     }
     .daily-row.favorable { border-left-color: var(--green); }
     .daily-row.caution   { border-left-color: var(--yellow); }
     .daily-row.no-good   { border-left-color: var(--red); }
-
-    .dr-day  { font-size: 14px; font-weight: 700; min-width: 36px; }
-    .dr-date { font-size: 11px; color: var(--text-dim); min-width: 52px; }
-    .dr-icon { font-size: 24px; }
-    .dr-temps { display: flex; flex-direction: column; font-size: 12px; min-width: 40px; }
-    .dr-high { color: #ff8c42; font-weight: 700; }
-    .dr-low  { color: #4fa3e3; }
-    .dr-meta { flex: 1; font-size: 11px; color: var(--text-dim); }
-    .dr-spray { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
-    .dr-spray.favorable { color: var(--green); background: rgba(61,220,132,0.15); }
+    .dr-day   { font-size: 14px; font-weight: 700; min-width: 32px; }
+    .dr-date  { font-size: 11px; color: var(--text-dim); min-width: 50px; }
+    .dr-icon  { font-size: 26px; }
+    .dr-temps { display: flex; flex-direction: column; font-size: 12px; min-width: 36px; }
+    .dr-high  { color: var(--orange); font-weight: 700; }
+    .dr-low   { color: var(--blue); }
+    .dr-meta  { flex: 1; font-size: 11px; color: var(--text-dim); line-height: 1.6; min-width: 120px; }
+    .dr-sun   { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+    .dr-spray { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; white-space: nowrap; align-self: flex-start; }
+    .dr-spray.favorable { color: var(--green);  background: rgba(61,220,132,0.15); }
     .dr-spray.caution   { color: var(--yellow); background: rgba(255,193,7,0.15); }
-    .dr-spray.no-good   { color: var(--red);   background: rgba(255,77,77,0.15); }
+    .dr-spray.no-good   { color: var(--red);    background: rgba(255,77,77,0.15); }
 
-    /* ═══════════════════════════════════════════════
-       BOTTOM CARDS — Humidity & Precip
-    ═══════════════════════════════════════════════ */
-    .bottom-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .bottom-card {
-      padding: 16px;
-    }
-
-    .bc-icon { font-size: 26px; margin-bottom: 8px; }
-    .bc-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 6px;
-    }
-    .bc-value {
-      font-size: 30px;
-      font-weight: 700;
-      line-height: 1;
-    }
-    .bc-unit { font-size: 14px; color: var(--text-dim); }
-    .bc-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 6px;
-      line-height: 1.4;
-    }
-
-    /* Humidity arc */
-    .humidity-arc {
-      margin: 4px 0 0;
-    }
-    .humidity-arc svg { width: 100%; max-width: 110px; }
-
-    /* Precip bar */
-    .precip-bar-bg {
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      height: 6px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-    .precip-bar-fill {
-      background: linear-gradient(90deg, #4fa3e3, #2176d4);
-      border-radius: 4px;
-      height: 100%;
-      transition: width 0.8s ease;
-    }
-
-    /* ═══════════════════════════════════════════════
-       PRODUCT THRESHOLDS STRIP
-    ═══════════════════════════════════════════════ */
-    .thresh-strip {
-      padding: 14px 16px;
-      margin-bottom: 14px;
-    }
-    .thresh-header {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-    .thresh-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .thresh-item {
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 11px;
-    }
-    .thresh-item-label { color: var(--text-muted); font-size: 10px; margin-bottom: 2px; }
-    .thresh-item-val   { color: var(--text); font-weight: 600; }
-
-    /* ═══════════════════════════════════════════════
-       LOADING / ERROR / EMPTY
-    ═══════════════════════════════════════════════ */
-    .loading-overlay {
-      text-align: center;
-      padding: 60px 20px;
-    }
-    .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid rgba(255,255,255,0.15);
-      border-top-color: rgba(255,255,255,0.7);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
+    /* ── Loading/Error/Empty ──────────────────────────────── */
+    .loading-overlay { text-align: center; padding: 60px 20px; }
+    .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.15); border-top-color: rgba(255,255,255,0.7); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    .error-card {
-      background: rgba(255,77,77,0.1);
-      border: 1px solid rgba(255,77,77,0.3);
-      border-radius: var(--radius);
-      color: #ffaaaa;
-      padding: 18px 20px;
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
-
-    .empty-hero {
-      text-align: center;
-      padding: 40px 20px;
-    }
+    .error-card { background: rgba(255,77,77,0.1); border: 1px solid rgba(255,77,77,0.3); border-radius: var(--radius); color: #ffaaaa; padding: 18px 20px; font-size: 13px; margin-bottom: 14px; }
+    .empty-hero { text-align: center; padding: 40px 20px; }
     .empty-hero .big-icon { font-size: 60px; margin-bottom: 14px; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5)); }
     .empty-hero p { font-size: 15px; color: var(--text-dim); line-height: 1.7; }
 
-    /* ═══════════════════════════════════════════════
-       FOOTER
-    ═══════════════════════════════════════════════ */
-    .footer {
-      text-align: center;
-      font-size: 10px;
-      color: var(--text-muted);
-      padding-top: 10px;
-    }
+    .footer { text-align: center; font-size: 10px; color: var(--text-muted); padding-top: 10px; }
 
-    /* ═══════════════════════════════════════════════
-       RESPONSIVE
-    ═══════════════════════════════════════════════ */
     @media (min-width: 500px) {
       .app { padding: 28px 24px; }
       .hero-city { font-size: 38px; }
@@ -735,38 +377,30 @@
 <body>
 <div class="app">
 
-  <!-- ── SEARCH BAR ──────────────────────────────── -->
+  <!-- Search -->
   <div class="search-row">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input
-        class="search-input"
-        id="loc-input"
-        type="text"
+      <input class="search-input" id="loc-input" type="text"
         placeholder="City, State  ·  Zip  ·  Lat, Lon"
-        autocomplete="off"
-        autocorrect="off"
-        spellcheck="false"
-      />
+        autocomplete="off" autocorrect="off" spellcheck="false" />
     </div>
     <button class="geo-btn" id="geo-btn" title="Use my location">🧭</button>
   </div>
 
-  <!-- ── PRODUCT SELECTOR ───────────────────────── -->
-  <div class="product-row">
-    <select class="product-select" id="herb-select">
-      <option value="general">🌾 General Ag Guidelines</option>
-      <option value="2,4-D Amine">🧪 2,4-D Amine</option>
-      <option value="Dicamba">🧪 Dicamba (Clarity)</option>
-      <option value="GrazonNext HL">🧪 GrazonNext HL</option>
-      <option value="Grazon P+D">🧪 Grazon P+D</option>
-      <option value="Roundup (Glyphosate)">🧪 Roundup / Glyphosate</option>
-      <option value="Tordon 22K">🧪 Tordon 22K</option>
-      <option value="Remedy Ultra">🧪 Remedy Ultra</option>
-    </select>
-  </div>
+  <!-- Product selector -->
+  <select class="product-select" id="herb-select">
+    <option value="general">🌾 General Ag Guidelines</option>
+    <option value="2,4-D Amine">🧪 2,4-D Amine</option>
+    <option value="Dicamba">🧪 Dicamba (Clarity)</option>
+    <option value="GrazonNext HL">🧪 GrazonNext HL</option>
+    <option value="Grazon P+D">🧪 Grazon P+D</option>
+    <option value="Roundup (Glyphosate)">🧪 Roundup / Glyphosate</option>
+    <option value="Tordon 22K">🧪 Tordon 22K</option>
+    <option value="Remedy Ultra">🧪 Remedy Ultra</option>
+  </select>
 
-  <!-- ── DYNAMIC CONTENT ────────────────────────── -->
+  <!-- Dynamic content -->
   <div id="app-content">
     <div class="empty-hero">
       <div class="big-icon">🌾</div>
@@ -777,41 +411,37 @@
   <div class="footer" id="app-footer"></div>
 </div>
 
-<!-- ── HOURLY EXTENDED MODAL ──────────────────── -->
+<!-- Hourly Modal -->
 <div class="modal-backdrop" id="modal-hourly">
   <div class="modal-card">
     <div class="modal-header">
       <span class="modal-title">⏱ Hourly Extended Forecast (96h)</span>
       <button class="modal-close" onclick="closeModal('modal-hourly')">✕</button>
     </div>
-    <div class="modal-body">
-      <div id="modal-hourly-body">Loading…</div>
-    </div>
+    <div class="modal-body"><div id="modal-hourly-body">Loading…</div></div>
   </div>
 </div>
 
-<!-- ── DAILY EXTENDED MODAL ───────────────────── -->
+<!-- Daily Modal -->
 <div class="modal-backdrop" id="modal-daily">
   <div class="modal-card">
     <div class="modal-header">
       <span class="modal-title">📅 7-Day Outlook</span>
       <button class="modal-close" onclick="closeModal('modal-daily')">✕</button>
     </div>
-    <div class="modal-body">
-      <div id="modal-daily-body">Loading…</div>
-    </div>
+    <div class="modal-body"><div id="modal-daily-body">Loading…</div></div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════
-//  APP STATE
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════
 let state = { data: null };
 
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 //  SEARCH & FETCH
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 async function doSearch() {
   const loc  = document.getElementById('loc-input').value.trim();
   const herb = document.getElementById('herb-select').value;
@@ -832,12 +462,10 @@ async function fetchAndRender(loc, herb) {
     }
     state.data = await resp.json();
     renderAll();
-  } catch (e) {
-    showError(e.message);
-  }
+  } catch(e) { showError(e.message); }
 }
 
-// ── Geolocation ──────────────────────────────
+// Geolocation
 document.getElementById('geo-btn').addEventListener('click', () => {
   if (!navigator.geolocation) { alert('Geolocation not supported.'); return; }
   const btn = document.getElementById('geo-btn');
@@ -856,16 +484,16 @@ document.getElementById('geo-btn').addEventListener('click', () => {
 
 document.getElementById('loc-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 document.getElementById('herb-select').addEventListener('change', () => {
-  if (state.data) {
-    const loc = document.getElementById('loc-input').value.trim();
+  const loc = document.getElementById('loc-input').value.trim();
+  if (state.data && loc) {
     const herb = document.getElementById('herb-select').value;
-    if (loc) fetchAndRender(loc, herb);
+    fetchAndRender(loc, herb);
   }
 });
 
-// ═══════════════════════════════════════════════
-//  LOADING / ERROR STATES
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
+//  LOADING / ERROR
+// ════════════════════════════════════════════
 function showLoading() {
   document.getElementById('app-content').innerHTML = `
     <div class="loading-overlay glass">
@@ -880,18 +508,19 @@ function showError(msg) {
     `<div class="error-card">⚠️ &nbsp;${esc(msg)}</div>`;
 }
 
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 //  MAIN RENDER
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 function renderAll() {
-  const d = state.data;
-  const now = d.hourly[0];   // current conditions = first hourly slot
+  const d      = state.data;
+  const now    = d.hourly[0];
   const status = now.spray.status;
 
-  // Delta-T classification
-  const dt     = now.delta_t;
-  const dtCls  = dt < 2 ? 'dt-bad' : dt > 8 ? 'dt-bad' : dt < 3 || dt > 7 ? 'dt-caution' : 'dt-optimal';
-  const dtDesc = dt < 2 ? 'Inversion Risk' : dt > 8 ? 'Evaporation Risk' : dt < 4 ? 'Marginal' : 'Optimal';
+  // Task 2: Delta-T dual display
+  const dt     = now.delta_t;    // °C
+  const dtF    = now.delta_t_f;  // °F spread
+  const dtCls  = dt < 2 ? 'dt-bad' : dt > 8 ? 'dt-bad' : (dt < 3 || dt > 7) ? 'dt-caution' : 'dt-optimal';
+  const dtDesc = dt < 2 ? 'Inversion Risk' : dt > 8 ? 'Evaporation Risk' : dt < 4 ? 'Marginal' : 'Optimal Range';
 
   const statusLabel = status === 'favorable' ? 'Good to Spray'
                     : status === 'caution'   ? 'Apply with Caution'
@@ -901,36 +530,70 @@ function renderAll() {
 
   document.getElementById('app-content').innerHTML = `
     ${renderHeroLocation(d, now)}
-    ${renderCommandCenter(now, d.product, status, statusLabel, dt, dtCls, dtDesc)}
+    ${d.inversion_alert.active ? renderInversionAlert(d.inversion_alert) : ''}
+    ${renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc)}
     ${renderSprayWindow(first24)}
     ${renderExtButtons()}
     ${renderBottomCards(now)}
     ${renderThreshStrip(d.product)}
   `;
 
-  // Post-render: draw gradient summary bar
   renderGradientBar(first24);
 
   document.getElementById('app-footer').innerHTML =
-    `Data: Open-Meteo · Geocoder: Nominatim · ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
+    `Open-Meteo · Nominatim · Updated ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
 }
 
-// ── Hero Location ────────────────────────────
+// ── Hero Location ─────────────────────────────
 function renderHeroLocation(d, now) {
-  const city = d.location.display;
-  const icon = now.condition.icon;
   return `<div class="hero-location">
-    <div class="hero-left">
+    <div>
       <div class="hero-label">Hero Weather</div>
-      <div class="hero-city">${esc(city)}</div>
+      <div class="hero-city">${esc(d.location.display)}</div>
       <div class="hero-coords">${d.location.lat.toFixed(4)}, ${d.location.lon.toFixed(4)}</div>
     </div>
-    <div class="hero-icon">${icon}</div>
+    <div class="hero-icon">${now.condition.icon}</div>
   </div>`;
 }
 
-// ── Command Center ───────────────────────────
-function renderCommandCenter(now, product, status, statusLabel, dt, dtCls, dtDesc) {
+// ── Task 8: Inversion Alert Card ──────────────
+function renderInversionAlert(alert) {
+  return `<div class="inversion-alert">
+    <div class="inv-icon">⚠️</div>
+    <div>
+      <div class="inv-title">Temperature Inversion Alert</div>
+      <div class="inv-body">${esc(alert.message)}</div>
+    </div>
+  </div>`;
+}
+
+// ── Command Center ────────────────────────────
+function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc) {
+  const product = d.product;
+  const summary = d.summary;
+  // Task 4: Rain countdown
+  const rainIn  = summary.hours_until_rain;
+  const rainHTML = rainIn === null
+    ? `<div class="rain-countdown"><span class="rc-icon">☀️</span><span class="rc-label">No rain in 96-hour window</span></div>`
+    : rainIn === 0
+    ? `<div class="rain-countdown urgent"><span class="rc-icon">🌧</span><span class="rc-label">Rain occurring now —</span><span class="rc-val">Do not spray</span></div>`
+    : `<div class="rain-countdown ${rainIn <= 4 ? 'urgent' : ''}">
+        <span class="rc-icon">${rainIn <= 4 ? '🌧' : '🌦'}</span>
+        <span class="rc-label">Rain-free window:</span>
+        <span class="rc-val">${rainIn}h remaining</span>
+      </div>`;
+
+  // Task 5: Wind bearing arrow (rotates to wind direction)
+  const windDeg = now.wind_dir_deg || 0;
+
+  // Task 2: Feels-like badge
+  const feelsDiff = Math.abs(now.feels_like_f - now.temp_f);
+  const feelsLabel = now.feels_like_f < now.temp_f
+    ? `Feels ${Math.round(now.feels_like_f)}°F (wind chill)`
+    : now.feels_like_f > now.temp_f
+    ? `Feels ${Math.round(now.feels_like_f)}°F (heat index)`
+    : `Feels like actual temp`;
+
   return `<div class="command-center glass status-${status}">
     <div class="cc-header">
       <div>
@@ -948,20 +611,27 @@ function renderCommandCenter(now, product, status, statusLabel, dt, dtCls, dtDes
     </div>
 
     <div class="big-three">
-      <!-- Wind -->
+      <!-- Task 5: Wind with bearing arrow -->
       <div class="metric-card">
         <div class="metric-icon">💨</div>
         <div class="metric-label">Wind</div>
         <div class="metric-value">${Math.round(now.wind_mph)}<span class="metric-unit">mph</span></div>
-        <div class="metric-sub">${now.wind_dir} · Drift management</div>
+        <div class="wind-arrow-badge">
+          <span class="wind-dir-arrow" style="transform:rotate(${windDeg}deg)">↑</span>
+          ${now.wind_dir}
+        </div>
+        <div class="metric-sub">Drift mgmt limit:<br>${product.thresholds.max_wind_mph} mph</div>
       </div>
 
-      <!-- Delta T -->
+      <!-- Task 2: Delta-T with °F equivalent -->
       <div class="metric-card">
         <div class="metric-icon">🌡</div>
         <div class="metric-label">Delta-T</div>
-        <div class="metric-value ${dtCls}">${dt.toFixed(1)}<span class="metric-unit">°C</span></div>
-        <div class="metric-sub">${dtDesc} · Core Ag metric</div>
+        <div class="dt-dual">
+          <span class="dt-primary ${dtCls}">${dt.toFixed(1)}<span style="font-size:13px;font-weight:400">°C</span></span>
+          <span class="dt-secondary">${dtF.toFixed(1)}°F spread</span>
+        </div>
+        <div class="metric-sub" style="margin-top:5px">${dtDesc}</div>
       </div>
 
       <!-- Gusts -->
@@ -969,27 +639,41 @@ function renderCommandCenter(now, product, status, statusLabel, dt, dtCls, dtDes
         <div class="metric-icon">🌬</div>
         <div class="metric-label">Gusts</div>
         <div class="metric-value">${Math.round(now.gust_mph)}<span class="metric-unit">mph</span></div>
-        <div class="metric-sub">Max ${product.thresholds.max_gust_mph} mph limit</div>
+        <div class="metric-sub">Limit:<br>${product.thresholds.max_gust_mph} mph</div>
       </div>
     </div>
 
-    ${now.spray.reasons.length ? `<div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.45);line-height:1.5">
-      ⚠️ ${now.spray.reasons.slice(0,2).map(esc).join(' · ')}
-    </div>` : `<div style="margin-top:12px;font-size:11px;color:rgba(61,220,132,0.7)">✅ All conditions within label thresholds</div>`}
+    <!-- Task 2: Feels-like badge -->
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:12px;color:var(--text-dim)">Now: <strong style="color:var(--text)">${Math.round(now.temp_f)}°F</strong></span>
+      <span class="feels-badge">🌡 ${feelsLabel}</span>
+      <span style="font-size:11px;color:var(--text-muted)">Dew: ${Math.round(now.dew_f)}°F · RH: ${now.rh}%</span>
+    </div>
+
+    ${now.spray.reasons.length
+      ? `<div style="margin-top:10px;font-size:11px;color:rgba(255,180,180,0.7);line-height:1.6">
+           ⚠️ ${now.spray.reasons.slice(0,3).map(esc).join('<br>⚠️ ')}
+         </div>`
+      : `<div style="margin-top:10px;font-size:11px;color:rgba(61,220,132,0.75)">✅ All parameters within label thresholds</div>`
+    }
+
+    <!-- Task 4: Rain countdown -->
+    ${rainHTML}
   </div>`;
 }
 
-// ── Spray Window (24h bar) ───────────────────
+// ── Spray Window ──────────────────────────────
 function renderSprayWindow(hours) {
-  const segments = hours.map((h, i) => {
-    const dt   = new Date(h.time);
-    const hr   = dt.getHours();
-    const hr12 = hr % 12 || 12;
-    const ampm = hr < 12 ? 'a' : 'p';
-    const bold = (hr === 0 || hr === 6 || hr === 12 || hr === 18);
+  const segments = hours.map(h => {
+    const dt    = new Date(h.time);
+    const hr    = dt.getHours();
+    const hr12  = hr % 12 || 12;
+    const ampm  = hr < 12 ? 'a' : 'p';
+    const bold  = hr === 0 || hr === 6 || hr === 12 || hr === 18;
+    const tip   = h.spray.status + (h.spray.reasons[0] ? ': ' + h.spray.reasons[0] : '');
     return `<div class="spray-segment">
-      <div class="spray-block ${h.spray.status}" title="${esc(h.spray.status + ': ' + (h.spray.reasons[0] || 'OK'))}"></div>
-      <div class="spray-time ${bold?'bold':''}">${hr12}${ampm}</div>
+      <div class="spray-block ${h.spray.status}" title="${esc(tip)}"></div>
+      <div class="spray-time ${bold ? 'bold' : ''}">${hr12}${ampm}</div>
     </div>`;
   }).join('');
 
@@ -997,11 +681,9 @@ function renderSprayWindow(hours) {
     <div class="sw-header">
       <div>
         <div class="sw-title">⏱ Hourly Spray Window</div>
-        <div class="sw-subtitle">Next 24 hours · Tap blocks for detail</div>
+        <div class="sw-subtitle">Next 24 hours · Hover blocks for detail</div>
       </div>
-      <div class="sw-tabs">
-        <div class="sw-tab active">24h</div>
-      </div>
+      <div class="sw-tabs"><div class="sw-tab active">24h</div></div>
     </div>
     <div class="spray-gradient-bar" id="gradient-bar"></div>
     <div class="spray-bar-wrap">
@@ -1012,18 +694,17 @@ function renderSprayWindow(hours) {
 
 function renderGradientBar(hours) {
   const bar = document.getElementById('gradient-bar');
-  if (!bar) return;
+  if (!bar || !hours.length) return;
   const stops = hours.map((h, i) => {
     const pct = (i / (hours.length - 1) * 100).toFixed(1);
     const col = h.spray.status === 'favorable' ? '#3ddc84'
-              : h.spray.status === 'caution'   ? '#ffc107'
-              : '#ff4d4d';
+              : h.spray.status === 'caution'   ? '#ffc107' : '#ff4d4d';
     return `${col} ${pct}%`;
   });
   bar.style.background = `linear-gradient(90deg, ${stops.join(', ')})`;
 }
 
-// ── Extended Forecast Buttons ────────────────
+// ── Extended Buttons ──────────────────────────
 function renderExtButtons() {
   return `<div class="ext-buttons">
     <button class="ext-btn" onclick="openModal('modal-hourly')">
@@ -1035,19 +716,23 @@ function renderExtButtons() {
   </div>`;
 }
 
-// ── Bottom Cards ─────────────────────────────
+// ── Bottom Cards ──────────────────────────────
 function renderBottomCards(now) {
-  const rh = now.rh;
+  const rh     = now.rh;
   const precip = now.precip_pct;
   const precipColor = precip >= 50 ? '#ff4d4d' : precip >= 25 ? '#ffc107' : '#4fa3e3';
 
   // SVG arc for humidity
-  const arcR = 28;
-  const arcC = 36;
+  const arcR      = 28, arcC = 36;
   const arcCircum = 2 * Math.PI * arcR;
-  const arcFill   = arcCircum * (rh / 100) * 0.75; // 75% of circle = 270deg
-  const arcOffset  = arcCircum - arcFill;
-  const rhColor = rh < 30 ? '#ff4d4d' : rh < 45 ? '#ffc107' : '#3ddc84';
+  const arcFill   = arcCircum * (rh / 100) * 0.75;
+  const arcOffset = arcCircum - arcFill;
+  const rhColor   = rh < 30 ? '#ff4d4d' : rh < 45 ? '#ffc107' : '#3ddc84';
+  const rhNote    = rh < 30 ? '⚠ Too low — drift risk' : rh > 90 ? '⚠ Very high — absorption risk' : 'Within optimal range';
+
+  const precipNote = precip >= 50 ? '⚠ Rain likely — avoid spray'
+                   : precip >= 30 ? '⚠ Moderate rain risk'
+                   : 'Low precipitation risk';
 
   return `<div class="bottom-cards">
     <div class="bottom-card glass">
@@ -1058,8 +743,7 @@ function renderBottomCards(now) {
         <circle cx="${arcC}" cy="38" r="${arcR}" fill="none"
           stroke="rgba(255,255,255,0.1)" stroke-width="5"
           stroke-dasharray="${(arcCircum*0.75).toFixed(1)}"
-          stroke-dashoffset="0"
-          stroke-linecap="round"
+          stroke-dashoffset="0" stroke-linecap="round"
           transform="rotate(135 ${arcC} 38)"/>
         <circle cx="${arcC}" cy="38" r="${arcR}" fill="none"
           stroke="${rhColor}" stroke-width="5"
@@ -1068,7 +752,7 @@ function renderBottomCards(now) {
           stroke-linecap="round"
           transform="rotate(135 ${arcC} 38)"/>
       </svg>
-      <div class="bc-sub">Relative humidity<br>${rh < 30 ? '⚠ Too low — drift risk' : rh > 90 ? '⚠ Too high' : 'Within optimal range'}</div>
+      <div class="bc-sub">Relative humidity<br>${rhNote}</div>
     </div>
 
     <div class="bottom-card glass">
@@ -1078,42 +762,45 @@ function renderBottomCards(now) {
       <div class="precip-bar-bg" style="margin-top:14px">
         <div class="precip-bar-fill" style="width:${precip}%;background:linear-gradient(90deg,${precipColor},${precipColor}99)"></div>
       </div>
-      <div class="bc-sub">Chance of rain<br>${precip >= 50 ? '⚠ Rain likely — avoid spray' : precip >= 25 ? '⚠ Moderate rain risk' : 'Low precipitation risk'}</div>
+      <div class="bc-sub">Chance of rain<br>${precipNote}</div>
     </div>
   </div>`;
 }
 
-// ── Thresholds Strip ─────────────────────────
+// ── Thresholds Strip ──────────────────────────
 function renderThreshStrip(product) {
   const t = product.thresholds;
   const items = [
-    { label: 'Max Wind',  val: `${t.max_wind_mph} mph` },
-    { label: 'Max Gust',  val: `${t.max_gust_mph} mph` },
-    { label: 'Temp Range',val: `${t.min_temp_f}–${t.max_temp_f}°F` },
-    { label: 'RH Range',  val: `${t.min_rh}–${t.max_rh}%` },
-    { label: 'Max Precip',val: `<${t.max_precip_pct}%` },
-    { label: 'Delta-T',   val: t.delta_t_range },
+    { label: 'Max Wind',   val: `${t.max_wind_mph} mph` },
+    { label: 'Max Gust',   val: `${t.max_gust_mph} mph` },
+    { label: 'Temp Range', val: `${t.min_temp_f}–${t.max_temp_f}°F` },
+    { label: 'RH Range',   val: `${t.min_rh}–${t.max_rh}%` },
+    { label: 'Max Precip', val: `<${t.max_precip_pct}%` },
+    { label: 'Delta-T',    val: t.delta_t_range },
   ];
   return `<div class="thresh-strip glass">
-    <div class="thresh-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'grid':'none'">
-      <span>🧪 ${esc(product.name)} Label Limits</span>
-      <span style="color:rgba(255,255,255,0.4);font-size:14px">▾</span>
+    <div class="thresh-header" onclick="
+      const body = this.nextElementSibling;
+      const isHidden = body.style.display === 'none';
+      body.style.display = isHidden ? 'grid' : 'none';
+      this.querySelector('.chev').textContent = isHidden ? '▲' : '▾';
+    ">
+      <span>🧪 ${esc(product.name)} — Label Thresholds</span>
+      <span class="chev">▾</span>
     </div>
-    <div class="thresh-grid">
+    <div style="display:grid" class="thresh-grid">
       ${items.map(it => `<div class="thresh-item">
         <div class="thresh-item-label">${it.label}</div>
         <div class="thresh-item-val">${it.val}</div>
       </div>`).join('')}
     </div>
-    <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:10px;line-height:1.4">
-      📋 ${esc(product.notes || '')}
-    </div>
+    <div class="thresh-notes">📋 ${esc(product.notes)}</div>
   </div>`;
 }
 
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 //  MODALS
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 function openModal(id) {
   document.getElementById(id).classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -1121,61 +808,102 @@ function openModal(id) {
   if (id === 'modal-hourly') renderHourlyModal();
   if (id === 'modal-daily')  renderDailyModal();
 }
-
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
   document.body.style.overflow = '';
 }
+document.querySelectorAll('.modal-backdrop').forEach(el =>
+  el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); })
+);
 
-// Close on backdrop click
-document.querySelectorAll('.modal-backdrop').forEach(el => {
-  el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); });
-});
-
+// Task 6: Hourly modal — better columns, day dividers, precip in hundredths
 function renderHourlyModal() {
   const hours = state.data.hourly;
-  const rows = hours.map(h => {
-    const dt = new Date(h.time);
-    const timeStr = dt.toLocaleDateString('en-US', {weekday:'short',month:'short',day:'numeric'}) + ' ' +
-                    dt.toLocaleTimeString('en-US', {hour:'numeric',hour12:true});
-    const dtV = h.delta_t;
-    const dtCls = dtV < 2 || dtV > 8 ? 'dt-bad' : dtV < 3 || dtV > 7 ? 'dt-caution' : 'dt-optimal';
+  let lastDay = null;
+  let rows = '';
+
+  hours.forEach(h => {
+    const dt     = new Date(h.time);
+    const dayStr = dt.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    const timeStr= dt.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+
+    // Day divider row
+    if (dayStr !== lastDay) {
+      lastDay = dayStr;
+      rows += `<tr class="day-divider"><td colspan="11">📅 ${dayStr}</td></tr>`;
+    }
+
+    const dtV    = h.delta_t;
+    const dtFV   = h.delta_t_f;
+    const dtCls  = dtV < 2 || dtV > 8 ? 'dt-bad' : (dtV < 3 || dtV > 7) ? 'dt-caution' : 'dt-optimal';
     const reason = h.spray.reasons[0] || '—';
-    return `<tr>
-      <td style="color:rgba(255,255,255,0.6);font-size:11px">${timeStr}</td>
-      <td>${h.condition.icon} <span style="font-size:10px;color:rgba(255,255,255,0.4)">${h.cloud_pct}%</span></td>
-      <td>${Math.round(h.temp_f)}°F</td>
-      <td style="color:#4fa3e3">${Math.round(h.dew_f)}°</td>
-      <td style="color:var(--text-dim)">${h.rh}%</td>
-      <td class="${dtCls}" style="font-weight:600">${dtV.toFixed(1)}</td>
+
+    // Task 3: Precip in hundredths with note
+    const precipInDisplay = h.precip_in > 0
+      ? `<span class="pin-val">${h.precip_in.toFixed(2)}</span><span class="pin-unit"> in</span>`
+      : `<span style="color:rgba(255,255,255,0.25)">—</span>`;
+
+    // Task 2: Feels-like in table
+    const feelsCell = Math.abs(h.feels_like_f - h.temp_f) >= 2
+      ? `<span style="color:rgba(255,255,255,0.4);font-size:10px">(${Math.round(h.feels_like_f)}°)</span>`
+      : '';
+
+    rows += `<tr>
+      <td style="color:rgba(255,255,255,0.55);font-size:11px">${timeStr}</td>
+      <td>${h.condition.icon}</td>
+      <td>${Math.round(h.temp_f)}°F ${feelsCell}</td>
+      <td style="color:var(--blue)">${Math.round(h.dew_f)}°</td>
+      <td>${h.rh}%</td>
+      <td class="${dtCls}" style="font-weight:600" title="${dtV.toFixed(1)}°C = ${dtFV.toFixed(1)}°F spread">${dtV.toFixed(1)}°C</td>
       <td>${Math.round(h.wind_mph)} <span style="color:rgba(255,255,255,0.4);font-size:10px">${h.wind_dir}</span></td>
       <td style="color:#2176d4">${Math.round(h.gust_mph)}</td>
       <td>${h.precip_pct}%</td>
+      <td class="precip-in-cell">${precipInDisplay}</td>
       <td><span class="status-dot ${h.spray.status}">${h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'OK'}</span></td>
-      <td style="color:rgba(255,255,255,0.35);font-size:10px;max-width:150px;white-space:normal">${esc(reason)}</td>
     </tr>`;
-  }).join('');
+  });
 
   document.getElementById('modal-hourly-body').innerHTML = `
-    <table class="h-table">
+    <p style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:10px">
+      Delta-T shown in °C (ag standard). Hover for °F equivalent.
+      Precip accumulation rounded to hundredths of an inch.
+    </p>
+    <div style="overflow-x:auto">
+    <table class="h-table" style="min-width:560px">
       <thead><tr>
-        <th>Time</th><th>Cond</th><th>Temp</th><th>Dew</th>
-        <th>RH</th><th>ΔT°C</th><th>Wind</th><th>Gust</th>
-        <th>Precip</th><th>Status</th><th>Note</th>
+        <th>Time</th><th>Sky</th><th>Temp</th><th>Dew</th>
+        <th>RH</th><th>ΔT</th><th>Wind</th><th>Gust</th>
+        <th>Precip%</th><th>Accum.</th><th>Status</th>
       </tr></thead>
       <tbody>${rows}</tbody>
-    </table>`;
+    </table>
+    </div>`;
 }
 
+// Task 7 + 10: Daily modal with real RH, feels-like range, sunrise/sunset
 function renderDailyModal() {
   const days = state.data.daily;
   const cards = days.map(day => {
-    const dt  = new Date(day.date + 'T12:00:00');
-    const dow  = dt.toLocaleDateString('en-US', {weekday:'short'});
-    const date = dt.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    const dt   = new Date(day.date + 'T12:00:00');
+    const dow  = dt.toLocaleDateString('en-US', { weekday: 'short' });
+    const date = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     const sprayLabel = day.spray.status === 'no-good' ? 'No Good'
                      : day.spray.status === 'caution' ? 'Caution' : 'Favorable';
     const reason = day.spray.reasons[0] || '';
+
+    // Task 10: Sunrise/sunset
+    const sunLine = (day.sunrise && day.sunrise !== 'N/A')
+      ? `🌅 ${day.sunrise} &nbsp;·&nbsp; 🌇 ${day.sunset}`
+      : '';
+
+    // Task 7: Real avg RH shown
+    const rhNote = day.avg_rh ? `RH avg ${day.avg_rh}%` : '';
+
+    // Feels-like range
+    const feelsLine = (day.feels_max_f && day.feels_min_f)
+      ? `Feels ${Math.round(day.feels_min_f)}–${Math.round(day.feels_max_f)}°F`
+      : '';
+
     return `<div class="daily-row ${day.spray.status}">
       <div class="dr-day">${dow}</div>
       <div class="dr-date">${date}</div>
@@ -1185,35 +913,39 @@ function renderDailyModal() {
         <span class="dr-low">${Math.round(day.temp_min_f)}°</span>
       </div>
       <div class="dr-meta">
+        ${feelsLine ? `<span style="color:rgba(255,255,255,0.4)">${feelsLine}</span><br>` : ''}
         💨 ${Math.round(day.wind_max_mph)}/${Math.round(day.gust_max_mph)} mph
         &nbsp;·&nbsp; 🌧 ${day.precip_pct}%
-        ${reason ? `<br><span style="font-size:10px;color:rgba(255,255,255,0.3)">${esc(reason)}</span>` : ''}
+        ${rhNote ? `&nbsp;·&nbsp; ${rhNote}` : ''}
+        ${reason ? `<br><span style="font-size:10px;color:rgba(255,255,255,0.3)">⚠ ${esc(reason)}</span>` : ''}
+        ${sunLine ? `<div class="dr-sun">${sunLine}</div>` : ''}
       </div>
       <div class="dr-spray ${day.spray.status}">${sprayLabel}</div>
     </div>`;
   }).join('');
+
   document.getElementById('modal-daily-body').innerHTML = `<div class="daily-list">${cards}</div>`;
 }
 
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 //  UTILS
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 function esc(str) {
   return String(str || '')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 //  AUTO-RESTORE SESSION
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
-  const savedLoc  = sessionStorage.getItem('lastLocation');
-  const savedHerb = sessionStorage.getItem('lastHerbicide');
-  if (savedLoc) {
-    document.getElementById('loc-input').value = savedLoc;
-    if (savedHerb) document.getElementById('herb-select').value = savedHerb;
-    fetchAndRender(savedLoc, savedHerb || 'general');
+  const loc  = sessionStorage.getItem('lastLocation');
+  const herb = sessionStorage.getItem('lastHerbicide');
+  if (loc) {
+    document.getElementById('loc-input').value = loc;
+    if (herb) document.getElementById('herb-select').value = herb;
+    fetchAndRender(loc, herb || 'general');
   }
 });
 
