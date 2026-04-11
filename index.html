@@ -47,7 +47,7 @@
                 const data = await response.text();
                 resultDiv.textContent = data;
             } catch (e) {
-                resultDiv.textContent = 'Error reaching Hermes: ' + e.message + '\nMake sure the backend is running on Oracle.';
+                resultDiv.textContent = 'Error: ' + e.message + '\n(Check your internet connection or refresh the page.)';
             }
         }
     </script>
