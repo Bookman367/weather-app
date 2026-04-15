@@ -27,67 +27,6 @@
       --radius-pill:  50px;
     }
 
-    [data-theme="light"] {
-      --text:         #1a2035;
-      --text-dim:     rgba(20,30,60,0.65);
-      --text-muted:   rgba(20,30,60,0.4);
-      --glass-bg:     rgba(255,255,255,0.82);
-      --glass-bg2:    rgba(255,255,255,0.65);
-      --glass-border: rgba(0,0,0,0.12);
-      --glass-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    }
-    [data-theme="light"] body { background: linear-gradient(180deg, #e8f0fb 0%, #d4e4f7 50%, #f0e8d4 100%), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&auto=format&fit=crop&q=80') center/cover no-repeat fixed; }
-    [data-theme="light"] .glass { border-color: rgba(0,0,0,0.1); }
-    [data-theme="light"] .search-input { background: rgba(255,255,255,0.7); color: #1a2035; border-color: rgba(0,0,0,0.15); }
-    [data-theme="light"] .search-input::placeholder { color: rgba(20,30,60,0.4); }
-    [data-theme="light"] .search-input:focus { border-color: rgba(0,0,0,0.3); background: rgba(255,255,255,0.9); }
-    [data-theme="light"] .product-select { background: rgba(255,255,255,0.7); color: #1a2035; border-color: rgba(0,0,0,0.12); }
-    [data-theme="light"] .product-select option { background: #e8f0fb; color: #1a2035; }
-    [data-theme="light"] .geo-btn { background: rgba(255,255,255,0.7); color: #1a2035; border-color: rgba(0,0,0,0.12); }
-    [data-theme="light"] .thresh-item { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.08); }
-    [data-theme="light"] .thresh-notes { color: rgba(20,30,60,0.5); }
-    [data-theme="light"] .thresh-item-val { color: #1a2035; }
-    [data-theme="light"] .h-table th { background: rgba(0,0,0,0.04); border-bottom-color: rgba(0,0,0,0.08); color: rgba(20,30,60,0.6); }
-    [data-theme="light"] .h-table td { border-bottom-color: rgba(0,0,0,0.06); }
-    [data-theme="light"] .h-table tr:hover td { background: rgba(0,0,0,0.04); }
-    [data-theme="light"] .modal-card { background: rgba(255,255,255,0.97); border-color: rgba(0,0,0,0.12); }
-    [data-theme="light"] .modal-header { background: rgba(0,0,0,0.04); border-bottom-color: rgba(0,0,0,0.08); }
-    [data-theme="light"] .modal-title { color: #1a2035; }
-    [data-theme="light"] .daily-row { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.07); }
-    [data-theme="light"] .dr-day { color: #1a2035; }
-    [data-theme="light"] .dr-date { color: rgba(20,30,60,0.55); }
-    [data-theme="light"] .dr-meta { color: rgba(20,30,60,0.65); }
-    [data-theme="light"] .dr-sun { color: rgba(20,30,60,0.45); }
-    [data-theme="light"] .cc-status-text.favorable { color: #1a8a50; }
-    [data-theme="light"] .cc-status-text.caution   { color: #b07800; }
-    [data-theme="light"] .cc-status-text.no-good   { color: #cc2222; }
-    [data-theme="light"] .pill-dot.green { background: #1a8a50; box-shadow: 0 0 6px #3ddc84; }
-    [data-theme="light"] .status-dot.favorable { color: #1a8a50; }
-    [data-theme="light"] .status-dot.caution   { color: #b07800; }
-    [data-theme="light"] .status-dot.no-good   { color: #cc2222; }
-    [data-theme="light"] .dr-spray.favorable { color: #1a8a50; background: rgba(61,220,132,0.15); }
-    [data-theme="light"] .dr-spray.caution   { color: #b07800; background: rgba(255,193,7,0.15); }
-    [data-theme="light"] .dr-spray.no-good   { color: #cc2222; background: rgba(255,77,77,0.15); }
-    [data-theme="light"] .bottom-card .bc-title { color: rgba(20,30,60,0.6); }
-    [data-theme="light"] .bc-sub { color: rgba(20,30,60,0.5); }
-    [data-theme="light"] .sw-title { color: #1a2035; }
-    [data-theme="light"] .sw-subtitle { color: rgba(20,30,60,0.45); }
-    [data-theme="light"] .sw-tab { color: rgba(20,30,60,0.6); background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); }
-    [data-theme="light"] .sw-tab.active { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.2); color: #1a2035; }
-    [data-theme="light"] .ext-btn { background: rgba(255,255,255,0.7); color: #1a2035; border-color: rgba(0,0,0,0.12); }
-    [data-theme="light"] .feels-badge { background: rgba(0,0,0,0.07); border-color: rgba(0,0,0,0.1); color: rgba(20,30,60,0.65); }
-    [data-theme="light"] .inv-body { color: rgba(50,0,0,0.85); }
-    [data-theme="light"] .inv-title { color: #cc2222; }
-    [data-theme="light"] .inversion-alert { background: rgba(255,77,77,0.08); border-color: rgba(255,77,77,0.3); }
-    [data-theme="light"] .error-card { color: #cc2222; background: rgba(255,77,77,0.08); border-color: rgba(255,77,77,0.25); }
-    [data-theme="light"] .spinner { border-color: rgba(0,0,0,0.15); border-top-color: rgba(0,0,0,0.6); }
-    [data-theme="light"] .ext-btn:active, [data-theme="light"] .geo-btn:active { transform: scale(0.97); }
-    [data-theme="light"] .settings-icon-btn { background: rgba(255,255,255,0.7); color: #1a2035; border-color: rgba(0,0,0,0.12); }
-    [data-theme="light"] .settings-panel { background: rgba(255,255,255,0.97); border-color: rgba(0,0,0,0.12); }
-    [data-theme="light"] .settings-panel h3 { color: #1a2035; border-bottom-color: rgba(0,0,0,0.08); }
-    [data-theme="light"] .settings-row label { color: #1a2035; }
-    [data-theme="light"] .settings-backdrop { background: rgba(0,0,0,0.4); }
-
     html, body {
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
       color: var(--text);
@@ -171,77 +110,6 @@
       flex-shrink: 0; transition: background 0.2s;
     }
     .geo-btn:hover { background: rgba(255,255,255,0.18); }
-
-    .settings-icon-btn {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-sm);
-      color: white; cursor: pointer; font-size: 16px;
-      padding: 0 12px; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: background 0.2s;
-      margin-left: 6px;
-    }
-    .settings-icon-btn:hover { background: rgba(255,255,255,0.18); }
-
-    /* Current conditions strip */
-    .now-strip {
-      display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto;
-      -webkit-overflow-scrolling: touch; padding-bottom: 4px;
-    }
-    .now-tile {
-      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius-sm); padding: 10px 12px; flex-shrink: 0;
-      min-width: 70px; text-align: center;
-    }
-    .now-tile .nt-icon { font-size: 18px; margin-bottom: 2px; }
-    .now-tile .nt-label { font-size: 9px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
-    .now-tile .nt-value { font-size: 16px; font-weight: 700; line-height: 1; }
-    .now-tile .nt-sub { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
-    [data-theme="light"] .now-tile { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); }
-
-    /* Settings panel */
-    .settings-backdrop {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-      z-index: 1000; padding: 20px 12px 40px;
-    }
-    .settings-backdrop.open { display: flex; align-items: flex-start; justify-content: flex-end; }
-    .settings-panel {
-      background: rgba(15,25,45,0.97); border: 1px solid rgba(255,255,255,0.15);
-      border-radius: var(--radius); width: 280px; overflow: hidden; margin-top: 60px;
-    }
-    .settings-panel h3 {
-      font-size: 13px; font-weight: 700; padding: 14px 18px;
-      border-bottom: 1px solid rgba(255,255,255,0.08); margin: 0;
-      letter-spacing: 0.3px;
-    }
-    .settings-panel .sp-body { padding: 14px 18px; }
-    .settings-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .settings-row:last-child { border-bottom: none; }
-    .settings-row label { font-size: 13px; color: var(--text); }
-    .settings-row .sl-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-
-    /* Toggle switch */
-    .toggle-switch {
-      position: relative; width: 44px; height: 24px; flex-shrink: 0;
-    }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider {
-      position: absolute; inset: 0; background: rgba(255,255,255,0.2);
-      border-radius: 24px; cursor: pointer; transition: background 0.3s;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .toggle-slider::before {
-      content: ''; position: absolute; width: 18px; height: 18px;
-      border-radius: 50%; background: white; top: 2px; left: 2px;
-      transition: transform 0.3s; box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    }
-    .toggle-switch input:checked + .toggle-slider { background: var(--green); border-color: var(--green); }
-    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
 
     .product-select {
       background: rgba(255,255,255,0.1);
@@ -518,7 +386,6 @@
         autocomplete="off" autocorrect="off" spellcheck="false" />
     </div>
     <button class="geo-btn" id="geo-btn" title="Use my location">🧭</button>
-    <button class="settings-icon-btn" id="settings-btn" title="Settings">⚙️</button>
   </div>
 
   <!-- Product selector -->
@@ -532,45 +399,6 @@
     <option value="Tordon 22K">🧪 Tordon 22K</option>
     <option value="Remedy Ultra">🧪 Remedy Ultra</option>
   </select>
-
-  <!-- Settings Panel -->
-  <div class="settings-backdrop" id="settings-backdrop">
-    <div class="settings-panel glass">
-      <h3>⚙️ Settings</h3>
-      <div class="sp-body">
-        <div class="settings-row">
-          <div>
-            <div style="font-size:13px;color:var(--text)">Dark Mode</div>
-            <div class="sl-sub">Use dark theme</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="toggle-dark" checked>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <div class="settings-row">
-          <div>
-            <div style="font-size:13px;color:var(--text)">Default Product</div>
-            <div class="sl-sub">Pre-select herbicide</div>
-          </div>
-          <select id="settings-default-product" style="
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 8px; color: var(--text); font-size: 12px; padding: 5px 8px;
-            outline: none; cursor: pointer;
-          ">
-            <option value="general">General Ag</option>
-            <option value="2,4-D Amine">2,4-D Amine</option>
-            <option value="Dicamba">Dicamba</option>
-            <option value="GrazonNext HL">GrazonNext HL</option>
-            <option value="Grazon P+D">Grazon P+D</option>
-            <option value="Roundup (Glyphosate)">Roundup</option>
-            <option value="Tordon 22K">Tordon 22K</option>
-            <option value="Remedy Ultra">Remedy Ultra</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Dynamic content -->
   <div id="app-content">
@@ -637,37 +465,17 @@ async function fetchAndRender(loc, herb) {
   } catch(e) { showError(e.message); }
 }
 
-// Geolocation — reverse geocode to city/state
+// Geolocation
 document.getElementById('geo-btn').addEventListener('click', () => {
   if (!navigator.geolocation) { alert('Geolocation not supported.'); return; }
   const btn = document.getElementById('geo-btn');
   btn.textContent = '⏳';
   navigator.geolocation.getCurrentPosition(
-    async pos => {
-      try {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        const coords = `${lat.toFixed(5)},${lon.toFixed(5)}`;
-        
-        // Reverse geocode to get city/state
-        const revUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
-        const revRes = await fetch(revUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } });
-        const revData = await revRes.json();
-        const addr = revData.address || {};
-        const city = addr.city || addr.town || addr.village || addr.county || '';
-        const state = addr.state_code || addr.state || '';
-        const display = (city && state) ? `${city}, ${state}` : coords;
-        
-        document.getElementById('loc-input').value = display;
-        btn.textContent = '🧭';
-        doSearch();
-      } catch(e) {
-        btn.textContent = '🧭';
-        alert('Geolocation succeeded but reverse geocoding failed. Trying raw coordinates.');
-        const coords = `${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`;
-        document.getElementById('loc-input').value = coords;
-        doSearch();
-      }
+    pos => {
+      const coords = `${pos.coords.latitude.toFixed(5)},${pos.coords.longitude.toFixed(5)}`;
+      document.getElementById('loc-input').value = coords;
+      btn.textContent = '🧭';
+      doSearch();
     },
     err => { btn.textContent = '🧭'; alert('Could not get location: ' + err.message); },
     { timeout: 10000 }
@@ -723,9 +531,8 @@ function renderAll() {
   document.getElementById('app-content').innerHTML = `
     ${renderHeroLocation(d, now)}
     ${d.inversion_alert.active ? renderInversionAlert(d.inversion_alert) : ''}
-    ${renderCurrentConditionsStrip(now)}
-    ${renderSprayWindow(first24)}
     ${renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc)}
+    ${renderSprayWindow(first24)}
     ${renderExtButtons()}
     ${renderBottomCards(now)}
     ${renderThreshStrip(d.product)}
@@ -739,17 +546,11 @@ function renderAll() {
 
 // ── Hero Location ─────────────────────────────
 function renderHeroLocation(d, now) {
-  // Show city/state in large font, coords as small fine print
-  const displayParts = d.location.display.split(',');
-  const cityState = displayParts.slice(0, 2).join(',').trim();
-  const extra = displayParts.slice(2).join(',').trim();
-
   return `<div class="hero-location">
     <div>
       <div class="hero-label">Hero Weather</div>
-      <div class="hero-city">${esc(cityState)}</div>
-      ${extra ? `<div class="hero-coords" style="font-size:11px;color:var(--text-muted)">${esc(extra)}</div>` : ''}
-      <div class="hero-coords">${d.location.lat.toFixed(4)}°, ${d.location.lon.toFixed(4)}°</div>
+      <div class="hero-city">${esc(d.location.display)}</div>
+      <div class="hero-coords">${d.location.lat.toFixed(4)}, ${d.location.lon.toFixed(4)}</div>
     </div>
     <div class="hero-icon">${now.condition.icon}</div>
   </div>`;
@@ -858,54 +659,6 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
 
     <!-- Task 4: Rain countdown -->
     ${rainHTML}
-  </div>`;
-}
-
-// ── Current Conditions Strip ───────────────────
-function renderCurrentConditionsStrip(now) {
-  const windDir = now.wind_dir || 'N/A';
-  const windArrow = now.wind_dir_deg
-    ? `<span style="display:inline-block;transform:rotate(${now.wind_dir_deg}deg)">↑</span>`
-    : '';
-
-  const precipLabel = now.precip_pct >= 30 ? `🌧 ${now.precip_pct}%`
-    : now.precip_pct >= 10 ? `🌦 ${now.precip_pct}%`
-    : `☁️ ${now.precip_pct}%`;
-
-  const precipColor = now.precip_pct >= 50 ? 'var(--red)' : now.precip_pct >= 25 ? 'var(--yellow)' : 'var(--blue)';
-  const dewColor = (now.temp_f - now.dew_f) < 8 ? 'var(--yellow)' : 'var(--green)';
-
-  return `<div class="now-strip">
-    <div class="now-tile">
-      <div class="nt-icon">🌡</div>
-      <div class="nt-label">Temp</div>
-      <div class="nt-value">${Math.round(now.temp_f)}°</div>
-      <div class="nt-sub">${now.condition.desc}</div>
-    </div>
-    <div class="now-tile">
-      <div class="nt-icon">💨</div>
-      <div class="nt-label">Wind</div>
-      <div class="nt-value">${Math.round(now.wind_mph)} <span style="font-size:11px;font-weight:400">mph</span></div>
-      <div class="nt-sub">${windArrow} ${windDir}</div>
-    </div>
-    <div class="now-tile">
-      <div class="nt-icon">💧</div>
-      <div class="nt-label">RH</div>
-      <div class="nt-value">${now.rh}<span style="font-size:11px;font-weight:400">%</span></div>
-      <div class="nt-sub">Dew ${Math.round(now.dew_f)}°F</div>
-    </div>
-    <div class="now-tile">
-      <div class="nt-icon">🌧</div>
-      <div class="nt-label">Precip</div>
-      <div class="nt-value" style="color:${precipColor}">${now.precip_pct}<span style="font-size:11px;font-weight:400">%</span></div>
-      <div class="nt-sub">${now.precip_in > 0 ? now.precip_in.toFixed(2)+'in' : 'No rain'}</div>
-    </div>
-    <div class="now-tile">
-      <div class="nt-icon">🌡</div>
-      <div class="nt-label">Feels</div>
-      <div class="nt-value">${Math.round(now.feels_like_f)}°</div>
-      <div class="nt-sub">${now.feels_like_f < now.temp_f ? 'Wind chill' : now.feels_like_f > now.temp_f ? 'Heat index' : 'Actual'}</div>
-    </div>
   </div>`;
 }
 
@@ -1143,11 +896,6 @@ function renderDailyModal() {
       ? `🌅 ${day.sunrise} &nbsp;·&nbsp; 🌇 ${day.sunset}`
       : '';
 
-    // Soil temp (Task 5 addition)
-    const soilLine = day.soil_temp_f !== null
-      ? `<span style="color:var(--text-muted)">🌱 Soil ${day.soil_temp_f}°F</span>`
-      : '';
-
     // Task 7: Real avg RH shown
     const rhNote = day.avg_rh ? `RH avg ${day.avg_rh}%` : '';
 
@@ -1170,7 +918,7 @@ function renderDailyModal() {
         &nbsp;·&nbsp; 🌧 ${day.precip_pct}%
         ${rhNote ? `&nbsp;·&nbsp; ${rhNote}` : ''}
         ${reason ? `<br><span style="font-size:10px;color:rgba(255,255,255,0.3)">⚠ ${esc(reason)}</span>` : ''}
-        ${sunLine ? `<div class="dr-sun">${sunLine}${soilLine ? '&nbsp;&nbsp;' + soilLine : ''}</div>` : ''}
+        ${sunLine ? `<div class="dr-sun">${sunLine}</div>` : ''}
       </div>
       <div class="dr-spray ${day.spray.status}">${sprayLabel}</div>
     </div>`;
@@ -1189,71 +937,15 @@ function esc(str) {
 }
 
 // ════════════════════════════════════════════
-//  SETTINGS PANEL
-// ════════════════════════════════════════════
-function openSettings() {
-  document.getElementById('settings-backdrop').classList.add('open');
-  // Sync toggle with current theme
-  const isDark = (document.documentElement.getAttribute('data-theme') !== 'light');
-  document.getElementById('toggle-dark').checked = isDark;
-  // Sync default product select
-  const savedDefault = localStorage.getItem('defaultProduct') || 'general';
-  document.getElementById('settings-default-product').value = savedDefault;
-}
-function closeSettings() {
-  document.getElementById('settings-backdrop').classList.remove('open');
-}
-function applyTheme(isDark) {
-  if (isDark) {
-    document.documentElement.removeAttribute('data-theme');
-  } else {
-    document.documentElement.setAttribute('data-theme', 'light');
-  }
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-}
-
-// ════════════════════════════════════════════
-//  AUTO-RESTORE SESSION + THEME INIT
+//  AUTO-RESTORE SESSION
 // ════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
-  // Apply saved theme immediately (before paint)
-  const savedTheme = localStorage.getItem('theme') || 'dark';
-  if (savedTheme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  }
-
-  // Settings gear button
-  document.getElementById('settings-btn').addEventListener('click', openSettings);
-  document.getElementById('settings-backdrop').addEventListener('click', e => {
-    if (e.target === document.getElementById('settings-backdrop')) closeSettings();
-  });
-
-  // Dark mode toggle
-  document.getElementById('toggle-dark').addEventListener('change', e => {
-    applyTheme(e.target.checked);
-  });
-
-  // Default product save
-  document.getElementById('settings-default-product').addEventListener('change', e => {
-    localStorage.setItem('defaultProduct', e.target.value);
-    // If no location has been searched yet, pre-select in the dropdown
-    if (!sessionStorage.getItem('lastLocation')) {
-      document.getElementById('herb-select').value = e.target.value;
-    }
-  });
-
-  // Load saved default product into dropdown on startup
-  const savedDefaultProduct = localStorage.getItem('defaultProduct');
-  if (savedDefaultProduct) {
-    document.getElementById('herb-select').value = savedDefaultProduct;
-  }
-
   const loc  = sessionStorage.getItem('lastLocation');
-  const herb = sessionStorage.getItem('lastHerbicide') || savedDefaultProduct || 'general';
+  const herb = sessionStorage.getItem('lastHerbicide');
   if (loc) {
     document.getElementById('loc-input').value = loc;
     if (herb) document.getElementById('herb-select').value = herb;
-    fetchAndRender(loc, herb);
+    fetchAndRender(loc, herb || 'general');
   }
 });
 
