@@ -257,7 +257,7 @@ async function fetchWeather(lat, lon) {
     'temperature_2m','apparent_temperature','dew_point_2m',
     'relative_humidity_2m','precipitation_probability','precipitation',
     'cloud_cover','weather_code','wind_speed_10m','wind_gusts_10m',
-    'wind_direction_10m'
+    'wind_direction_10m','soil_temperature_0cm'
   ].join(',');
 
   const dailyVars = [
@@ -265,7 +265,7 @@ async function fetchWeather(lat, lon) {
     'apparent_temperature_max','apparent_temperature_min',
     'precipitation_sum','precipitation_probability_max',
     'weather_code','wind_speed_10m_max','wind_gusts_10m_max',
-    'wind_direction_10m_dominant','sunrise','sunset'
+    'wind_direction_10m_dominant','sunrise','sunset','soil_temperature_0cm'
   ].join(',');
 
   const url = [
@@ -329,6 +329,10 @@ export default async function handler(req, res) {
       const precipIn = h.precipitation[i] || 0;
       const cloudPct = h.cloud_cover[i] || 0;
       const wmoCode  = h.weather_code[i] || 0;
+      const soilTempC = h.soil_temperature_0cm[i];
+      const soilTempF = soilTempC !== undefined && soilTempC !== null
+        ? Math.round(soilTempC * 9/5 + 32)
+        : null;
       const inversion = deltaT < 2 && windMph < 5;
 
       const hourData = {
@@ -348,7 +352,8 @@ export default async function handler(req, res) {
         cloud_pct:     Math.round(cloudPct),
         weather_code:  wmoCode,
         condition:     wmoToCondition(wmoCode),
-        inversion
+        inversion,
+        soil_temp_f:   soilTempF
       };
       hourData.spray = scoreSprayConditions(hourData, herbicide);
       hourly.push(hourData);
@@ -408,6 +413,15 @@ export default async function handler(req, res) {
       // Sunrise/sunset (astronomical calc, no extra API call)
       const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
 
+      // Soil temp: average of hours 6am–8pm for this day
+      const daySoilTemps = dayHours
+        .filter(h => { const hr = new Date(h.time).getUTCHours(); return hr >= 10 && hr <= 20; })
+        .map(h => h.soil_temp_f)
+        .filter(v => v !== null);
+      const avgSoilTempF = daySoilTemps.length
+        ? Math.round(daySoilTemps.reduce((s, v) => s + v, 0) / daySoilTemps.length)
+        : null;
+
       daily.push({
         date:           dateStr,
         temp_max_f:     Math.round(maxF    * 10) / 10,
@@ -424,6 +438,7 @@ export default async function handler(req, res) {
         condition:      wmoToCondition(wmoCode),
         sunrise:        sunTimes.sunrise,
         sunset:         sunTimes.sunset,
+        soil_temp_f:    avgSoilTempF,
         spray:          scoreSprayConditions(dailyHour, herbicide)
       });
     }
