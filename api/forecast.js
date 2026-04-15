@@ -265,7 +265,7 @@ async function fetchWeather(lat, lon) {
     'apparent_temperature_max','apparent_temperature_min',
     'precipitation_sum','precipitation_probability_max',
     'weather_code','wind_speed_10m_max','wind_gusts_10m_max',
-    'wind_direction_10m_dominant','sunrise','sunset','soil_temperature_0cm'
+    'wind_direction_10m_dominant','sunrise','sunset'
   ].join(',');
 
   const url = [
