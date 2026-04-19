@@ -329,9 +329,9 @@ export default async function handler(req, res) {
       const precipIn = h.precipitation[i] || 0;
       const cloudPct = h.cloud_cover[i] || 0;
       const wmoCode  = h.weather_code[i] || 0;
-      const soilTempC = h.soil_temperature_0cm[i];
-      const soilTempF = soilTempC !== undefined && soilTempC !== null
-        ? Math.round(soilTempC * 9/5 + 32)
+      // soil_temperature_0cm is returned in the same unit as temperature_2m (fahrenheit due to temperature_unit=fahrenheit)
+      const soilTempF = h.soil_temperature_0cm[i] !== undefined && h.soil_temperature_0cm[i] !== null
+        ? Math.round(h.soil_temperature_0cm[i])
         : null;
       const inversion = deltaT < 2 && windMph < 5;
 
@@ -413,7 +413,7 @@ export default async function handler(req, res) {
       // Sunrise/sunset (astronomical calc, no extra API call)
       const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
 
-      // Soil temp: average of hours 6am–8pm for this day
+      // Soil temp: average of hours 6am–8pm for this day (already in °F due to temperature_unit=fahrenheit)
       const daySoilTemps = dayHours
         .filter(h => { const hr = new Date(h.time).getUTCHours(); return hr >= 10 && hr <= 20; })
         .map(h => h.soil_temp_f)
