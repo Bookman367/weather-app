@@ -435,23 +435,25 @@ export default async function handler(req, res) {
         var hourly = [];
         for (const p of nwsData.hourly.slice(0, 48)) {
           const tempF = parseFloat(p.temperature);
-          const rh = p.relativeHumidity || 50;
+          const rh = p.relativeHumidity?.value || 50;
+          const dewC = p.dewpoint?.value || (tempF - 32) * 5 / 9;
+          const dewF = dewC * 9 / 5 + 32;
           const deltaT = calcDeltaT((tempF - 32) * 5 / 9, rh);
           const windSpeedStr = p.windSpeed || '0 mph';
-          const windSpeed = parseFloat(windSpeedStr) || 0;
+          const windSpeed = parseFloat(windSpeedStr.replace(' mph', '')) || 0;
           hourly.push({
             time: new Date(p.startTime).toISOString(),
             temp_f: tempF,
             feels_like_f: p.apparentTemperature || tempF,
-            dew_f: tempF - 5,
-            rh: rh,
+            dew_f: Math.round(dewF),
+            rh: Math.round(rh),
             delta_t: Math.round(deltaT * 10) / 10,
             delta_t_f: Math.round(deltaTtoF(deltaT) * 10) / 10,
             wind_mph: windSpeed,
             gust_mph: 0,
             wind_dir_deg: 180,
             wind_dir: p.windDirection || 'N',
-            precip_pct: 0,
+            precip_pct: p.probabilityOfPrecipitation?.value || 0,
             precip_in: 0,
             cloud_pct: 50,
             weather_code: 0,
@@ -471,7 +473,7 @@ export default async function handler(req, res) {
         for (const [dateStr, dayPeriods] of dayMap.entries()) {
           const maxF = Math.max(...dayPeriods.map(p => parseFloat(p.temperature)));
           const minF = Math.min(...dayPeriods.map(p => parseFloat(p.temperature)));
-          const avgRH = dayPeriods.reduce((s, p) => s + (p.relativeHumidity || 50), 0) / dayPeriods.length;
+          const avgRH = dayPeriods.reduce((s, p) => s + (p.relativeHumidity?.value || 50), 0) / dayPeriods.length;
           const avgTemp = (maxF + minF) / 2;
           const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
           const samplePeriod = dayPeriods[0];
@@ -482,7 +484,7 @@ export default async function handler(req, res) {
             feels_max_f: maxF,
             feels_min_f: minF,
             precip_sum_in: 0,
-            precip_pct: 0,
+            precip_pct: samplePeriod?.probabilityOfPrecipitation?.value || 0,
             wind_max_mph: 0,
             gust_max_mph: 0,
             avg_rh: Math.round(avgRH),
