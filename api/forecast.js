@@ -358,13 +358,13 @@ export default async function handler(req, res) {
     const rainIn = hoursUntilRain(hourlyFinal, 30);
 
     // ── Active inversion alert ────────────────────────────
-    const inversionNow = hourly[0]?.inversion || false;
+    const inversionNow = hourlyFinal[0]?.inversion || false;
     const inversionAlert = inversionNow ? {
       active: true,
-      delta_t:   hourly[0].delta_t,
-      delta_t_f: hourly[0].delta_t_f,
-      wind_mph:  hourly[0].wind_mph,
-      message:   `Temperature inversion conditions detected. Delta-T ${hourly[0].delta_t}°C (${hourly[0].delta_t_f}°F spread) with winds at ${hourly[0].wind_mph} mph. Spray droplets may pool and drift unpredictably. Do not apply.`
+      delta_t:   hourlyFinal[0].delta_t,
+      delta_t_f: hourlyFinal[0].delta_t_f,
+      wind_mph:  hourlyFinal[0].wind_mph,
+      message:   `Temperature inversion conditions detected. Delta-T ${hourlyFinal[0].delta_t}°C (${hourlyFinal[0].delta_t_f}°F spread) with winds at ${hourlyFinal[0].wind_mph} mph. Spray droplets may pool and drift unpredictably. Do not apply.`
     } : { active: false };
 
     // ── Process daily (7 days) ────────────────────────────
@@ -385,7 +385,7 @@ export default async function handler(req, res) {
 
       // Task 7: use real avg RH from actual hourly data for this calendar date
       const dateStr = d.time[i];
-      const dayHours = hourly.filter(h => h.time.startsWith(dateStr));
+      const dayHours = hourlyFinal.filter(h => h.time.startsWith(dateStr));
       const avgRH = dayHours.length
         ? Math.round(dayHours.reduce((s, h) => s + h.rh, 0) / dayHours.length)
         : 60;
@@ -434,17 +434,17 @@ export default async function handler(req, res) {
         sunrise:        sunTimes.sunrise,
         sunset:         sunTimes.sunset,
         soil_temp_f:    avgSoilTempF,
-        spray:          scoreSprayConditions(dailyHour, herbicide)
+        spray:          scoreSprayConditions(dailyHour, herbicide, method)
       });
     }
 
     // ── Summary stats ─────────────────────────────────────
-    const favorableCount = hourly.filter(h => h.spray.status === 'favorable').length;
-    const cautionCount   = hourly.filter(h => h.spray.status === 'caution').length;
-    const noGoodCount    = hourly.filter(h => h.spray.status === 'no-good').length;
+    const favorableCount = hourlyFinal.filter(h => h.spray.status === 'favorable').length;
+    const cautionCount   = hourlyFinal.filter(h => h.spray.status === 'caution').length;
+    const noGoodCount    = hourlyFinal.filter(h => h.spray.status === 'no-good').length;
 
     let bestStart = null, bestLen = 0, curStart = null, curLen = 0;
-    for (const h of hourly) {
+    for (const h of hourlyFinal) {
       if (h.spray.status === 'favorable') {
         if (!curStart) curStart = h.time;
         curLen++;
@@ -483,7 +483,7 @@ export default async function handler(req, res) {
       },
       inversion_alert: inversionAlert,
       timezone: raw.timezone,
-      hourly,
+      hourly: hourlyFinal,
       daily
     });
 
