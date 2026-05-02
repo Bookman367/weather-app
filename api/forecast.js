@@ -280,23 +280,21 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  let locationStr, herbicide;
+  let locationStr, herbicide, method;
   if (req.method === 'GET') {
-    let method;
-    if (req.method === 'GET') {
-      locationStr = req.query.location || '';
-      herbicide   = req.query.herbicide || 'general';
-      method      = req.query.method || 'clarity';
-    } else {
-      const body  = req.body || {};
-      locationStr = body.location || '';
-      herbicide   = body.herbicide || 'general';
-      method      = body.method || 'clarity';
-    }
-    if (!locationStr) return res.status(400).json({ error: 'Missing location parameter' });
+    locationStr = req.query.location || '';
+    herbicide   = req.query.herbicide || 'general';
+    method      = req.query.method || 'clarity';
+  } else {
+    const body  = req.body || {};
+    locationStr = body.location || '';
+    herbicide   = body.herbicide || 'general';
+    method      = body.method || 'clarity';
+  }
+  if (!locationStr) return res.status(400).json({ error: 'Missing location parameter' });
 
-    try {
-      const geoResult = await geocode(locationStr);
+  try {
+    const geoResult = await geocode(locationStr);
       const raw       = await fetchWeather(geoResult.lat, geoResult.lon);
       const tzOffset  = raw.utc_offset_seconds || 0;
       const product   = PRODUCTS[herbicide] || PRODUCTS.general;
