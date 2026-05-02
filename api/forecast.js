@@ -612,7 +612,7 @@ export default async function handler(req, res) {
         hours_until_rain:   rainIn,   // null = no rain in 96h window
       },
       inversion_alert: inversionAlert,
-      timezone: raw.timezone,
+      timezone: timezone || 'America/Chicago',
       hourly: hourlyFinal,
       daily
     });
