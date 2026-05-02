@@ -275,28 +275,33 @@ async function fetchWeather(lat, lon) {
 
 // ── NWS/NOAA API Fetch (Government weather station data) ────
 async function fetchWeatherNWS(lat, lon) {
-  // Get nearest station
-  const stationsUrl = `https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`;
-  const stationsRes = await fetch(stationsUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0 (agricultural spray forecast)' } });
-  if (!stationsRes.ok) throw new Error(`NWS points error: ${stationsRes.status}`);
-  const stationsData = await stationsRes.json();
-  
-  const gridUrl = stationsData.properties.forecastGridData;
-  const stationUrl = stationsData.properties.stations;
+  // Get nearest station metadata
+  const pointsUrl = `https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`;
+  const pointsRes = await fetch(pointsUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0 (agricultural spray forecast)' } });
+  if (!pointsRes.ok) throw new Error(`NWS points error: ${pointsRes.status}`);
+  const pointsData = await pointsRes.json();
 
-  // Get grid forecast (hourly + daily)
-  const gridRes = await fetch(gridUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } });
-  if (!gridRes.ok) throw new Error(`NWS grid error: ${gridRes.status}`);
-  const gridData = await gridRes.json();
+  // Get hourly forecast (contains periods with time-series data)
+  const hourlyUrl = pointsData.properties.forecastHourly;
+  const dailyUrl = pointsData.properties.forecast;
 
-  // Get current observation
-  const stationRes = await fetch(stationUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } });
-  const stationData = await stationRes.ok ? await stationRes.json() : { properties: {} };
-  const nearestStation = stationData.properties?.stations?.[0];
-  const obsUrl = nearestStation ? `${nearestStation}/observations/latest` : null;
-  const obsData = obsUrl ? (await fetch(obsUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } }).then(r => r.ok ? r.json() : null)) : null;
+  // Fetch hourly and daily forecasts in parallel
+  const [hourlyRes, dailyRes] = await Promise.all([
+    fetch(hourlyUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } }),
+    fetch(dailyUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } })
+  ]);
 
-  return { grid: gridData, obs: obsData, tz: stationsData.properties.timeZone };
+  if (!hourlyRes.ok) throw new Error(`NWS hourly error: ${hourlyRes.status}`);
+  if (!dailyRes.ok) throw new Error(`NWS daily error: ${dailyRes.status}`);
+
+  const hourlyData = await hourlyRes.json();
+  const dailyData = await dailyRes.json();
+
+  return {
+    hourly: hourlyData.properties.periods || [],
+    daily: dailyData.properties.periods || [],
+    tz: pointsData.properties.timeZone
+  };
 }
 
 // ── WeatherAPI.com Fetch (Real-time + forecast, free key needed) ────
@@ -425,38 +430,69 @@ export default async function handler(req, res) {
       default:
         // NWS/NOAA - Government weather station + forecast data
         const nwsData = await fetchWeatherNWS(geoResult.lat, geoResult.lon);
-        raw = nwsData.grid;
         tzOffset = 0;
-        // Normalize NWS format
-        var hourly = []; var daily = [];
-        const periods = raw.properties.periods || [];
-        let hourlyIdx = 0;
-        for (const p of periods) {
-          if (p.number <= 24) { // Hourly
-            const tempF = parseFloat(p.temperature);
-            const rh = 50; // NWS doesn't always give RH in grid data
-            const deltaT = calcDeltaT((tempF - 32) * 5 / 9, rh);
-            hourly.push({
-              time: new Date(p.startTime).toISOString(),
-              temp_f: tempF,
-              feels_like_f: tempF,
-              dew_f: tempF - 5,
-              rh: rh,
-              delta_t: Math.round(deltaT * 10) / 10,
-              delta_t_f: Math.round(deltaTtoF(deltaT) * 10) / 10,
-              wind_mph: parseFloat(p.windSpeed) || 0,
-              gust_mph: 0,
-              wind_dir_deg: 180,
-              wind_dir: p.windDirection || 'N',
-              precip_pct: 0,
-              precip_in: 0,
-              cloud_pct: 50,
-              weather_code: 0,
-              condition: { desc: p.shortForecast, icon: '🌤️' },
-              inversion: false,
-              soil_temp_f: null
-            });
-          }
+        // Normalize NWS hourly format (periods array)
+        var hourly = [];
+        for (const p of nwsData.hourly.slice(0, 48)) {
+          const tempF = parseFloat(p.temperature);
+          const rh = p.relativeHumidity || 50;
+          const deltaT = calcDeltaT((tempF - 32) * 5 / 9, rh);
+          const windSpeedStr = p.windSpeed || '0 mph';
+          const windSpeed = parseFloat(windSpeedStr) || 0;
+          hourly.push({
+            time: new Date(p.startTime).toISOString(),
+            temp_f: tempF,
+            feels_like_f: p.apparentTemperature || tempF,
+            dew_f: tempF - 5,
+            rh: rh,
+            delta_t: Math.round(deltaT * 10) / 10,
+            delta_t_f: Math.round(deltaTtoF(deltaT) * 10) / 10,
+            wind_mph: windSpeed,
+            gust_mph: 0,
+            wind_dir_deg: 180,
+            wind_dir: p.windDirection || 'N',
+            precip_pct: 0,
+            precip_in: 0,
+            cloud_pct: 50,
+            weather_code: 0,
+            condition: { desc: p.shortForecast, icon: '🌤️' },
+            inversion: deltaT < 2 && windSpeed < 5,
+            soil_temp_f: null
+          });
+        }
+        // Normalize NWS daily format (periods are 12hr chunks, need daily aggregation)
+        var daily = [];
+        var dayMap = new Map();
+        for (const p of nwsData.daily) {
+          const dateStr = p.startTime ? p.startTime.split('T')[0] : '';
+          if (!dayMap.has(dateStr)) dayMap.set(dateStr, []);
+          dayMap.get(dateStr).push(p);
+        }
+        for (const [dateStr, dayPeriods] of dayMap.entries()) {
+          const maxF = Math.max(...dayPeriods.map(p => parseFloat(p.temperature)));
+          const minF = Math.min(...dayPeriods.map(p => parseFloat(p.temperature)));
+          const avgRH = dayPeriods.reduce((s, p) => s + (p.relativeHumidity || 50), 0) / dayPeriods.length;
+          const avgTemp = (maxF + minF) / 2;
+          const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
+          const samplePeriod = dayPeriods[0];
+          daily.push({
+            date: dateStr,
+            temp_max_f: maxF,
+            temp_min_f: minF,
+            feels_max_f: maxF,
+            feels_min_f: minF,
+            precip_sum_in: 0,
+            precip_pct: 0,
+            wind_max_mph: 0,
+            gust_max_mph: 0,
+            avg_rh: Math.round(avgRH),
+            wind_dir: samplePeriod?.windDirection || 'N',
+            weather_code: 0,
+            condition: { desc: samplePeriod?.shortForecast || 'Varied', icon: '⛅' },
+            sunrise: '',
+            sunset: '',
+            soil_temp_f: null
+          });
         }
         var timezone = nwsData.tz;
         break;
