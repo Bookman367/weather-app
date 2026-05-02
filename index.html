@@ -533,6 +533,16 @@
     <option value="Remedy Ultra">🧪 Remedy Ultra</option>
   </select>
 
+  <!-- Recommendation Method Dropdown -->
+  <div style="margin-bottom: 20px;">
+    <label style="font-size: 12px; color: var(--text-dim); margin-bottom: 5px; display: block;">Recommendation Method</label>
+    <select class="product-select" id="method-select" style="margin-bottom: 0;">
+      <option value="clarity">🟢 Clarity Guidelines (Default)</option>
+      <option value="university">🎓 University Guidelines</option>
+    </select>
+  </div>
+  <div style="height: 20px;"></div>
+
   <!-- Settings Panel -->
   <div class="settings-backdrop" id="settings-backdrop">
     <div class="settings-panel glass">
@@ -617,16 +627,18 @@ let state = { data: null };
 async function doSearch() {
   const loc  = document.getElementById('loc-input').value.trim();
   const herb = document.getElementById('herb-select').value;
+  const meth = document.getElementById('method-select').value;
   if (!loc) { document.getElementById('loc-input').focus(); return; }
   sessionStorage.setItem('lastLocation', loc);
   sessionStorage.setItem('lastHerbicide', herb);
-  await fetchAndRender(loc, herb);
+  sessionStorage.setItem('lastMethod', meth);
+  await fetchAndRender(loc, herb, meth);
 }
 
-async function fetchAndRender(loc, herb) {
+async function fetchAndRender(loc, herb, meth) {
   showLoading();
   try {
-    const params = new URLSearchParams({ location: loc, herbicide: herb });
+    const params = new URLSearchParams({ location: loc, herbicide: herb, method: meth });
     const resp = await fetch(`/api/forecast?${params}`);
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({ error: `HTTP ${resp.status}` }));
@@ -679,7 +691,17 @@ document.getElementById('herb-select').addEventListener('change', () => {
   const loc = document.getElementById('loc-input').value.trim();
   if (state.data && loc) {
     const herb = document.getElementById('herb-select').value;
-    fetchAndRender(loc, herb);
+    const meth = document.getElementById('method-select').value;
+    fetchAndRender(loc, herb, meth);
+  }
+});
+
+document.getElementById('method-select').addEventListener('change', () => {
+  const loc = document.getElementById('loc-input').value.trim();
+  if (state.data && loc) {
+    const herb = document.getElementById('herb-select').value;
+    const meth = document.getElementById('method-select').value;
+    fetchAndRender(loc, herb, meth);
   }
 });
 

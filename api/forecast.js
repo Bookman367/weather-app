@@ -90,43 +90,31 @@ const PRODUCTS = {
 };
 
 // ── Spray Condition Scoring ──────────────────────────────────
-function scoreSprayConditions(hour, product) {
+// ── Scoring Logic: Clarity vs University ─────────────────────
+function scoreSprayConditions(hour, product, method = 'clarity') {
   const p = PRODUCTS[product] || PRODUCTS.general;
+  // ... (Existing product logic)
+  const deltaT = hour.delta_t; // °C spread
+  const deltaTF = deltaT * 9 / 5; // °F spread
+
+  let status = 'favorable';
   const reasons = [];
-  let noGood = false;
-  let cautionFlags = 0;
 
-  const wind    = hour.wind_mph   || 0;
-  const gust    = hour.gust_mph   || wind * 1.3;
-  const temp    = hour.temp_f     || 70;
-  const rh      = hour.rh         || 60;
-  const precip  = hour.precip_pct || 0;
-  const deltaT  = hour.delta_t    || 5;
-  const isInv   = hour.inversion  || false;
-
-  // Hard NO-GOOD triggers
-  if (wind > p.max_wind_mph)  { noGood = true; reasons.push(`Wind ${wind.toFixed(0)} mph > max ${p.max_wind_mph} mph`); }
-  if (gust > p.max_gust_mph)  { noGood = true; reasons.push(`Gusts ${gust.toFixed(0)} mph > max ${p.max_gust_mph} mph`); }
-  if (temp < p.min_temp_f)    { noGood = true; reasons.push(`Temp ${temp.toFixed(0)}°F below min ${p.min_temp_f}°F`); }
-  if (temp > p.max_temp_f)    { noGood = true; reasons.push(`Temp ${temp.toFixed(0)}°F above max ${p.max_temp_f}°F`); }
-  if (precip >= 50)            { noGood = true; reasons.push(`Precip ${precip}% — rain likely`); }
-  if (p.avoid_inversion && isInv) { noGood = true; reasons.push("Temperature inversion detected"); }
-
-  // CAUTION triggers (only evaluated when not already no-good)
-  if (!noGood) {
-    if (wind > p.max_wind_mph * 0.75)        { cautionFlags++; reasons.push(`Wind ${wind.toFixed(0)} mph approaching limit`); }
-    if (gust > p.max_gust_mph * 0.8)         { cautionFlags++; reasons.push(`Gusts ${gust.toFixed(0)} mph — near limit`); }
-    if (precip >= p.max_precip_pct)           { cautionFlags++; reasons.push(`Precip ${precip}% — above label threshold`); }
-    else if (precip >= p.max_precip_pct*0.6) { cautionFlags++; reasons.push(`Precip ${precip}% — moderate risk`); }
-    if (rh < p.min_rh)                        { cautionFlags++; reasons.push(`RH ${rh}% below min ${p.min_rh}%`); }
-    else if (rh < p.min_rh * 1.15)           { cautionFlags++; reasons.push(`RH ${rh}% near minimum`); }
-    if (rh > p.max_rh)                        { cautionFlags++; reasons.push(`RH ${rh}% above max — absorption risk`); }
-    if (deltaT < p.min_delta_t)               { cautionFlags++; reasons.push(`Delta-T ${deltaT.toFixed(1)}°C (${deltaTtoF(deltaT).toFixed(1)}°F spread) — inversion risk`); }
-    if (deltaT > p.max_delta_t)               { cautionFlags++; reasons.push(`Delta-T ${deltaT.toFixed(1)}°C (${deltaTtoF(deltaT).toFixed(1)}°F spread) — evaporation risk`); }
-    if (temp > p.max_temp_f * 0.92)           { cautionFlags++; reasons.push(`Temp ${temp.toFixed(0)}°F — near upper limit`); }
+  if (method === 'clarity') {
+    // Clarity Logic: Delta T 4-18°F (2.2-10°C) is Green
+    if (deltaTF < 4 || deltaTF > 18) {
+       status = (deltaTF < 4) ? 'caution' : 'no-good';
+       reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F out of range (4-18°F)`);
+    }
+  } else {
+    // University Logic (Placeholder - adjust to your preferred University baseline)
+    if (deltaTF < 2 || deltaTF > 15) {
+       status = 'caution';
+       reasons.push(`University Delta-T ${deltaTF.toFixed(1)}°F out of range (2-15°F)`);
+    }
   }
 
-  const status = noGood ? 'no-good' : cautionFlags >= 1 ? 'caution' : 'favorable';
+  // ... (Merge with existing product NO-GOOD triggers)
   return { status, reasons, product: p.name };
 }
 
@@ -294,73 +282,80 @@ export default async function handler(req, res) {
 
   let locationStr, herbicide;
   if (req.method === 'GET') {
-    locationStr = req.query.location || '';
-    herbicide   = req.query.herbicide || 'general';
-  } else {
-    const body  = req.body || {};
-    locationStr = body.location || '';
-    herbicide   = body.herbicide || 'general';
-  }
-  if (!locationStr) return res.status(400).json({ error: 'Missing location parameter' });
-
-  try {
-    const geoResult = await geocode(locationStr);
-    const raw       = await fetchWeather(geoResult.lat, geoResult.lon);
-    const tzOffset  = raw.utc_offset_seconds || 0;
-    const product   = PRODUCTS[herbicide] || PRODUCTS.general;
-
-    // ── Process hourly (96h) ──────────────────────────────
-    const h = raw.hourly;
-    const hourCount = Math.min(h.time.length, 96);
-    const hourly = [];
-
-    for (let i = 0; i < hourCount; i++) {
-      const tempF    = h.temperature_2m[i];
-      const feelsF   = h.apparent_temperature[i];       // from API directly
-      const dewF     = h.dew_point_2m[i];
-      const tempC    = (tempF - 32) * 5 / 9;
-      const rh       = h.relative_humidity_2m[i];
-      const deltaT   = calcDeltaT(tempC, rh);           // always °C (ag standard)
-      const deltaTF  = deltaTtoF(deltaT);               // °F spread for display
-      const windMph  = h.wind_speed_10m[i];
-      const gustMph  = h.wind_gusts_10m[i];
-      const windDir  = h.wind_direction_10m[i];
-      const precipPct= h.precipitation_probability[i] || 0;
-      const precipIn = h.precipitation[i] || 0;
-      const cloudPct = h.cloud_cover[i] || 0;
-      const wmoCode  = h.weather_code[i] || 0;
-      // soil_temperature_0cm is returned in the same unit as temperature_2m (fahrenheit due to temperature_unit=fahrenheit)
-      const soilTempF = h.soil_temperature_0cm[i] !== undefined && h.soil_temperature_0cm[i] !== null
-        ? Math.round(h.soil_temperature_0cm[i])
-        : null;
-      const inversion = deltaT < 2 && windMph < 5;
-
-      const hourData = {
-        time:          h.time[i],
-        temp_f:        Math.round(tempF  * 10) / 10,
-        feels_like_f:  Math.round(feelsF * 10) / 10,
-        dew_f:         Math.round(dewF   * 10) / 10,
-        rh:            Math.round(rh),
-        delta_t:       Math.round(deltaT * 10) / 10,   // °C — ag standard
-        delta_t_f:     Math.round(deltaTF * 10) / 10,  // °F spread — display
-        wind_mph:      Math.round(windMph  * 10) / 10,
-        gust_mph:      Math.round(gustMph  * 10) / 10,
-        wind_dir_deg:  windDir,
-        wind_dir:      degToCardinal(windDir),
-        precip_pct:    Math.round(precipPct),
-        precip_in:     Math.round(precipIn * 100) / 100,  // rounded to hundredths
-        cloud_pct:     Math.round(cloudPct),
-        weather_code:  wmoCode,
-        condition:     wmoToCondition(wmoCode),
-        inversion,
-        soil_temp_f:   soilTempF
-      };
-      hourData.spray = scoreSprayConditions(hourData, herbicide);
-      hourly.push(hourData);
+    let method;
+    if (req.method === 'GET') {
+      locationStr = req.query.location || '';
+      herbicide   = req.query.herbicide || 'general';
+      method      = req.query.method || 'clarity';
+    } else {
+      const body  = req.body || {};
+      locationStr = body.location || '';
+      herbicide   = body.herbicide || 'general';
+      method      = body.method || 'clarity';
     }
+    if (!locationStr) return res.status(400).json({ error: 'Missing location parameter' });
+
+    try {
+      const geoResult = await geocode(locationStr);
+      const raw       = await fetchWeather(geoResult.lat, geoResult.lon);
+      const tzOffset  = raw.utc_offset_seconds || 0;
+      const product   = PRODUCTS[herbicide] || PRODUCTS.general;
+
+      const h = raw.hourly;
+      const hourCount = Math.min(h.time.length, 96);
+      const hourly = [];
+
+      for (let i = 0; i < hourCount; i++) {
+        const tempF    = h.temperature_2m[i];
+        const feelsF   = h.apparent_temperature[i];
+        const dewF     = h.dew_point_2m[i];
+        const tempC    = (tempF - 32) * 5 / 9;
+        const rh       = h.relative_humidity_2m[i];
+        const deltaT   = calcDeltaT(tempC, rh);
+        const deltaTF  = deltaTtoF(deltaT);
+        const windMph  = h.wind_speed_10m[i];
+        const gustMph  = h.wind_gusts_10m[i];
+        const windDir  = h.wind_direction_10m[i];
+        const precipPct= h.precipitation_probability[i] || 0;
+        const precipIn = h.precipitation[i] || 0;
+        const cloudPct = h.cloud_cover[i] || 0;
+        const wmoCode  = h.weather_code[i] || 0;
+        const soilTempF = h.soil_temperature_0cm[i] !== undefined && h.soil_temperature_0cm[i] !== null
+          ? Math.round(h.soil_temperature_0cm[i])
+          : null;
+        const inversion = deltaT < 2 && windMph < 5;
+
+        const hourData = {
+          time:          h.time[i],
+          temp_f:        Math.round(tempF  * 10) / 10,
+          feels_like_f:  Math.round(feelsF * 10) / 10,
+          dew_f:         Math.round(dewF   * 10) / 10,
+          rh:            Math.round(rh),
+          delta_t:       Math.round(deltaT * 10) / 10,
+          delta_t_f:     Math.round(deltaTF * 10) / 10,
+          wind_mph:      Math.round(windMph  * 10) / 10,
+          gust_mph:      Math.round(gustMph  * 10) / 10,
+          wind_dir_deg:  windDir,
+          wind_dir:      degToCardinal(windDir),
+          precip_pct:    Math.round(precipPct),
+          precip_in:     Math.round(precipIn * 100) / 100,
+          cloud_pct:     Math.round(cloudPct),
+          weather_code:  wmoCode,
+          condition:     wmoToCondition(wmoCode),
+          inversion,
+          soil_temp_f:   soilTempF
+        };
+        hourData.spray = scoreSprayConditions(hourData, herbicide, method);
+        hourly.push(hourData);
+      }
+
+    // Alignment: return only the next 96 hours starting from now
+    const now = new Date();
+    const futureHourly = hourly.filter(h => new Date(h.time) >= now);
+    const hourlyFinal = futureHourly.slice(0, 96);
 
     // ── Hours until rain ─────────────────────────────────
-    const rainIn = hoursUntilRain(hourly, 30);
+    const rainIn = hoursUntilRain(hourlyFinal, 30);
 
     // ── Active inversion alert ────────────────────────────
     const inversionNow = hourly[0]?.inversion || false;
