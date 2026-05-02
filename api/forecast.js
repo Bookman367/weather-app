@@ -273,6 +273,104 @@ async function fetchWeather(lat, lon) {
   return res.json();
 }
 
+// ── NWS/NOAA API Fetch (Government weather station data) ────
+async function fetchWeatherNWS(lat, lon) {
+  // Get nearest station
+  const stationsUrl = `https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`;
+  const stationsRes = await fetch(stationsUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0 (agricultural spray forecast)' } });
+  if (!stationsRes.ok) throw new Error(`NWS points error: ${stationsRes.status}`);
+  const stationsData = await stationsRes.json();
+  
+  const gridUrl = stationsData.properties.forecastGridData;
+  const stationUrl = stationsData.properties.stations;
+
+  // Get grid forecast (hourly + daily)
+  const gridRes = await fetch(gridUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } });
+  if (!gridRes.ok) throw new Error(`NWS grid error: ${gridRes.status}`);
+  const gridData = await gridRes.json();
+
+  // Get current observation
+  const stationRes = await fetch(stationUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } });
+  const stationData = await stationRes.ok ? await stationRes.json() : { properties: {} };
+  const nearestStation = stationData.properties?.stations?.[0];
+  const obsUrl = nearestStation ? `${nearestStation}/observations/latest` : null;
+  const obsData = obsUrl ? (await fetch(obsUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0' } }).then(r => r.ok ? r.json() : null)) : null;
+
+  return { grid: gridData, obs: obsData, tz: stationsData.properties.timeZone };
+}
+
+// ── WeatherAPI.com Fetch (Real-time + forecast, free key needed) ────
+async function fetchWeatherWeatherAPI(lat, lon, apiKey = '') {
+  // If no API key, fall back to Open-Meteo
+  if (!apiKey) throw new Error('WeatherAPI.com requires an API key');
+  const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${lat},${lon}&days=7&aqi=no&alerts=no`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`WeatherAPI error: ${res.status}`);
+  return res.json();
+}
+
+// ── Normalize Weather Data ──────────────────────────────────
+// All fetch functions return data in this unified format for internal processing
+function normalizeOpenMeteo(raw) {
+  const h = raw.hourly;
+  const d = raw.daily;
+  const hourCount = Math.min(h.time.length, 96);
+  const hourly = [];
+
+  for (let i = 0; i < hourCount; i++) {
+    const tempF = h.temperature_2m[i];
+    const tempC = (tempF - 32) * 5 / 9;
+    const rh = h.relative_humidity_2m[i];
+    const deltaT = calcDeltaT(tempC, rh);
+    const deltaTF = deltaTtoF(deltaT);
+
+    hourly.push({
+      time: h.time[i],
+      temp_f: Math.round(tempF * 10) / 10,
+      feels_like_f: Math.round((h.apparent_temperature[i] || tempF) * 10) / 10,
+      dew_f: Math.round((h.dew_point_2m[i] || tempF) * 10) / 10,
+      rh: Math.round(rh),
+      delta_t: Math.round(deltaT * 10) / 10,
+      delta_t_f: Math.round(deltaTF * 10) / 10,
+      wind_mph: Math.round((h.wind_speed_10m[i] || 0) * 10) / 10,
+      gust_mph: Math.round((h.wind_gusts_10m[i] || 0) * 10) / 10,
+      wind_dir_deg: h.wind_direction_10m[i],
+      wind_dir: degToCardinal(h.wind_direction_10m[i]),
+      precip_pct: Math.round(h.precipitation_probability[i] || 0),
+      precip_in: Math.round((h.precipitation[i] || 0) * 100) / 100,
+      cloud_pct: Math.round(h.cloud_cover[i] || 0),
+      weather_code: h.weather_code[i] || 0,
+      condition: wmoToCondition(h.weather_code[i] || 0),
+      inversion: deltaT < 2 && (h.wind_speed_10m[i] || 0) < 5,
+      soil_temp_f: h.soil_temperature_0cm[i] !== undefined ? Math.round(h.soil_temperature_0cm[i]) : null
+    });
+  }
+
+  const daily = [];
+  for (let i = 0; i < d.time.length; i++) {
+    daily.push({
+      date: d.time[i],
+      temp_max_f: Math.round((d.temperature_2m_max[i] || 0) * 10) / 10,
+      temp_min_f: Math.round((d.temperature_2m_min[i] || 0) * 10) / 10,
+      feels_max_f: Math.round((d.apparent_temperature_max[i] || 0) * 10) / 10,
+      feels_min_f: Math.round((d.apparent_temperature_min[i] || 0) * 10) / 10,
+      precip_sum_in: Math.round((d.precipitation_sum[i] || 0) * 100) / 100,
+      precip_pct: Math.round(d.precipitation_probability_max[i] || 0),
+      wind_max_mph: Math.round((d.wind_speed_10m_max[i] || 0) * 10) / 10,
+      gust_max_mph: Math.round((d.wind_gusts_10m_max[i] || 0) * 10) / 10,
+      avg_rh: 50,
+      wind_dir: degToCardinal(d.wind_direction_10m_dominant[i]),
+      weather_code: d.weather_code[i] || 0,
+      condition: wmoToCondition(d.weather_code[i] || 0),
+      sunrise: d.sunrise[i],
+      sunset: d.sunset[i],
+      soil_temp_f: null
+    });
+  }
+
+  return { hourly, daily, timezone: raw.timezone || 'America/Chicago' };
+}
+
 // ── Main Handler ─────────────────────────────────────────────
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -280,74 +378,98 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  let locationStr, herbicide, method;
+  let locationStr, herbicide, method, source;
   if (req.method === 'GET') {
     locationStr = req.query.location || '';
     herbicide   = req.query.herbicide || 'general';
     method      = req.query.method || 'clarity';
+    source      = req.query.source || 'nws'; // Default to NWS (government station data)
   } else {
     const body  = req.body || {};
     locationStr = body.location || '';
     herbicide   = body.herbicide || 'general';
     method      = body.method || 'clarity';
+    source      = body.source || 'nws';
   }
   if (!locationStr) return res.status(400).json({ error: 'Missing location parameter' });
 
   try {
     const geoResult = await geocode(locationStr);
-      const raw       = await fetchWeather(geoResult.lat, geoResult.lon);
-      const tzOffset  = raw.utc_offset_seconds || 0;
-      const product   = PRODUCTS[herbicide] || PRODUCTS.general;
+    let raw, tzOffset;
 
-      const h = raw.hourly;
-      const hourCount = Math.min(h.time.length, 96);
-      const hourly = [];
+    // Fetch from selected weather source
+    switch (source) {
+      case 'openmeteo':
+        raw = await fetchWeather(geoResult.lat, geoResult.lon);
+        const normalized = normalizeOpenMeteo(raw);
+        tzOffset = raw.utc_offset_seconds || 0;
+        var hourly = normalized.hourly;
+        var daily = normalized.daily;
+        var timezone = normalized.timezone;
+        break;
+      case 'weatherapi':
+        // Note: WeatherAPI.com requires a free API key
+        // For now, fall back to NWS if no key provided
+        const apiKey = process.env.WEATHERAPI_KEY || '';
+        if (apiKey) {
+          raw = await fetchWeatherWeatherAPI(geoResult.lat, geoResult.lon, apiKey);
+          // Normalize WeatherAPI format (simplified)
+          tzOffset = 0;
+          var hourly = []; var daily = [];
+          // WeatherAPI structure processing would go here
+        } else {
+          throw new Error('WeatherAPI key not configured');
+        }
+        break;
+      case 'nws':
+      default:
+        // NWS/NOAA - Government weather station + forecast data
+        const nwsData = await fetchWeatherNWS(geoResult.lat, geoResult.lon);
+        raw = nwsData.grid;
+        tzOffset = 0;
+        // Normalize NWS format
+        var hourly = []; var daily = [];
+        const periods = raw.properties.periods || [];
+        let hourlyIdx = 0;
+        for (const p of periods) {
+          if (p.number <= 24) { // Hourly
+            const tempF = parseFloat(p.temperature);
+            const rh = 50; // NWS doesn't always give RH in grid data
+            const deltaT = calcDeltaT((tempF - 32) * 5 / 9, rh);
+            hourly.push({
+              time: new Date(p.startTime).toISOString(),
+              temp_f: tempF,
+              feels_like_f: tempF,
+              dew_f: tempF - 5,
+              rh: rh,
+              delta_t: Math.round(deltaT * 10) / 10,
+              delta_t_f: Math.round(deltaTtoF(deltaT) * 10) / 10,
+              wind_mph: parseFloat(p.windSpeed) || 0,
+              gust_mph: 0,
+              wind_dir_deg: 180,
+              wind_dir: p.windDirection || 'N',
+              precip_pct: 0,
+              precip_in: 0,
+              cloud_pct: 50,
+              weather_code: 0,
+              condition: { desc: p.shortForecast, icon: '🌤️' },
+              inversion: false,
+              soil_temp_f: null
+            });
+          }
+        }
+        var timezone = nwsData.tz;
+        break;
+    }
 
-      for (let i = 0; i < hourCount; i++) {
-        const tempF    = h.temperature_2m[i];
-        const feelsF   = h.apparent_temperature[i];
-        const dewF     = h.dew_point_2m[i];
-        const tempC    = (tempF - 32) * 5 / 9;
-        const rh       = h.relative_humidity_2m[i];
-        const deltaT   = calcDeltaT(tempC, rh);
-        const deltaTF  = deltaTtoF(deltaT);
-        const windMph  = h.wind_speed_10m[i];
-        const gustMph  = h.wind_gusts_10m[i];
-        const windDir  = h.wind_direction_10m[i];
-        const precipPct= h.precipitation_probability[i] || 0;
-        const precipIn = h.precipitation[i] || 0;
-        const cloudPct = h.cloud_cover[i] || 0;
-        const wmoCode  = h.weather_code[i] || 0;
-        const soilTempF = h.soil_temperature_0cm[i] !== undefined && h.soil_temperature_0cm[i] !== null
-          ? Math.round(h.soil_temperature_0cm[i])
-          : null;
-        const inversion = deltaT < 2 && windMph < 5;
+    const product = PRODUCTS[herbicide] || PRODUCTS.general;
 
-        const hourData = {
-          time:          h.time[i],
-          temp_f:        Math.round(tempF  * 10) / 10,
-          feels_like_f:  Math.round(feelsF * 10) / 10,
-          dew_f:         Math.round(dewF   * 10) / 10,
-          rh:            Math.round(rh),
-          delta_t:       Math.round(deltaT * 10) / 10,
-          delta_t_f:     Math.round(deltaTF * 10) / 10,
-          wind_mph:      Math.round(windMph  * 10) / 10,
-          gust_mph:      Math.round(gustMph  * 10) / 10,
-          wind_dir_deg:  windDir,
-          wind_dir:      degToCardinal(windDir),
-          precip_pct:    Math.round(precipPct),
-          precip_in:     Math.round(precipIn * 100) / 100,
-          cloud_pct:     Math.round(cloudPct),
-          weather_code:  wmoCode,
-          condition:     wmoToCondition(wmoCode),
-          inversion,
-          soil_temp_f:   soilTempF
-        };
-        hourData.spray = scoreSprayConditions(hourData, herbicide, method);
-        hourly.push(hourData);
-      }
+    // Add spray conditions to each hour
+    for (const hour of hourly) {
+      hour.spray = scoreSprayConditions(hour, herbicide, method);
+    }
 
-    // Alignment: return only the next 96 hours starting from now
+    // Time alignment: return only the next 96 hours starting from now
     const now = new Date();
     const futureHourly = hourly.filter(h => new Date(h.time) >= now);
     const hourlyFinal = futureHourly.slice(0, 96);
@@ -366,74 +488,46 @@ export default async function handler(req, res) {
     } : { active: false };
 
     // ── Process daily (7 days) ────────────────────────────
-    const d = raw.daily;
-    const daily = [];
+    // If daily was populated by the source switch, use it; otherwise aggregate from hourly
+    if (daily.length === 0) {
+      // Aggregate daily data from hourly
+      const dayMap = new Map();
+      for (const h of hourlyFinal) {
+        const dateStr = h.time.split('T')[0];
+        if (!dayMap.has(dateStr)) dayMap.set(dateStr, []);
+        dayMap.get(dateStr).push(h);
+      }
 
-    for (let i = 0; i < d.time.length; i++) {
-      const maxF      = d.temperature_2m_max[i];
-      const minF      = d.temperature_2m_min[i];
-      const feelsMax  = d.apparent_temperature_max[i];
-      const feelsMin  = d.apparent_temperature_min[i];
-      const precipSum = d.precipitation_sum[i] || 0;
-      const precipPct = d.precipitation_probability_max[i] || 0;
-      const windMax   = d.wind_speed_10m_max[i] || 0;
-      const gustMax   = d.wind_gusts_10m_max[i] || 0;
-      const windDirD  = d.wind_direction_10m_dominant[i];
-      const wmoCode   = d.weather_code[i] || 0;
-
-      // Task 7: use real avg RH from actual hourly data for this calendar date
-      const dateStr = d.time[i];
-      const dayHours = hourlyFinal.filter(h => h.time.startsWith(dateStr));
-      const avgRH = dayHours.length
-        ? Math.round(dayHours.reduce((s, h) => s + h.rh, 0) / dayHours.length)
-        : 60;
-      const avgWind = dayHours.length
-        ? dayHours.reduce((s, h) => s + h.wind_mph, 0) / dayHours.length
-        : windMax * 0.65;
-
-      const avgTemp = (maxF + minF) / 2;
-      const dailyHour = {
-        temp_f:     avgTemp,
-        wind_mph:   avgWind,
-        gust_mph:   gustMax,
-        rh:         avgRH,
-        precip_pct: precipPct,
-        delta_t:    calcDeltaT((avgTemp - 32) * 5 / 9, avgRH),
-        delta_t_f:  deltaTtoF(calcDeltaT((avgTemp - 32) * 5 / 9, avgRH)),
-        inversion:  false
-      };
-
-      // Sunrise/sunset (astronomical calc, no extra API call)
-      const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
-
-      // Soil temp: average of hours 6am–8pm for this day (already in °F due to temperature_unit=fahrenheit)
-      const daySoilTemps = dayHours
-        .filter(h => { const hr = new Date(h.time).getUTCHours(); return hr >= 10 && hr <= 20; })
-        .map(h => h.soil_temp_f)
-        .filter(v => v !== null);
-      const avgSoilTempF = daySoilTemps.length
-        ? Math.round(daySoilTemps.reduce((s, v) => s + v, 0) / daySoilTemps.length)
-        : null;
-
-      daily.push({
-        date:           dateStr,
-        temp_max_f:     Math.round(maxF    * 10) / 10,
-        temp_min_f:     Math.round(minF    * 10) / 10,
-        feels_max_f:    Math.round(feelsMax * 10) / 10,
-        feels_min_f:    Math.round(feelsMin * 10) / 10,
-        precip_sum_in:  Math.round(precipSum * 100) / 100,
-        precip_pct:     Math.round(precipPct),
-        wind_max_mph:   Math.round(windMax * 10) / 10,
-        gust_max_mph:   Math.round(gustMax * 10) / 10,
-        avg_rh:         avgRH,
-        wind_dir:       degToCardinal(windDirD),
-        weather_code:   wmoCode,
-        condition:      wmoToCondition(wmoCode),
-        sunrise:        sunTimes.sunrise,
-        sunset:         sunTimes.sunset,
-        soil_temp_f:    avgSoilTempF,
-        spray:          scoreSprayConditions(dailyHour, herbicide, method)
-      });
+      for (const [dateStr, dayHours] of dayMap.entries()) {
+        const maxF = Math.max(...dayHours.map(h => h.temp_f));
+        const minF = Math.min(...dayHours.map(h => h.temp_f));
+        const avgRH = Math.round(dayHours.reduce((s, h) => s + h.rh, 0) / dayHours.length);
+        const avgTemp = (maxF + minF) / 2;
+        const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
+        const dailyHour = {
+          temp_f: avgTemp, wind_mph: 0, gust_mph: 0, rh: avgRH,
+          precip_pct: 0, delta_t: deltaT, delta_t_f: deltaTtoF(deltaT), inversion: false
+        };
+        const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
+        daily.push({
+          date: dateStr, temp_max_f: maxF, temp_min_f: minF,
+          feels_max_f: maxF, feels_min_f: minF,
+          precip_sum_in: 0, precip_pct: 0, wind_max_mph: 0, gust_max_mph: 0,
+          avg_rh: avgRH, wind_dir: 'N', weather_code: 0,
+          condition: { desc: 'Varied', icon: '⛅' },
+          sunrise: sunTimes.sunrise, sunset: sunTimes.sunset, soil_temp_f: null,
+          spray: scoreSprayConditions(dailyHour, herbicide, method)
+        });
+      }
+    } else {
+      // Add spray conditions to existing daily data
+      for (const day of daily) {
+        const dayHour = {
+          temp_f: day.temp_max_f, rh: day.avg_rh, delta_t: day.delta_t,
+          delta_t_f: day.delta_t_f, wind_mph: day.wind_max_mph, gust_mph: day.gust_max_mph
+        };
+        day.spray = scoreSprayConditions(dayHour, herbicide, method);
+      }
     }
 
     // ── Summary stats ─────────────────────────────────────

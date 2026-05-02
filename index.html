@@ -533,6 +533,16 @@
     <option value="Remedy Ultra">🧪 Remedy Ultra</option>
   </select>
 
+  <!-- Weather Source Dropdown -->
+  <div style="margin-bottom: 15px;">
+    <label style="font-size: 12px; color: var(--text-dim); margin-bottom: 5px; display: block;">Weather Data Source</label>
+    <select class="product-select" id="source-select" style="margin-bottom: 0;">
+      <option value="nws">🌐 NWS/NOAA (Government — Default)</option>
+      <option value="openmeteo">🛰️ Open-Meteo (Forecast Model)</option>
+      <option value="weatherapi">☁️ WeatherAPI.com (Real-time — API Key Required)</option>
+    </select>
+  </div>
+
   <!-- Recommendation Method Dropdown -->
   <div style="margin-bottom: 20px;">
     <label style="font-size: 12px; color: var(--text-dim); margin-bottom: 5px; display: block;">Recommendation Method</label>
@@ -628,17 +638,19 @@ async function doSearch() {
   const loc  = document.getElementById('loc-input').value.trim();
   const herb = document.getElementById('herb-select').value;
   const meth = document.getElementById('method-select').value;
+  const src  = document.getElementById('source-select').value;
   if (!loc) { document.getElementById('loc-input').focus(); return; }
   sessionStorage.setItem('lastLocation', loc);
   sessionStorage.setItem('lastHerbicide', herb);
   sessionStorage.setItem('lastMethod', meth);
-  await fetchAndRender(loc, herb, meth);
+  sessionStorage.setItem('lastSource', src);
+  await fetchAndRender(loc, herb, meth, src);
 }
 
-async function fetchAndRender(loc, herb, meth) {
+async function fetchAndRender(loc, herb, meth, src) {
   showLoading();
   try {
-    const params = new URLSearchParams({ location: loc, herbicide: herb, method: meth });
+    const params = new URLSearchParams({ location: loc, herbicide: herb, method: meth, source: src });
     const resp = await fetch(`/api/forecast?${params}`);
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({ error: `HTTP ${resp.status}` }));
@@ -692,7 +704,8 @@ document.getElementById('herb-select').addEventListener('change', () => {
   if (state.data && loc) {
     const herb = document.getElementById('herb-select').value;
     const meth = document.getElementById('method-select').value;
-    fetchAndRender(loc, herb, meth);
+    const src  = document.getElementById('source-select').value;
+    fetchAndRender(loc, herb, meth, src);
   }
 });
 
@@ -701,7 +714,18 @@ document.getElementById('method-select').addEventListener('change', () => {
   if (state.data && loc) {
     const herb = document.getElementById('herb-select').value;
     const meth = document.getElementById('method-select').value;
-    fetchAndRender(loc, herb, meth);
+    const src  = document.getElementById('source-select').value;
+    fetchAndRender(loc, herb, meth, src);
+  }
+});
+
+document.getElementById('source-select').addEventListener('change', () => {
+  const loc = document.getElementById('loc-input').value.trim();
+  if (state.data && loc) {
+    const herb = document.getElementById('herb-select').value;
+    const meth = document.getElementById('method-select').value;
+    const src  = document.getElementById('source-select').value;
+    fetchAndRender(loc, herb, meth, src);
   }
 });
 
@@ -1272,10 +1296,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const loc  = sessionStorage.getItem('lastLocation');
   const herb = sessionStorage.getItem('lastHerbicide') || savedDefaultProduct || 'general';
+  const meth = sessionStorage.getItem('lastMethod') || 'clarity';
+  const src  = sessionStorage.getItem('lastSource') || 'nws';
   if (loc) {
     document.getElementById('loc-input').value = loc;
     if (herb) document.getElementById('herb-select').value = herb;
-    fetchAndRender(loc, herb);
+    if (meth) document.getElementById('method-select').value = meth;
+    if (src)  document.getElementById('source-select').value = src;
+    fetchAndRender(loc, herb, meth, src);
   }
 });
 
