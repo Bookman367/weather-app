@@ -1173,7 +1173,7 @@ function renderHourlyModal() {
     </div>`;
 }
 
-// Task 7 + 10: Daily modal with real RH, feels-like range, sunrise/sunset
+    // Task 7 + 10: Daily modal with real RH, feels-like range, sunrise/sunset
 function renderDailyModal() {
   const days = state.data.daily;
   const cards = days.map(day => {
@@ -1183,6 +1183,7 @@ function renderDailyModal() {
     const sprayLabel = day.spray.status === 'no-good' ? 'No Good'
                      : day.spray.status === 'caution' ? 'Caution' : 'Favorable';
     const reason = day.spray.reasons[0] || '';
+    const reasonCount = day.spray.reasons.length;
 
     // Task 10: Sunrise/sunset
     const sunLine = (day.sunrise && day.sunrise !== 'N/A')
@@ -1202,6 +1203,14 @@ function renderDailyModal() {
       ? `Feels ${Math.round(day.feels_min_f)}–${Math.round(day.feels_max_f)}°F`
       : '';
 
+    // More detailed reason display
+    const reasonsHTML = reasonCount > 0
+      ? `<div style="font-size:10px;color:rgba(255,180,180,0.75);line-height:1.5;margin-top:3px">
+           ⚠ ${day.spray.reasons.slice(0,3).map(esc).join('<br>⚠ ')}
+           ${reasonCount > 3 ? `<br>⚠ +${reasonCount-3} more` : ''}
+         </div>`
+      : `<div style="font-size:10px;color:rgba(61,220,132,0.75);margin-top:3px">✅ All daytime params within label thresholds</div>`;
+
     return `<div class="daily-row ${day.spray.status}">
       <div class="dr-day">${dow}</div>
       <div class="dr-date">${date}</div>
@@ -1215,8 +1224,9 @@ function renderDailyModal() {
         💨 ${Math.round(day.wind_max_mph)}/${Math.round(day.gust_max_mph)} mph
         &nbsp;·&nbsp; 🌧 ${day.precip_pct}%
         ${rhNote ? `&nbsp;·&nbsp; ${rhNote}` : ''}
-        ${reason ? `<br><span style="font-size:10px;color:rgba(255,255,255,0.3)">⚠ ${esc(reason)}</span>` : ''}
+        ${reasonsHTML}
         ${sunLine ? `<div class="dr-sun">${sunLine}${soilLine ? '&nbsp;&nbsp;' + soilLine : ''}</div>` : ''}
+        <div style="font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px">☀ Based on sunrise → sunset+2h window</div>
       </div>
       <div class="dr-spray ${day.spray.status}">${sprayLabel}</div>
     </div>`;

@@ -627,6 +627,45 @@ export default async function handler(req, res) {
       message:   `Temperature inversion conditions detected. Delta-T ${hourlyFinal[0].delta_t}°C (${hourlyFinal[0].delta_t_f}°F spread) with winds at ${hourlyFinal[0].wind_mph} mph. Spray droplets may pool and drift unpredictably. Do not apply.`
     } : { active: false };
 
+    // ── Parse sunrise/sunset times to hour-of-day integers ──────────────
+    function parseSunHour(timeStr) {
+      if (!timeStr || timeStr === 'N/A') return null;
+      // Open-Meteo: "2026-05-03T06:12:00", NWS: "6:42 AM"
+      if (timeStr.includes('T')) {
+        const d = new Date(timeStr);
+        return d.getUTCHours();
+      }
+      const m = timeStr.match(/(\d+):(\d+)\s*([AP]M)/);
+      if (!m) return null;
+      let h = parseInt(m[1]);
+      if (m[3] === 'PM' && h !== 12) h += 12;
+      if (m[3] === 'AM' && h === 12) h = 0;
+      return h;
+    }
+
+    // ── Sprayable daytime window helper ────────────────────────────────
+    // JD sprays sunrise → sunset+2hrs. Returns hours from dayHours within that window.
+    function daytimeHours(dayHours, sunriseStr, sunsetStr) {
+      if (!sunriseStr || sunriseStr === 'N/A' || !sunsetStr || sunsetStr === 'N/A') {
+        return dayHours; // fallback: use all hours if sun times unavailable
+      }
+      const sunriseH = parseSunHour(sunriseStr);
+      const rawSunsetH = parseSunHour(sunsetStr);
+      if (sunriseH === null || rawSunsetH === null) return dayHours;
+      const endSprayH = (rawSunsetH + 2) % 24;
+
+      return dayHours.filter(h => {
+        const hour = new Date(h.time).getUTCHours();
+        if (endSprayH > sunriseH) {
+          // Window doesn't wrap midnight
+          return hour >= sunriseH && hour <= endSprayH;
+        } else {
+          // Wraps past midnight (rare for ag usage)
+          return hour >= sunriseH || hour <= endSprayH;
+        }
+      });
+    }
+
     // ── Process daily (7 days) ────────────────────────────
     // If daily was populated by the source switch, use it; otherwise aggregate from hourly
     if (daily.length === 0) {
@@ -642,31 +681,112 @@ export default async function handler(req, res) {
         const maxF = Math.max(...dayHours.map(h => h.temp_f));
         const minF = Math.min(...dayHours.map(h => h.temp_f));
         const avgRH = Math.round(dayHours.reduce((s, h) => s + h.rh, 0) / dayHours.length);
+        const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
+
+        // Filter to daytime sprayable window
+        const daySprayHours = daytimeHours(dayHours, sunTimes.sunrise, sunTimes.sunset);
+
+        // Score using daytime window hours (if none, fall back to all hours)
+        const scoringHours = daySprayHours.length > 0 ? daySprayHours : dayHours;
+
+        // Use actual worst-case values for key thresholds from daytime window
+        const maxWind = Math.max(...scoringHours.map(h => h.wind_mph));
+        const maxGust = Math.max(...scoringHours.map(h => h.gust_mph));
+        const maxPrecip = Math.max(...scoringHours.map(h => h.precip_pct || 0));
+        const worstDeltaT = scoringHours.reduce((worst, h) => {
+          if (!worst) return h.delta_t;
+          return h.delta_t > worst ? h.delta_t : worst;
+        }, null);
         const avgTemp = (maxF + minF) / 2;
         const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
-        const dailyHour = {
-          temp_f: avgTemp, wind_mph: 0, gust_mph: 0, rh: avgRH,
-          precip_pct: 0, delta_t: deltaT, delta_t_f: deltaTtoF(deltaT), inversion: false
-        };
-        const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
+
+        const sprayObj = scoreSprayConditions({
+          temp_f: avgTemp,
+          wind_mph: maxWind,
+          gust_mph: maxGust,
+          rh: avgRH,
+          precip_pct: maxPrecip,
+          delta_t: worstDeltaT !== null ? worstDeltaT : deltaT,
+          delta_t_f: deltaTtoF(worstDeltaT !== null ? worstDeltaT : deltaT)
+        }, herbicide, method);
+
+        // Determine overall day status from daytime window
+        const statuses = daySprayHours.map(h => h.spray.status);
+        let overallStatus = 'favorable';
+        if (statuses.some(s => s === 'no-good')) overallStatus = 'no-good';
+        else if (statuses.some(s => s === 'caution')) overallStatus = 'caution';
+
+        const allReasons = daySprayHours
+          .flatMap(h => h.spray.reasons)
+          .filter((r, i, a) => a.indexOf(r) === i); // dedupe
+
         daily.push({
-          date: dateStr, temp_max_f: maxF, temp_min_f: minF,
-          feels_max_f: maxF, feels_min_f: minF,
-          precip_sum_in: 0, precip_pct: 0, wind_max_mph: 0, gust_max_mph: 0,
-          avg_rh: avgRH, wind_dir: 'N', weather_code: 0,
+          date: dateStr,
+          temp_max_f: maxF,
+          temp_min_f: minF,
+          feels_max_f: maxF,
+          feels_min_f: minF,
+          precip_sum_in: 0,
+          precip_pct: maxPrecip,
+          wind_max_mph: maxWind,
+          gust_max_mph: maxGust,
+          avg_rh: avgRH,
+          wind_dir: 'N',
+          weather_code: 0,
           condition: { desc: 'Varied', icon: '⛅' },
-          sunrise: sunTimes.sunrise, sunset: sunTimes.sunset, soil_temp_f: null,
-          spray: scoreSprayConditions(dailyHour, herbicide, method)
+          sunrise: sunTimes.sunrise,
+          sunset: sunTimes.sunset,
+          soil_temp_f: null,
+          spray: {
+            status: overallStatus,
+            reasons: allReasons.length > 0 ? allReasons : sprayObj.reasons,
+            product: sprayObj.product
+          }
         });
       }
     } else {
-      // Add spray conditions to existing daily data
+      // NWS / WeatherAPI daily path: score using actual wind/gust/precip data
       for (const day of daily) {
-        const dayHour = {
-          temp_f: day.temp_max_f, rh: day.avg_rh, delta_t: day.delta_t,
-          delta_t_f: day.delta_t_f, wind_mph: day.wind_max_mph, gust_mph: day.gust_max_mph
+        // Derive daytime window hours from the hourly data for this day
+        const dayDateStr = day.date;
+        const dayHours = hourlyFinal.filter(h => h.time.split('T')[0] === dayDateStr);
+        const daySprayHours = daytimeHours(dayHours, day.sunrise, day.sunset);
+        const scoringHours = daySprayHours.length > 0 ? daySprayHours : dayHours;
+
+        // Use actual max values from daytime window
+        const maxWind = day.wind_max_mph;
+        const maxGust = day.gust_max_mph;
+        const maxPrecip = day.precip_pct || 0;
+
+        // Calculate delta_t from avg conditions if not present
+        const avgTemp = (day.temp_max_f + day.temp_min_f) / 2;
+        const avgRH = day.avg_rh || 50;
+        const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
+
+        const sprayObj = scoreSprayConditions({
+          temp_f: avgTemp,
+          wind_mph: maxWind,
+          gust_mph: maxGust,
+          rh: avgRH,
+          precip_pct: maxPrecip,
+          delta_t: deltaT,
+          delta_t_f: deltaTtoF(deltaT)
+        }, herbicide, method);
+
+        const statuses = daySprayHours.map(h => h.spray.status);
+        let overallStatus = 'favorable';
+        if (statuses.some(s => s === 'no-good')) overallStatus = 'no-good';
+        else if (statuses.some(s => s === 'caution')) overallStatus = 'caution';
+
+        const allReasons = daySprayHours
+          .flatMap(h => h.spray.reasons)
+          .filter((r, i, a) => a.indexOf(r) === i);
+
+        day.spray = {
+          status: overallStatus,
+          reasons: allReasons.length > 0 ? allReasons : sprayObj.reasons,
+          product: sprayObj.product
         };
-        day.spray = scoreSprayConditions(dayHour, herbicide, method);
       }
     }
 
