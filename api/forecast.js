@@ -541,7 +541,7 @@ export default async function handler(req, res) {
             gustSpeed = parseFloat(gustSpeedStr.replace(' mph', '').replace('G', '')) || 0;
           }
           // Parse wind direction degrees from NWS
-          const windDirDeg = p.windDirection?.value || p.windDirection || 180;
+          const windDirDeg = p.windDirection?.value ?? p.windDirection ?? null;
           hourly.push({
             time: new Date(p.startTime).toISOString(),
             temp_f: tempF,
