@@ -1178,47 +1178,55 @@ function initSprayBarSync() {
   if (_sprayObserver) { _sprayObserver.disconnect(); _sprayObserver = null; }
   _lastActiveIdx = -1;
 
-  // Remove stale active classes
-  track.querySelectorAll('.spray-segment').forEach(el => el.classList.remove('active-segment'));
+  // Segment width: 36px block + 3px gap = 39px per segment
+  const SEG_W = 39;
 
+  function syncToIndex(idx) {
+    if (idx === _lastActiveIdx) return;
+    _lastActiveIdx = idx;
+    // Highlight
+    track.querySelectorAll('.spray-segment').forEach((el, i) => {
+      el.classList.toggle('active-segment', i === idx);
+    });
+    // Update Command Center
+    const d = state.data;
+    if (d && d.hourly && d.hourly[idx]) {
+      updateCommandCenter(d.hourly[idx], d);
+    }
+  }
+
+  // Scroll listener: directly compute which segment is at the left edge
+  // — this is the LEFTMOST intersecting segment, which is always the one
+  //   whose left edge is just inside the left boundary of the scroll container
+  function onScroll() {
+    const idx = Math.round(wrap.scrollLeft / SEG_W);
+    syncToIndex(idx);
+  }
+
+  // Tear down previous observer
+  if (_sprayObserver) {
+    _sprayObserver.disconnect();
+  }
+  _sprayObserver = null;
+
+  // IntersectionObserver fires for initial sync (before first scroll)
   _sprayObserver = new IntersectionObserver((entries) => {
-    // Find the LEFTMOST intersecting segment (smallest data-index)
-    // — this is the one sitting in the fixed far-left frame
-    let bestEntry = null;
-    let bestIdx = Infinity;
-
+    // Only sync if we haven't scrolled yet (lastActiveIdx === -1)
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && _lastActiveIdx === -1) {
         const idx = parseInt(entry.target.getAttribute('data-index'), 10);
-        if (idx < bestIdx) {
-          bestIdx = idx;
-          bestEntry = entry;
-        }
+        syncToIndex(idx);
       }
     });
-
-    if (bestEntry) {
-      const idx = parseInt(bestEntry.target.getAttribute('data-index'), 10);
-      if (idx !== _lastActiveIdx) {
-        _lastActiveIdx = idx;
-
-        // Highlight active segment
-        track.querySelectorAll('.spray-segment').forEach(el => el.classList.remove('active-segment'));
-        bestEntry.target.classList.add('active-segment');
-
-        // Update Command Center with this hour's data
-        const d = state.data;
-        if (d && d.hourly && d.hourly[idx]) {
-          updateCommandCenter(d.hourly[idx], d);
-        }
-      }
-    }
-  }, {
-    root: wrap,
-    threshold: 0.5
-  });
+  }, { root: wrap, threshold: 0 });
 
   track.querySelectorAll('.spray-segment').forEach(seg => _sprayObserver.observe(seg));
+
+  // Primary sync: scroll listener — reliable regardless of scroll direction or speed
+  wrap.addEventListener('scroll', onScroll, { passive: true });
+
+  // Initial sync
+  onScroll();
 }
 
 // ── Extended Buttons ──────────────────────────
