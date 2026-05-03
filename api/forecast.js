@@ -468,18 +468,22 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  let locationStr, herbicide, method, source;
+  let locationStr, herbicide, method, source, sunriseOffset, sunsetOffset;
   if (req.method === 'GET') {
     locationStr = req.query.location || '';
     herbicide   = req.query.herbicide || 'general';
     method      = req.query.method || 'clarity';
-    source      = req.query.source || 'nws'; // Default to NWS (government station data)
+    source      = req.query.source || 'nws';
+    sunriseOffset = parseInt(req.query.sunriseOffset || '0');
+    sunsetOffset  = parseInt(req.query.sunsetOffset || '2');
   } else {
     const body  = req.body || {};
     locationStr = body.location || '';
     herbicide   = body.herbicide || 'general';
     method      = body.method || 'clarity';
     source      = body.source || 'nws';
+    sunriseOffset = parseInt(body.sunriseOffset || '0');
+    sunsetOffset  = parseInt(body.sunsetOffset || '2');
   }
   if (!locationStr) return res.status(400).json({ error: 'Missing location parameter' });
 
@@ -644,26 +648,49 @@ export default async function handler(req, res) {
     }
 
     // ── Sprayable daytime window helper ────────────────────────────────
-    // JD sprays sunrise → sunset+2hrs. Returns hours from dayHours within that window.
-    function daytimeHours(dayHours, sunriseStr, sunsetStr) {
+    // JD sprays sunrise → sunset+offset. Returns hours from dayHours within that window.
+    // sunriseOffset: hours after sunrise to start (can be negative = before sunrise)
+    // sunsetOffset: hours after sunset to end (can be negative = before sunset)
+    function daytimeHours(dayHours, sunriseStr, sunsetStr, sunriseOffset = 0, sunsetOffset = 2) {
       if (!sunriseStr || sunriseStr === 'N/A' || !sunsetStr || sunsetStr === 'N/A') {
         return dayHours; // fallback: use all hours if sun times unavailable
       }
       const sunriseH = parseSunHour(sunriseStr);
       const rawSunsetH = parseSunHour(sunsetStr);
       if (sunriseH === null || rawSunsetH === null) return dayHours;
-      const endSprayH = (rawSunsetH + 2) % 24;
+
+      const startSprayH = (sunriseH + sunriseOffset + 24) % 24;
+      const endSprayH = (rawSunsetH + sunsetOffset + 24) % 24;
 
       return dayHours.filter(h => {
         const hour = new Date(h.time).getUTCHours();
-        if (endSprayH > sunriseH) {
+        if (startSprayH <= endSprayH) {
           // Window doesn't wrap midnight
-          return hour >= sunriseH && hour <= endSprayH;
+          return hour >= startSprayH && hour <= endSprayH;
         } else {
-          // Wraps past midnight (rare for ag usage)
-          return hour >= sunriseH || hour <= endSprayH;
+          // Window wraps past midnight
+          return hour >= startSprayH || hour <= endSprayH;
         }
       });
+    }
+
+    // ── Majority-rule daily status ────────────────────────────────────
+    // "What the majority of hours show = what the day shows"
+    function majorityDayStatus(daySprayHours) {
+      if (!daySprayHours || daySprayHours.length === 0) return 'favorable';
+      const counts = { favorable: 0, caution: 0, 'no-good': 0 };
+      for (const h of daySprayHours) {
+        counts[h.spray.status] = (counts[h.spray.status] || 0) + 1;
+      }
+      // Majority wins
+      if (counts['no-good'] > counts.favorable && counts['no-good'] > counts.caution) return 'no-good';
+      if (counts.caution > counts.favorable && counts.caution > counts['no-good']) return 'caution';
+      if (counts.favorable > counts['no-good'] && counts.favorable > counts.caution) return 'favorable';
+      // Tie-breaker: use the worse of the tied statuses
+      if (counts.favorable === counts.caution && counts.favorable > counts['no-good']) return 'caution';
+      if (counts.favorable === counts['no-good'] && counts.favorable > counts.caution) return 'caution';
+      if (counts.caution === counts['no-good'] && counts.caution > counts.favorable) return 'no-good';
+      return 'favorable';
     }
 
     // ── Process daily (7 days) ────────────────────────────
@@ -684,7 +711,7 @@ export default async function handler(req, res) {
         const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
 
         // Filter to daytime sprayable window
-        const daySprayHours = daytimeHours(dayHours, sunTimes.sunrise, sunTimes.sunset);
+        const daySprayHours = daytimeHours(dayHours, sunTimes.sunrise, sunTimes.sunset, sunriseOffset, sunsetOffset);
 
         // Score using daytime window hours (if none, fall back to all hours)
         const scoringHours = daySprayHours.length > 0 ? daySprayHours : dayHours;
@@ -710,11 +737,8 @@ export default async function handler(req, res) {
           delta_t_f: deltaTtoF(worstDeltaT !== null ? worstDeltaT : deltaT)
         }, herbicide, method);
 
-        // Determine overall day status from daytime window
-        const statuses = daySprayHours.map(h => h.spray.status);
-        let overallStatus = 'favorable';
-        if (statuses.some(s => s === 'no-good')) overallStatus = 'no-good';
-        else if (statuses.some(s => s === 'caution')) overallStatus = 'caution';
+        // Majority-rule daily status
+        const overallStatus = majorityDayStatus(daySprayHours);
 
         const allReasons = daySprayHours
           .flatMap(h => h.spray.reasons)
@@ -750,7 +774,7 @@ export default async function handler(req, res) {
         // Derive daytime window hours from the hourly data for this day
         const dayDateStr = day.date;
         const dayHours = hourlyFinal.filter(h => h.time.split('T')[0] === dayDateStr);
-        const daySprayHours = daytimeHours(dayHours, day.sunrise, day.sunset);
+        const daySprayHours = daytimeHours(dayHours, day.sunrise, day.sunset, sunriseOffset, sunsetOffset);
         const scoringHours = daySprayHours.length > 0 ? daySprayHours : dayHours;
 
         // Use actual max values from daytime window
@@ -773,10 +797,7 @@ export default async function handler(req, res) {
           delta_t_f: deltaTtoF(deltaT)
         }, herbicide, method);
 
-        const statuses = daySprayHours.map(h => h.spray.status);
-        let overallStatus = 'favorable';
-        if (statuses.some(s => s === 'no-good')) overallStatus = 'no-good';
-        else if (statuses.some(s => s === 'caution')) overallStatus = 'caution';
+        const overallStatus = majorityDayStatus(daySprayHours);
 
         const allReasons = daySprayHours
           .flatMap(h => h.spray.reasons)
@@ -835,6 +856,10 @@ export default async function handler(req, res) {
       },
       inversion_alert: inversionAlert,
       timezone: timezone || 'America/Chicago',
+      sprayWindow: {
+        sunriseOffset,
+        sunsetOffset
+      },
       hourly: hourlyFinal,
       daily
     });

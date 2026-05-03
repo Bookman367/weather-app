@@ -588,6 +588,43 @@
             <option value="Remedy Ultra">Remedy Ultra</option>
           </select>
         </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:13px;color:var(--text)">Spray Window (daytime only)</div>
+          <div class="sl-sub" style="margin-bottom:2px">Recommendations based on these hours</div>
+          <div style="display:flex;gap:16px;align-items:center">
+            <div style="display:flex;align-items:center;gap:6px">
+              <label style="font-size:11px;color:var(--text-dim);white-space:nowrap">Sunrise ±</label>
+              <select id="settings-sunrise-offset" style="
+                background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+                border-radius: 8px; color: var(--text); font-size: 12px; padding: 4px 6px;
+                outline: none; cursor: pointer;
+              ">
+                <option value="-2">-2h</option>
+                <option value="-1">-1h</option>
+                <option value="0" selected>at sunrise</option>
+                <option value="1">+1h</option>
+                <option value="2">+2h</option>
+                <option value="3">+3h</option>
+              </select>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <label style="font-size:11px;color:var(--text-dim);white-space:nowrap">Sunset ±</label>
+              <select id="settings-sunset-offset" style="
+                background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+                border-radius: 8px; color: var(--text); font-size: 12px; padding: 4px 6px;
+                outline: none; cursor: pointer;
+              ">
+                <option value="-2">-2h</option>
+                <option value="-1">-1h</option>
+                <option value="0">at sunset</option>
+                <option value="1">+1h</option>
+                <option value="2" selected>+2h</option>
+                <option value="3">+3h</option>
+                <option value="4">+4h</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -639,18 +676,25 @@ async function doSearch() {
   const herb = document.getElementById('herb-select').value;
   const meth = document.getElementById('method-select').value;
   const src  = document.getElementById('source-select').value;
+  const sunriseOffset = document.getElementById('settings-sunrise-offset').value;
+  const sunsetOffset  = document.getElementById('settings-sunset-offset').value;
   if (!loc) { document.getElementById('loc-input').focus(); return; }
   sessionStorage.setItem('lastLocation', loc);
   sessionStorage.setItem('lastHerbicide', herb);
   sessionStorage.setItem('lastMethod', meth);
   sessionStorage.setItem('lastSource', src);
-  await fetchAndRender(loc, herb, meth, src);
+  sessionStorage.setItem('lastSunriseOffset', sunriseOffset);
+  sessionStorage.setItem('lastSunsetOffset', sunsetOffset);
+  await fetchAndRender(loc, herb, meth, src, sunriseOffset, sunsetOffset);
 }
 
-async function fetchAndRender(loc, herb, meth, src) {
+async function fetchAndRender(loc, herb, meth, src, sunriseOffset = 0, sunsetOffset = 2) {
   showLoading();
   try {
-    const params = new URLSearchParams({ location: loc, herbicide: herb, method: meth, source: src });
+    const params = new URLSearchParams({
+      location: loc, herbicide: herb, method: meth, source: src,
+      sunriseOffset, sunsetOffset
+    });
     const resp = await fetch(`/api/forecast?${params}`);
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({ error: `HTTP ${resp.status}` }));
@@ -705,7 +749,9 @@ document.getElementById('herb-select').addEventListener('change', () => {
     const herb = document.getElementById('herb-select').value;
     const meth = document.getElementById('method-select').value;
     const src  = document.getElementById('source-select').value;
-    fetchAndRender(loc, herb, meth, src);
+    const sunriseOffset = document.getElementById('settings-sunrise-offset').value;
+    const sunsetOffset  = document.getElementById('settings-sunset-offset').value;
+    fetchAndRender(loc, herb, meth, src, sunriseOffset, sunsetOffset);
   }
 });
 
@@ -715,7 +761,9 @@ document.getElementById('method-select').addEventListener('change', () => {
     const herb = document.getElementById('herb-select').value;
     const meth = document.getElementById('method-select').value;
     const src  = document.getElementById('source-select').value;
-    fetchAndRender(loc, herb, meth, src);
+    const sunriseOffset = document.getElementById('settings-sunrise-offset').value;
+    const sunsetOffset  = document.getElementById('settings-sunset-offset').value;
+    fetchAndRender(loc, herb, meth, src, sunriseOffset, sunsetOffset);
   }
 });
 
@@ -725,7 +773,9 @@ document.getElementById('source-select').addEventListener('change', () => {
     const herb = document.getElementById('herb-select').value;
     const meth = document.getElementById('method-select').value;
     const src  = document.getElementById('source-select').value;
-    fetchAndRender(loc, herb, meth, src);
+    const sunriseOffset = document.getElementById('settings-sunrise-offset').value;
+    const sunsetOffset  = document.getElementById('settings-sunset-offset').value;
+    fetchAndRender(loc, herb, meth, src, sunriseOffset, sunsetOffset);
   }
 });
 
@@ -1204,6 +1254,12 @@ function renderDailyModal() {
       : '';
 
     // More detailed reason display
+    // Compute spray window label from API response
+    const sw = state.data.sprayWindow || {};
+    const srLabel = sw.sunriseOffset > 0 ? `+${sw.sunriseOffset}h` : sw.sunriseOffset < 0 ? `${sw.sunriseOffset}h` : 'sunrise';
+    const ssLabel = sw.sunsetOffset > 0 ? `+${sw.sunsetOffset}h` : sw.sunsetOffset < 0 ? `${sw.sunsetOffset}h` : 'sunset';
+    const windowNote = `☀ Based on sunrise ${srLabel} → sunset ${ssLabel}`;
+
     const reasonsHTML = reasonCount > 0
       ? `<div style="font-size:10px;color:rgba(255,180,180,0.75);line-height:1.5;margin-top:3px">
            ⚠ ${day.spray.reasons.slice(0,3).map(esc).join('<br>⚠ ')}
@@ -1226,7 +1282,7 @@ function renderDailyModal() {
         ${rhNote ? `&nbsp;·&nbsp; ${rhNote}` : ''}
         ${reasonsHTML}
         ${sunLine ? `<div class="dr-sun">${sunLine}${soilLine ? '&nbsp;&nbsp;' + soilLine : ''}</div>` : ''}
-        <div style="font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px">☀ Based on sunrise → sunset+2h window</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px">${windowNote}</div>
       </div>
       <div class="dr-spray ${day.spray.status}">${sprayLabel}</div>
     </div>`;
@@ -1298,22 +1354,42 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Spray window offset saves
+  document.getElementById('settings-sunrise-offset').addEventListener('change', e => {
+    localStorage.setItem('spraySunriseOffset', e.target.value);
+  });
+  document.getElementById('settings-sunset-offset').addEventListener('change', e => {
+    localStorage.setItem('spraySunsetOffset', e.target.value);
+  });
+
   // Load saved default product into dropdown on startup
   const savedDefaultProduct = localStorage.getItem('defaultProduct');
   if (savedDefaultProduct) {
     document.getElementById('herb-select').value = savedDefaultProduct;
   }
 
+  // Load saved spray window offsets
+  const savedSunriseOffset = localStorage.getItem('spraySunriseOffset');
+  const savedSunsetOffset = localStorage.getItem('spraySunsetOffset');
+  if (savedSunriseOffset !== null) {
+    document.getElementById('settings-sunrise-offset').value = savedSunriseOffset;
+  }
+  if (savedSunsetOffset !== null) {
+    document.getElementById('settings-sunset-offset').value = savedSunsetOffset;
+  }
+
   const loc  = sessionStorage.getItem('lastLocation');
   const herb = sessionStorage.getItem('lastHerbicide') || savedDefaultProduct || 'general';
   const meth = sessionStorage.getItem('lastMethod') || 'clarity';
   const src  = sessionStorage.getItem('lastSource') || 'nws';
+  const sunriseOffset = sessionStorage.getItem('lastSunriseOffset') || savedSunriseOffset || '0';
+  const sunsetOffset  = sessionStorage.getItem('lastSunsetOffset') || savedSunsetOffset || '2';
   if (loc) {
     document.getElementById('loc-input').value = loc;
     if (herb) document.getElementById('herb-select').value = herb;
     if (meth) document.getElementById('method-select').value = meth;
     if (src)  document.getElementById('source-select').value = src;
-    fetchAndRender(loc, herb, meth, src);
+    fetchAndRender(loc, herb, meth, src, sunriseOffset, sunsetOffset);
   }
 });
 
