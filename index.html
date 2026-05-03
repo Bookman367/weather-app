@@ -1194,15 +1194,15 @@ function renderHourlyModal() {
     rows += `<tr>
       <td style="color:rgba(255,255,255,0.55);font-size:11px">${timeStr}</td>
       <td>${h.condition.icon}</td>
+      <td><span class="status-dot ${h.spray.status}">${h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'OK'}</span></td>
       <td>${Math.round(h.temp_f)}°F ${feelsCell}</td>
-      <td style="color:var(--blue)">${Math.round(h.dew_f)}°</td>
-      <td>${h.rh}%</td>
-      <td class="${dtCls}" style="font-weight:600" title="${dtV.toFixed(1)}°C = ${dtFV.toFixed(1)}°F spread">${dtV.toFixed(1)}°C</td>
       <td>${Math.round(h.wind_mph)} <span style="color:rgba(255,255,255,0.4);font-size:10px">${h.wind_dir}</span></td>
       <td style="color:#2176d4">${Math.round(h.gust_mph)}</td>
       <td>${h.precip_pct}%</td>
+      <td style="color:var(--blue)">${Math.round(h.dew_f)}°</td>
+      <td>${h.rh}%</td>
+      <td class="${dtCls}" style="font-weight:600" title="${dtV.toFixed(1)}°C = ${dtFV.toFixed(1)}°F spread">${dtV.toFixed(1)}°C</td>
       <td class="precip-in-cell">${precipInDisplay}</td>
-      <td><span class="status-dot ${h.spray.status}">${h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'OK'}</span></td>
     </tr>`;
   });
 
@@ -1214,9 +1214,9 @@ function renderHourlyModal() {
     <div style="overflow-x:auto">
     <table class="h-table" style="min-width:560px">
       <thead><tr>
-        <th>Time</th><th>Sky</th><th>Temp</th><th>Dew</th>
-        <th>RH</th><th>ΔT</th><th>Wind</th><th>Gust</th>
-        <th>Precip%</th><th>Accum.</th><th>Status</th>
+        <th>Time</th><th>Sky</th><th>Status</th><th>Temp</th>
+        <th>Wind</th><th>Gust</th><th>Precip%</th><th>Dew</th>
+        <th>RH</th><th>ΔT</th><th>Accum.</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>
