@@ -881,6 +881,24 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
   // Task 5: Wind bearing arrow (rotates to wind direction)
   const windDeg = now.wind_dir_deg || 0;
 
+  // ── Inversion Risk Indicator ───────────────────────
+  // Check for inversion conditions: low wind, clear skies, low delta-T
+  const isLowWindInv = now.wind_mph < 4;
+  const isClearSkyInv = now.cloud_pct !== undefined && now.cloud_pct <= 25;
+  const isDeltaTInv = now.delta_t < 2;
+  const inversionRisk = isLowWindInv || isClearSkyInv || isDeltaTInv;
+  const invRiskBadges = [];
+  if (isLowWindInv) invRiskBadges.push(`<span style="background:rgba(255,77,77,0.2);border:1px solid rgba(255,77,77,0.4);border-radius:6px;padding:2px 7px;font-size:10px;color:#ff6666">💨 Wind ${now.wind_mph.toFixed(0)} mph &lt;4 mph</span>`);
+  if (isClearSkyInv) invRiskBadges.push(`<span style="background:rgba(255,77,77,0.2);border:1px solid rgba(255,77,77,0.4);border-radius:6px;padding:2px 7px;font-size:10px;color:#ff6666">☁️ Clear sky ${now.cloud_pct}% ≤25%</span>`);
+  if (isDeltaTInv) invRiskBadges.push(`<span style="background:rgba(255,77,77,0.2);border:1px solid rgba(255,77,77,0.4);border-radius:6px;padding:2px 7px;font-size:10px;color:#ff6666">🌡 Delta-T ${now.delta_t.toFixed(1)}°C &lt;2°C</span>`);
+
+  const invRiskHTML = inversionRisk
+    ? `<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+         <span style="font-size:11px;color:rgba(255,100,100,0.85);font-weight:600">⚠️ Inversion Risk:</span>
+         ${invRiskBadges.join(' ')}
+       </div>`
+    : '';
+
   // Task 2: Feels-like badge
   const feelsDiff = Math.abs(now.feels_like_f - now.temp_f);
   const feelsLabel = now.feels_like_f < now.temp_f
@@ -949,6 +967,9 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
       : `<div style="margin-top:10px;font-size:11px;color:rgba(61,220,132,0.75)">✅ All parameters within label thresholds</div>`
     }
     </div>
+
+    <!-- Inversion Risk Indicator -->
+    ${invRiskHTML}
 
     <div class="cc-rain">
     <!-- Task 4: Rain countdown -->
