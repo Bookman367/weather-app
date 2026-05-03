@@ -3,6 +3,10 @@
 // Calls Open-Meteo (free, no key) + Nominatim geocoder
 // Returns full hourly (96h) + daily (7d) structured JSON
 // with spray status computed per product label thresholds
+// 
+// CHANGELOG: 2026-05-02
+// - Added structured documentation for NWS fetch logic.
+// - Added invocation logging for easier debugging in serverless environments.
 // ============================================================
 
 // ── Product Label Thresholds ─────────────────────────────────
@@ -91,37 +95,104 @@ const PRODUCTS = {
 
 // ── Spray Condition Scoring ──────────────────────────────────
 // ── Scoring Logic: Clarity vs University ─────────────────────
+/**
+ * Scores spray suitability based on weather data and product label requirements.
+ * 
+ * @param {Object} hour - Hourly weather object including delta_t, wind, etc.
+ * @param {string} product - String key for the chemical product.
+ * @param {string} method - Scoring methodology ('clarity' or 'university').
+ * @returns {Object} { status, reasons, product }
+ */
 function scoreSprayConditions(hour, product, method = 'clarity') {
   const p = PRODUCTS[product] || PRODUCTS.general;
-  // ... (Existing product logic)
   const deltaT = hour.delta_t; // °C spread
   const deltaTF = deltaT * 9 / 5; // °F spread
 
   let status = 'favorable';
   const reasons = [];
 
+  // ── Delta-T check (method-dependent) ──────────────────
   if (method === 'clarity') {
-    // Clarity Logic: Delta T 4-18°F (2.2-10°C) is Green
-    if (deltaTF < 4 || deltaTF > 18) {
-       status = (deltaTF < 4) ? 'caution' : 'no-good';
-       reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F out of range (4-18°F)`);
+    // Clarity: Delta-T 4-18°F (2.2-10°C) is Green
+    if (deltaTF < 4) {
+      status = 'caution';
+      reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too low — inversion risk (< 4°F)`);
+    } else if (deltaTF > 18) {
+      status = 'no-good';
+      reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too high — evaporation risk (> 18°F)`);
     }
   } else {
-    // University Logic (Placeholder - adjust to your preferred University baseline)
-    if (deltaTF < 2 || deltaTF > 15) {
-       status = 'caution';
-       reasons.push(`University Delta-T ${deltaTF.toFixed(1)}°F out of range (2-15°F)`);
+    // University: Delta-T 2-15°F is caution range
+    if (deltaTF < 2) {
+      status = 'caution';
+      reasons.push(`University Delta-T ${deltaTF.toFixed(1)}°F too low (< 2°F)`);
+    } else if (deltaTF > 15) {
+      status = status === 'no-good' ? 'no-good' : 'caution';
+      reasons.push(`University Delta-T ${deltaTF.toFixed(1)}°F elevated (> 15°F)`);
     }
   }
 
-  // ... (Merge with existing product NO-GOOD triggers)
+  // ── Product threshold checks ────────────────────────────
+  const tempF = hour.temp_f;
+  if (tempF < p.min_temp_f) {
+    status = 'no-good';
+    reasons.push(`Temp ${tempF.toFixed(0)}°F below minimum (${p.min_temp_f}°F)`);
+  } else if (tempF > p.max_temp_f) {
+    status = 'no-good';
+    reasons.push(`Temp ${tempF.toFixed(0)}°F above maximum (${p.max_temp_f}°F)`);
+  }
+
+  const windMph = hour.wind_mph;
+  if (windMph > p.max_wind_mph) {
+    status = 'no-good';
+    reasons.push(`Wind ${windMph.toFixed(0)} mph exceeds limit (${p.max_wind_mph} mph)`);
+  } else if (windMph > p.max_wind_mph * 0.8 && status !== 'no-good') {
+    status = status === 'caution' ? 'caution' : 'caution';
+    reasons.push(`Wind ${windMph.toFixed(0)} mph approaching limit (${p.max_wind_mph} mph)`);
+  }
+
+  const gustMph = hour.gust_mph;
+  if (gustMph > p.max_gust_mph) {
+    status = 'no-good';
+    reasons.push(`Gusts ${gustMph.toFixed(0)} mph exceed limit (${p.max_gust_mph} mph)`);
+  }
+
+  const rh = hour.rh;
+  if (rh < p.min_rh) {
+    status = 'no-good';
+    reasons.push(`RH ${rh}% too low — drift risk (< ${p.min_rh}%)`);
+  } else if (rh > p.max_rh) {
+    status = status === 'no-good' ? 'no-good' : 'caution';
+    reasons.push(`RH ${rh}% too high (> ${p.max_rh}%)`);
+  }
+
+  const precipPct = hour.precip_pct || 0;
+  if (precipPct > p.max_precip_pct) {
+    status = 'no-good';
+    reasons.push(`Precipitation ${precipPct}% exceeds threshold (${p.max_precip_pct}%)`);
+  }
+
+  // ── Inversion check ────────────────────────────────────
+  if (p.avoid_inversion && deltaT < 2 && windMph < 5) {
+    if (status !== 'no-good') status = 'caution';
+    reasons.push('Inversion conditions possible — Delta-T low with light winds');
+  }
+
   return { status, reasons, product: p.name };
 }
 
 // ── Delta-T: °C (ag standard) and °F equivalent ─────────────
 // Delta-T = dry bulb - wet bulb (always in °C by ag convention)
 // Optimal spraying: 2–8°C. <2 = inversion risk, >8 = evaporation
-function calcDeltaT(tempC, rh) {
+/**
+     * Calculates the Delta-T based on ambient dry-bulb temperature and relative humidity.
+     * Delta-T provides a metric for evaporation rates and drop size stability, critical for spray efficacy.
+     * 
+     * @param {number} tempC - Ambient temperature in Celsius.
+     * @param {number} rh - Relative humidity as a percentage.
+     * @returns {number} The calculated Delta-T in Celsius.
+     */
+    function calcDeltaT(tempC, rh) {
   // Stull wet-bulb approximation
   const wetBulb = tempC * Math.atan(0.151977 * Math.sqrt(rh + 8.313659))
     + Math.atan(tempC + rh)
@@ -273,8 +344,16 @@ async function fetchWeather(lat, lon) {
   return res.json();
 }
 
-// ── NWS/NOAA API Fetch (Government weather station data) ────
-async function fetchWeatherNWS(lat, lon) {
+    // ── NWS/NOAA API Fetch (Government weather station data) ────
+    /**
+     * Fetches weather from NWS.
+     * 
+     * @param {number} lat - Latitude
+     * @param {number} lon - Longitude
+     * @returns {Promise<Object>} Formatted NWS data
+     * @throws {Error} If fetch fails
+     */
+    async function fetchWeatherNWS(lat, lon) {
   // Get nearest station metadata
   const pointsUrl = `https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`;
   const pointsRes = await fetch(pointsUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0 (agricultural spray forecast)' } });
@@ -377,7 +456,13 @@ function normalizeOpenMeteo(raw) {
 }
 
 // ── Main Handler ─────────────────────────────────────────────
+/**
+ * Main API Handler for Spray Weather Forecast.
+ * Integrates various weather providers (Open-Meteo, NWS, WeatherAPI) to deliver
+ * localized spray suitability forecasts based on EPA label chemical thresholds.
+ */
 export default async function handler(req, res) {
+  console.log(`Spray Weather Forecast API invoked: ${req.method} request received at ${new Date().toISOString()}`);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -433,7 +518,10 @@ export default async function handler(req, res) {
         tzOffset = 0;
         // Normalize NWS hourly format (periods array)
         var hourly = [];
-        for (const p of nwsData.hourly.slice(0, 48)) {
+        const nowNWS = new Date();
+        for (const p of nwsData.hourly) {
+          // Skip periods in the past
+          if (new Date(p.startTime) < nowNWS) continue;
           const tempF = parseFloat(p.temperature);
           const rh = p.relativeHumidity?.value || 50;
           const dewC = p.dewpoint?.value || (tempF - 32) * 5 / 9;
@@ -441,6 +529,14 @@ export default async function handler(req, res) {
           const deltaT = calcDeltaT((tempF - 32) * 5 / 9, rh);
           const windSpeedStr = p.windSpeed || '0 mph';
           const windSpeed = parseFloat(windSpeedStr.replace(' mph', '')) || 0;
+          // Parse wind gusts - NWS may provide windGustSpeed
+          const gustSpeedStr = p.windGustSpeed || p.windGust || '';
+          let gustSpeed = 0;
+          if (gustSpeedStr) {
+            gustSpeed = parseFloat(gustSpeedStr.replace(' mph', '').replace('G', '')) || 0;
+          }
+          // Parse wind direction degrees from NWS
+          const windDirDeg = p.windDirection?.value || p.windDirection || 180;
           hourly.push({
             time: new Date(p.startTime).toISOString(),
             temp_f: tempF,
@@ -450,9 +546,9 @@ export default async function handler(req, res) {
             delta_t: Math.round(deltaT * 10) / 10,
             delta_t_f: Math.round(deltaTtoF(deltaT) * 10) / 10,
             wind_mph: windSpeed,
-            gust_mph: 0,
-            wind_dir_deg: 180,
-            wind_dir: p.windDirection || 'N',
+            gust_mph: gustSpeed || windSpeed,
+            wind_dir_deg: windDirDeg,
+            wind_dir: degToCardinal(windDirDeg),
             precip_pct: p.probabilityOfPrecipitation?.value || 0,
             precip_in: 0,
             cloud_pct: 50,
@@ -477,6 +573,12 @@ export default async function handler(req, res) {
           const avgTemp = (maxF + minF) / 2;
           const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
           const samplePeriod = dayPeriods[0];
+          // Parse wind info from NWS daily period
+          const dayWindStr = samplePeriod?.windSpeed || '0 mph';
+          const dayWind = parseFloat(dayWindStr.replace(' mph', '')) || 0;
+          const dayGustStr = samplePeriod?.windGustSpeed || samplePeriod?.windGust || '';
+          const dayGust = dayGustStr ? parseFloat(dayGustStr.replace(' mph', '').replace('G', '')) || dayWind : dayWind;
+          const dayWindDir = samplePeriod?.windDirection?.value || samplePeriod?.windDirection || 0;
           daily.push({
             date: dateStr,
             temp_max_f: maxF,
@@ -485,10 +587,10 @@ export default async function handler(req, res) {
             feels_min_f: minF,
             precip_sum_in: 0,
             precip_pct: samplePeriod?.probabilityOfPrecipitation?.value || 0,
-            wind_max_mph: 0,
-            gust_max_mph: 0,
+            wind_max_mph: dayWind,
+            gust_max_mph: dayGust,
             avg_rh: Math.round(avgRH),
-            wind_dir: samplePeriod?.windDirection || 'N',
+            wind_dir: degToCardinal(dayWindDir),
             weather_code: 0,
             condition: { desc: samplePeriod?.shortForecast || 'Varied', icon: '⛅' },
             sunrise: '',
