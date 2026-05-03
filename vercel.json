@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/forecast", "destination": "/api/forecast.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
