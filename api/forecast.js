@@ -93,7 +93,7 @@ const PRODUCTS = {
   },
   "Detonate + 2,4-D": {
     name: "Detonate + 2,4-D (Pasture near Soybeans)",
-    max_wind_mph: 15, max_gust_mph: 0,  // NO gusts allowed
+    max_wind_mph: 15, max_gust_mph: 15,  // Gusts allowed up to 15 mph
     min_temp_f: 50,   max_temp_f: 999,  // 999 = no hard max, prefer <86°F
     min_rh: 30,       max_rh: 95,
     max_precip_pct: 30,
