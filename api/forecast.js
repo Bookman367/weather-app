@@ -264,8 +264,20 @@ function hoursUntilRain(hourly, rainThresholdPct = 30) {
 // ── Wind direction degrees → cardinal + bearing arrow ────────
 function degToCardinal(deg) {
   if (deg === null || deg === undefined) return 'N/A';
+  if (typeof deg === 'string') return deg; // already a cardinal like "SSW"
   const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
   return dirs[Math.round(deg / 22.5) % 16];
+}
+
+// ── Cardinal string (NWS) → degrees ──────────────────────────
+function cardinalToDeg(cardinal) {
+  if (cardinal === null || cardinal === undefined) return null;
+  if (typeof cardinal === 'number') return cardinal; // already degrees
+  const map = {
+    'N':0,'NNE':22,'NE':45,'ENE':67,'E':90,'ESE':112,'SE':135,'SSE':157,
+    'S':180,'SSW':202,'SW':225,'WSW':247,'W':270,'WNW':292,'NW':315,'NNW':337
+  };
+  return map[cardinal.toUpperCase()] ?? null;
 }
 
 // ── WMO weather code → description + emoji ───────────────────
@@ -540,8 +552,9 @@ export default async function handler(req, res) {
           if (gustSpeedStr) {
             gustSpeed = parseFloat(gustSpeedStr.replace(' mph', '').replace('G', '')) || 0;
           }
-          // Parse wind direction degrees from NWS
-          const windDirDeg = p.windDirection?.value ?? p.windDirection ?? null;
+          // Parse wind direction from NWS — may be cardinal string ("SSW") or {value: degrees}
+          const rawWindDir = p.windDirection?.value ?? p.windDirection ?? null;
+          const windDirDeg = cardinalToDeg(rawWindDir);
           hourly.push({
             time: new Date(p.startTime).toISOString(),
             temp_f: tempF,
@@ -583,7 +596,8 @@ export default async function handler(req, res) {
           const dayWind = parseFloat(dayWindStr.replace(' mph', '')) || 0;
           const dayGustStr = samplePeriod?.windGustSpeed || samplePeriod?.windGust || '';
           const dayGust = dayGustStr ? parseFloat(dayGustStr.replace(' mph', '').replace('G', '')) || dayWind : dayWind;
-          const dayWindDir = samplePeriod?.windDirection?.value ?? samplePeriod?.windDirection ?? null;
+          const dayWindDirRaw = samplePeriod?.windDirection?.value ?? samplePeriod?.windDirection ?? null;
+          const dayWindDir = cardinalToDeg(dayWindDirRaw);
           daily.push({
             date: dateStr,
             temp_max_f: maxF,
