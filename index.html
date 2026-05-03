@@ -1006,7 +1006,7 @@ function renderCurrentConditionsStrip(now) {
 
 // ── Spray Window ──────────────────────────────
 function renderSprayWindow(hours) {
-  const segments = hours.map(h => {
+  const segments = hours.map((h, i) => {
     const dt    = new Date(h.time);
     const hr    = dt.getHours();
     const hr12  = hr % 12 || 12;
