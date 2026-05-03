@@ -1,10 +1,4 @@
 {
-  "version": 2,
-  "functions": {
-    "api/forecast.js": {
-      "maxDuration": 15
-    }
-  },
   "rewrites": [
     { "source": "/api/forecast", "destination": "/api/forecast.js" },
     { "source": "/(.*)", "destination": "/index.html" }
