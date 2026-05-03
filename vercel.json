@@ -5,8 +5,8 @@
       "maxDuration": 15
     }
   },
-  "routes": [
-    { "src": "/api/forecast", "dest": "/api/forecast.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/api/forecast", "destination": "/api/forecast.js" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
