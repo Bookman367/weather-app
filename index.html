@@ -1182,20 +1182,16 @@ function initSprayBarSync() {
   track.querySelectorAll('.spray-segment').forEach(el => el.classList.remove('active-segment'));
 
   _sprayObserver = new IntersectionObserver((entries) => {
-    // Find the entry closest to the horizontal center of the wrap
-    const wrapRect = wrap.getBoundingClientRect();
-    const wrapCenterX = wrapRect.left + wrapRect.width / 2;
-
+    // Find the LEFTMOST intersecting segment (smallest data-index)
+    // — this is the one sitting in the fixed far-left frame
     let bestEntry = null;
-    let bestDist = Infinity;
+    let bestIdx = Infinity;
 
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const rect = entry.target.getBoundingClientRect();
-        const segCenterX = rect.left + rect.width / 2;
-        const dist = Math.abs(segCenterX - wrapCenterX);
-        if (dist < bestDist) {
-          bestDist = dist;
+        const idx = parseInt(entry.target.getAttribute('data-index'), 10);
+        if (idx < bestIdx) {
+          bestIdx = idx;
           bestEntry = entry;
         }
       }
