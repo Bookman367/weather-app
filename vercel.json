@@ -6,7 +6,6 @@
     }
   },
   "rewrites": [
-    { "source": "/api/forecast", "destination": "/api/forecast" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

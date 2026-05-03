@@ -1196,7 +1196,7 @@ function renderHourlyModal() {
       <td>${h.condition.icon}</td>
       <td><span class="status-dot ${h.spray.status}">${h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'OK'}</span></td>
       <td>${Math.round(h.temp_f)}°F ${feelsCell}</td>
-      <td>${Math.round(h.wind_mph)} <span style="color:rgba(255,255,255,0.4);font-size:10px">${h.wind_dir_deg != null ? `<span style="display:inline-block;transform:rotate(${h.wind_dir_deg - 90}deg);font-size:9px">➤</span>` : '—'}</span></td>
+      <td>${Math.round(h.wind_mph)} <span style="color:rgba(255,255,255,0.4);font-size:10px">${h.wind_dir_deg != null ? `<span style="display:inline-block;transform:rotate(${h.wind_dir_deg + 90}deg);font-size:9px">➤</span>` : '—'}</span></td>
       <td style="color:#2176d4">${Math.round(h.gust_mph)}</td>
       <td>${h.precip_pct}%</td>
       <td style="color:var(--blue)">${Math.round(h.dew_f)}°</td>
@@ -1277,7 +1277,7 @@ function renderDailyModal() {
       </div>
       <div class="dr-meta">
         ${feelsLine ? `<span style="color:rgba(255,255,255,0.4)">${feelsLine}</span><br>` : ''}
-        💨 ${Math.round(day.wind_max_mph)}/${Math.round(day.gust_max_mph)} mph${day.wind_dir_deg != null ? ` <span style="display:inline-block;transform:rotate(${day.wind_dir_deg - 90}deg);font-size:9px">➤</span>` : ''}
+        💨 ${Math.round(day.wind_max_mph)}/${Math.round(day.gust_max_mph)} mph${day.wind_dir_deg != null ? ` <span style="display:inline-block;transform:rotate(${day.wind_dir_deg + 90}deg);font-size:9px">➤</span>` : ' —'}
         &nbsp;·&nbsp; 🌧 ${day.precip_pct}%
         ${rhNote ? `&nbsp;·&nbsp; ${rhNote}` : ''}
         ${reasonsHTML}

@@ -583,7 +583,7 @@ export default async function handler(req, res) {
           const dayWind = parseFloat(dayWindStr.replace(' mph', '')) || 0;
           const dayGustStr = samplePeriod?.windGustSpeed || samplePeriod?.windGust || '';
           const dayGust = dayGustStr ? parseFloat(dayGustStr.replace(' mph', '').replace('G', '')) || dayWind : dayWind;
-          const dayWindDir = samplePeriod?.windDirection?.value || samplePeriod?.windDirection || 0;
+          const dayWindDir = samplePeriod?.windDirection?.value ?? samplePeriod?.windDirection ?? null;
           daily.push({
             date: dateStr,
             temp_max_f: maxF,
@@ -633,20 +633,23 @@ export default async function handler(req, res) {
       message:   `Temperature inversion conditions detected. Delta-T ${hourlyFinal[0].delta_t}°C (${hourlyFinal[0].delta_t_f}°F spread) with winds at ${hourlyFinal[0].wind_mph} mph. Spray droplets may pool and drift unpredictably. Do not apply.`
     } : { active: false };
 
-    // ── Parse sunrise/sunset times to hour-of-day integers ──────────────
+    // ── Parse sunrise/sunset times to LOCAL hour-of-day integers ────
+    // Used with daytimeHours() which also uses getHours() (local time)
     function parseSunHour(timeStr) {
       if (!timeStr || timeStr === 'N/A') return null;
-      // Open-Meteo: "2026-05-03T06:12:00", NWS: "6:42 AM"
       if (timeStr.includes('T')) {
-        const d = new Date(timeStr);
-        return d.getUTCHours();
+        // Open-Meteo full timestamp: "2026-05-03T06:12:00"
+        // Parse hour+minute directly from string to avoid server-TZ issues
+        const parts = timeStr.split('T')[1].split(':');
+        return parseInt(parts[0]) + parseInt(parts[1]) / 60;
       }
+      // NWS "6:42 AM" format — already local time
       const m = timeStr.match(/(\d+):(\d+)\s*([AP]M)/);
       if (!m) return null;
       let h = parseInt(m[1]);
       if (m[3] === 'PM' && h !== 12) h += 12;
       if (m[3] === 'AM' && h === 12) h = 0;
-      return h;
+      return h + parseInt(m[2]) / 60;
     }
 
     // ── Sprayable daytime window helper ────────────────────────────────
@@ -665,7 +668,12 @@ export default async function handler(req, res) {
       const endSprayH = (rawSunsetH + sunsetOffset + 24) % 24;
 
       return dayHours.filter(h => {
-        const hour = new Date(h.time).getUTCHours();
+        // h.time is stored as an ISO UTC string from both NWS and Open-Meteo.
+        // On a UTC server, getHours() returns UTC hour = correct for NWS (already UTC).
+        // For Open-Meteo, h.time is local time but interpreted as UTC on a UTC server,
+        // so getHours() gives the local hour value (6 for CDT 6:00) which matches
+        // the local-hour parseSunHour output — the two are consistent on a UTC server.
+        const hour = new Date(h.time).getHours();
         if (startSprayH <= endSprayH) {
           // Window doesn't wrap midnight
           return hour >= startSprayH && hour <= endSprayH;
