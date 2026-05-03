@@ -61,7 +61,6 @@
     [data-theme="light"] .cc-status-text.favorable { color: #1a8a50; }
     [data-theme="light"] .cc-status-text.caution   { color: #b07800; }
     [data-theme="light"] .cc-status-text.no-good   { color: #cc2222; }
-    [data-theme="light"] .pill-dot.green { background: #1a8a50; box-shadow: 0 0 6px #3ddc84; }
     [data-theme="light"] .status-dot.favorable { color: #1a8a50; }
     [data-theme="light"] .status-dot.caution   { color: #b07800; }
     [data-theme="light"] .status-dot.no-good   { color: #cc2222; }
@@ -300,17 +299,6 @@
     .cc-status-text.favorable { color: var(--green); }
     .cc-status-text.caution   { color: var(--yellow); }
     .cc-status-text.no-good   { color: var(--red); }
-
-    .status-pills { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
-    .status-pill {
-      display: flex; align-items: center; gap: 6px;
-      background: rgba(0,0,0,0.25); border-radius: var(--radius-pill);
-      border: 1px solid rgba(255,255,255,0.1);
-      font-size: 11px; font-weight: 600; padding: 5px 12px 5px 8px; white-space: nowrap;
-    }
-    .pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .pill-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
-    .pill-dot.red   { background: var(--red);   box-shadow: 0 0 6px var(--red); }
 
     /* Big Three grid */
     .big-three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 6px; }
@@ -894,10 +882,6 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
       <div>
         <div class="cc-title">Spray Status Command Center</div>
         <div class="cc-status-text ${status}">${statusLabel}</div>
-      </div>
-      <div class="status-pills">
-        <div class="status-pill"><span class="pill-dot green"></span>Good to Spray</div>
-        <div class="status-pill"><span class="pill-dot red"></span>Conditions Restricted</div>
       </div>
     </div>
 
