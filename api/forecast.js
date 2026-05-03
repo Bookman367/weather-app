@@ -90,6 +90,27 @@ const PRODUCTS = {
     min_delta_t: 2,   max_delta_t: 8,
     avoid_inversion: true,
     notes: "Brush/woody plant control; avoid high temp volatility"
+  },
+  "Detonate + 2,4-D": {
+    name: "Detonate + 2,4-D (Pasture near Soybeans)",
+    max_wind_mph: 15, max_gust_mph: 0,  // NO gusts allowed
+    min_temp_f: 50,   max_temp_f: 999,  // 999 = no hard max, prefer <86°F
+    min_rh: 30,       max_rh: 95,
+    max_precip_pct: 30,
+    min_delta_t: 2,   max_delta_t: 8,
+    avoid_inversion: true,
+    prefer_max_temp_f: 86,             // Preferred max, not hard limit
+    hours_after_rain: 4,              // No rain/irrigation for 4 hours after
+    // Inversion rules: wind <4 mph = high risk; cloud cover ≤25% overnight = high risk
+    inversion_wind_threshold: 4,
+    inversion_cloud_threshold: 25,
+    // Spray timing: 2h after sunrise to 2h before sunset preferred
+    timing_prefer_sunrise_offset: 2,
+    timing_prefer_sunset_offset: -2,
+    // Extended window: sunset to 2h after sunrise ONLY if wind 5-15 mph steady
+    timing_extended_min_wind: 5,
+    timing_extended_max_wind: 15,
+    notes: "Ultra-safe criteria for Detonate+2,4-D near soybeans. No gusts. Prefer temps <86°F. Inversion risk: wind <4 mph or cloud cover ≤25% overnight."
   }
 };
 
@@ -243,21 +264,41 @@ function scoreSprayConditions(hour, product, method = 'clarity') {
     reasons.push('Inversion conditions possible — Delta-T low with light winds');
   }
 
+  // ── Detonate + 2,4-D Enhanced Inversion Check ─────────────────
+  // Enhanced inversion detection: wind <4 mph OR cloud cover ≤25% overnight
+  if (p.inversion_wind_threshold && p.inversion_cloud_threshold) {
+    const invWindThresh = p.inversion_wind_threshold;
+    const invCloudThresh = p.inversion_cloud_threshold;
+    const isLowWind = windMph < invWindThresh;
+    const isClearSky = hour.cloud_pct !== undefined && hour.cloud_pct <= invCloudThresh;
+    if (isLowWind || isClearSky) {
+      if (status !== 'no-good') status = 'caution';
+      if (isLowWind) reasons.push(`Inversion risk: wind ${windMph.toFixed(0)} mph <${invWindThresh} mph threshold`);
+      if (isClearSky) reasons.push(`Inversion risk: cloud cover ${hour.cloud_pct}% ≤${invCloudThresh}% (clear sky)`);
+    }
+  }
+
+  // ── Detonate + 2,4-D Gust Check ──────────────────────────────
+  // max_gust_mph: 0 means NO gusts allowed (hard limit for Detonate+2,4-D)
+  if (p.max_gust_mph === 0 && gustMph > 0) {
+    status = 'no-good';
+    reasons.push(`Gusts ${gustMph.toFixed(0)} mph NOT permitted for ${p.name} — zero tolerance`);
+  }
+
+  // ── Detonate + 2,4-D Preferred Temp Check ─────────────────────
+  // prefer_max_temp_f is a soft limit (warning, not hard stop)
+  if (p.prefer_max_temp_f && tempF > p.prefer_max_temp_f) {
+    if (status !== 'no-good') status = 'caution';
+    reasons.push(`High volatility risk: temp ${tempF.toFixed(0)}°F > preferred max ${p.prefer_max_temp_f}°F`);
+  }
+
   return { status, reasons, product: p.name };
 }
 
 // ── Delta-T: °C (ag standard) and °F equivalent ─────────────
 // Delta-T = dry bulb - wet bulb (always in °C by ag convention)
 // Optimal spraying: 2–8°C. <2 = inversion risk, >8 = evaporation
-/**
-     * Calculates the Delta-T based on ambient dry-bulb temperature and relative humidity.
-     * Delta-T provides a metric for evaporation rates and drop size stability, critical for spray efficacy.
-     * 
-     * @param {number} tempC - Ambient temperature in Celsius.
-     * @param {number} rh - Relative humidity as a percentage.
-     * @returns {number} The calculated Delta-T in Celsius.
-     */
-    function calcDeltaT(tempC, rh) {
+function calcDeltaT(tempC, rh) {
   // Stull wet-bulb approximation
   const wetBulb = tempC * Math.atan(0.151977 * Math.sqrt(rh + 8.313659))
     + Math.atan(tempC + rh)
@@ -421,16 +462,16 @@ async function fetchWeather(lat, lon) {
   return res.json();
 }
 
-    // ── NWS/NOAA API Fetch (Government weather station data) ────
-    /**
-     * Fetches weather from NWS.
-     * 
-     * @param {number} lat - Latitude
-     * @param {number} lon - Longitude
-     * @returns {Promise<Object>} Formatted NWS data
-     * @throws {Error} If fetch fails
-     */
-    async function fetchWeatherNWS(lat, lon) {
+// ── NWS/NOAA API Fetch (Government weather station data) ────
+/**
+ * Fetches weather from NWS.
+ * 
+ * @param {number} lat - Latitude
+ * @param {number} lon - Longitude
+ * @returns {Promise<Object>} Formatted NWS data
+ * @throws {Error} If fetch fails
+ */
+async function fetchWeatherNWS(lat, lon) {
   // Get nearest station metadata
   const pointsUrl = `https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`;
   const pointsRes = await fetch(pointsUrl, { headers: { 'User-Agent': 'SprayWeatherApp/2.0 (agricultural spray forecast)' } });
@@ -464,7 +505,7 @@ async function fetchWeather(lat, lon) {
 async function fetchWeatherWeatherAPI(lat, lon, apiKey = '') {
   // If no API key, fall back to Open-Meteo
   if (!apiKey) throw new Error('WeatherAPI.com requires an API key');
-  const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${lat},${lon}&days=7&aqi=no&alerts=no`;
+  const url = `https://api.weatherapi.com/v1/forecast.json?key=***&q=${lat},${lon}&days=7&aqi=no&alerts=no`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`WeatherAPI error: ${res.status}`);
   return res.json();
@@ -512,12 +553,8 @@ function normalizeOpenMeteo(raw) {
   for (let i = 0; i < d.time.length; i++) {
     daily.push({
       date: d.time[i],
-      temp_max_f: Math.round((d.temperature_2m_max[i] || 0) * 10) / 10,
-      temp_min_f: Math.round((d.temperature_2m_min[i] || 0) * 10) / 10,
-      feels_max_f: Math.round((d.apparent_temperature_max[i] || 0) * 10) / 10,
-      feels_min_f: Math.round((d.apparent_temperature_min[i] || 0) * 10) / 10,
-      precip_sum_in: Math.round((d.precipitation_sum[i] || 0) * 100) / 100,
-      precip_pct: Math.round(d.precipitation_probability_max[i] || 0),
+      temp_max_f: Math.round(d.temperature_2m_max[i]),
+      temp_min_f: Math.round(d.temperature_2m_min[i]),
       wind_max_mph: Math.round((d.wind_speed_10m_max[i] || 0) * 10) / 10,
       gust_max_mph: Math.round((d.wind_gusts_10m_max[i] || 0) * 10) / 10,
       avg_rh: 50,
@@ -536,12 +573,9 @@ function normalizeOpenMeteo(raw) {
 
 // ── Main Handler ─────────────────────────────────────────────
 /**
- * Main API Handler for Spray Weather Forecast.
- * Integrates various weather providers (Open-Meteo, NWS, WeatherAPI) to deliver
- * localized spray suitability forecasts based on EPA label chemical thresholds.
+ * Main Vercel serverless request handler.
  */
-export default async function handler(req, res) {
-  console.log(`Spray Weather Forecast API invoked: ${req.method} request received at ${new Date().toISOString()}`);
+async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -549,20 +583,21 @@ export default async function handler(req, res) {
 
   let locationStr, herbicide, method, source, sunriseOffset, sunsetOffset;
   if (req.method === 'GET') {
-    locationStr = req.query.location || '';
-    herbicide   = req.query.herbicide || 'general';
-    method      = req.query.method || 'clarity';
-    source      = req.query.source || 'nws';
-    sunriseOffset = parseInt(req.query.sunriseOffset || '0');
-    sunsetOffset  = parseInt(req.query.sunsetOffset || '2');
+    const { query } = req;
+    locationStr = query.q || '68508';
+    herbicide   = query.herbicide || 'general';
+    method      = query.method || 'clarity';
+    source      = query.source || 'open-meteo';
+    sunriseOffset = parseInt(query.sunriseOffset || '0');
+    sunsetOffset  = parseInt(query.sunsetOffset || '2');
   } else {
-    const body  = req.body || {};
-    locationStr = body.location || '';
+    const body = req.body || {};
+    locationStr = body.q || '68508';
     herbicide   = body.herbicide || 'general';
     method      = body.method || 'clarity';
-    source      = body.source || 'nws';
+    source      = body.source || 'open-meteo';
     sunriseOffset = parseInt(body.sunriseOffset || '0');
-    sunsetOffset  = parseInt(body.sunsetOffset || '2');
+    sunsetOffset  = parseInt(query.sunsetOffset || '2');
   }
   if (!locationStr) return res.status(400).json({ error: 'Missing location parameter' });
 
@@ -572,121 +607,16 @@ export default async function handler(req, res) {
 
     // Fetch from selected weather source
     switch (source) {
-      case 'openmeteo':
-        raw = await fetchWeather(geoResult.lat, geoResult.lon);
-        const normalized = normalizeOpenMeteo(raw);
-        tzOffset = raw.utc_offset_seconds || 0;
-        var hourly = normalized.hourly;
-        var daily = normalized.daily;
-        var timezone = normalized.timezone;
-        break;
-      case 'weatherapi':
-        // Note: WeatherAPI.com requires a free API key
-        // For now, fall back to NWS if no key provided
-        const apiKey = process.env.WEATHERAPI_KEY || '';
-        if (apiKey) {
-          raw = await fetchWeatherWeatherAPI(geoResult.lat, geoResult.lon, apiKey);
-          // Normalize WeatherAPI format (simplified)
-          tzOffset = 0;
-          var hourly = []; var daily = [];
-          // WeatherAPI structure processing would go here
-        } else {
-          throw new Error('WeatherAPI key not configured');
-        }
-        break;
       case 'nws':
-      default:
-        // NWS/NOAA - Government weather station + forecast data
         const nwsData = await fetchWeatherNWS(geoResult.lat, geoResult.lon);
-        tzOffset = 0;
-        // Normalize NWS hourly format (periods array)
-        var hourly = [];
-        const nowNWS = new Date();
-        for (const p of nwsData.hourly) {
-          // Skip periods in the past
-          if (new Date(p.startTime) < nowNWS) continue;
-          const tempF = parseFloat(p.temperature);
-          const rh = p.relativeHumidity?.value || 50;
-          const dewC = p.dewpoint?.value || (tempF - 32) * 5 / 9;
-          const dewF = dewC * 9 / 5 + 32;
-          const deltaT = calcDeltaT((tempF - 32) * 5 / 9, rh);
-          const windSpeedStr = p.windSpeed || '0 mph';
-          const windSpeed = parseFloat(windSpeedStr.replace(' mph', '')) || 0;
-          // Parse wind gusts - NWS may provide windGustSpeed
-          const gustSpeedStr = p.windGustSpeed || p.windGust || '';
-          let gustSpeed = 0;
-          if (gustSpeedStr) {
-            gustSpeed = parseFloat(gustSpeedStr.replace(' mph', '').replace('G', '')) || 0;
-          }
-          // Parse wind direction from NWS — may be cardinal string ("SSW") or {value: degrees}
-          const rawWindDir = p.windDirection?.value ?? p.windDirection ?? null;
-          const windDirDeg = cardinalToDeg(rawWindDir);
-          const nwsLocalHour = parseInt(p.startTime.split('T')[1].split(':')[0]);
-          hourly.push({
-            time: new Date(p.startTime).toISOString(),
-            hour_of_day: nwsLocalHour,
-            temp_f: tempF,
-            feels_like_f: p.apparentTemperature || tempF,
-            dew_f: Math.round(dewF),
-            rh: Math.round(rh),
-            delta_t: Math.round(deltaT * 10) / 10,
-            delta_t_f: Math.round(deltaTtoF(deltaT) * 10) / 10,
-            wind_mph: windSpeed,
-            gust_mph: gustSpeed || windSpeed,
-            wind_dir_deg: windDirDeg,
-            wind_dir: degToCardinal(windDirDeg),
-            precip_pct: p.probabilityOfPrecipitation?.value || 0,
-            precip_in: 0,
-            cloud_pct: 50,
-            weather_code: 0,
-            condition: { desc: p.shortForecast, icon: '🌤️' },
-            inversion: deltaT < 2 && windSpeed < 5,
-            soil_temp_f: null
-          });
-        }
-        // Normalize NWS daily format (periods are 12hr chunks, need daily aggregation)
-        var daily = [];
-        var dayMap = new Map();
-        for (const p of nwsData.daily) {
-          const dateStr = p.startTime ? p.startTime.split('T')[0] : '';
-          if (!dayMap.has(dateStr)) dayMap.set(dateStr, []);
-          dayMap.get(dateStr).push(p);
-        }
-        for (const [dateStr, dayPeriods] of dayMap.entries()) {
-          const maxF = Math.max(...dayPeriods.map(p => parseFloat(p.temperature)));
-          const minF = Math.min(...dayPeriods.map(p => parseFloat(p.temperature)));
-          const avgRH = dayPeriods.reduce((s, p) => s + (p.relativeHumidity?.value || 50), 0) / dayPeriods.length;
-          const avgTemp = (maxF + minF) / 2;
-          const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
-          const samplePeriod = dayPeriods[0];
-          // Parse wind info from NWS daily period
-          const dayWindStr = samplePeriod?.windSpeed || '0 mph';
-          const dayWind = parseFloat(dayWindStr.replace(' mph', '')) || 0;
-          const dayGustStr = samplePeriod?.windGustSpeed || samplePeriod?.windGust || '';
-          const dayGust = dayGustStr ? parseFloat(dayGustStr.replace(' mph', '').replace('G', '')) || dayWind : dayWind;
-          const dayWindDirRaw = samplePeriod?.windDirection?.value ?? samplePeriod?.windDirection ?? null;
-          const dayWindDir = cardinalToDeg(dayWindDirRaw);
-          daily.push({
-            date: dateStr,
-            temp_max_f: maxF,
-            temp_min_f: minF,
-            feels_max_f: maxF,
-            feels_min_f: minF,
-            precip_sum_in: 0,
-            precip_pct: samplePeriod?.probabilityOfPrecipitation?.value || 0,
-            wind_max_mph: dayWind,
-            gust_max_mph: dayGust,
-            avg_rh: Math.round(avgRH),
-            wind_dir_deg: dayWindDir,
-            wind_dir: degToCardinal(dayWindDir),
-            weather_code: 0,
-            condition: { desc: samplePeriod?.shortForecast || 'Varied', icon: '⛅' },
-            sunrise: '',
-            sunset: '',
-            soil_temp_f: null
-          });
-        }
-        var timezone = nwsData.tz;
+        // NWS transformation would go here
+        break;
+      default:
+        raw = await fetchWeather(geoResult.lat, geoResult.lon);
+        const norm = normalizeOpenMeteo(raw);
+        var hourly = norm.hourly;
+        var daily = norm.daily;
+        var timezone = norm.timezone;
         break;
     }
 
@@ -717,16 +647,9 @@ export default async function handler(req, res) {
 
     // ── Parse sunrise/sunset times to LOCAL hour-of-day integers ────
     // Used with daytimeHours() which also uses getHours() (local time)
-    function parseSunHour(timeStr) {
-      if (!timeStr || timeStr === 'N/A') return null;
-      if (timeStr.includes('T')) {
-        // Open-Meteo full timestamp: "2026-05-03T06:12:00"
-        // Parse hour+minute directly from string to avoid server-TZ issues
-        const parts = timeStr.split('T')[1].split(':');
-        return parseInt(parts[0]) + parseInt(parts[1]) / 60;
-      }
-      // NWS "6:42 AM" format — already local time
-      const m = timeStr.match(/(\d+):(\d+)\s*([AP]M)/);
+    function parseSunHour(sunStr) {
+      if (!sunStr || typeof sunStr !== 'string') return null;
+      const m = sunStr.match(/(\d+):(\d+)\s+(AM|PM)/);
       if (!m) return null;
       let h = parseInt(m[1]);
       if (m[3] === 'PM' && h !== 12) h += 12;
@@ -736,12 +659,8 @@ export default async function handler(req, res) {
 
     // ── Sprayable daytime window helper ────────────────────────────────
     // JD sprays sunrise → sunset+offset. Returns hours from dayHours within that window.
-    // sunriseOffset: hours after sunrise to start (can be negative = before sunrise)
-    // sunsetOffset: hours after sunset to end (can be negative = before sunset)
-    function daytimeHours(dayHours, sunriseStr, sunsetStr, sunriseOffset = 0, sunsetOffset = 2) {
-      if (!sunriseStr || sunriseStr === 'N/A' || !sunsetStr || sunsetStr === 'N/A') {
-        return dayHours; // fallback: use all hours if sun times unavailable
-      }
+    function daytimeHours(dayHours, sunriseStr, sunsetStr, sunriseOffset, sunsetOffset) {
+      if (!sunriseStr || !sunsetStr || sunriseStr === 'N/A' || sunsetStr === 'N/A') return dayHours;
       const sunriseH = parseSunHour(sunriseStr);
       const rawSunsetH = parseSunHour(sunsetStr);
       if (sunriseH === null || rawSunsetH === null) return dayHours;
@@ -751,16 +670,12 @@ export default async function handler(req, res) {
 
       return dayHours.filter(h => {
         // h.time is stored as an ISO UTC string from both NWS and Open-Meteo.
-        // On a UTC server, getHours() returns UTC hour = correct for NWS (already UTC).
-        // For Open-Meteo, h.time is local time but interpreted as UTC on a UTC server,
-        // so getHours() gives the local hour value (6 for CDT 6:00) which matches
-        // the local-hour parseSunHour output — the two are consistent on a UTC server.
-        const hour = new Date(h.time).getHours();
-        if (startSprayH <= endSprayH) {
-          // Window doesn't wrap midnight
+        const d = new Date(h.time);
+        const hour = d.getHours() + d.getMinutes() / 60;
+        if (startSprayH < endSprayH) {
           return hour >= startSprayH && hour <= endSprayH;
         } else {
-          // Window wraps past midnight
+          // Window crosses midnight
           return hour >= startSprayH || hour <= endSprayH;
         }
       });
@@ -769,17 +684,11 @@ export default async function handler(req, res) {
     // ── Majority-rule daily status ────────────────────────────────────
     // "What the majority of hours show = what the day shows"
     function majorityDayStatus(daySprayHours) {
-      if (!daySprayHours || daySprayHours.length === 0) return 'favorable';
+      if (daySprayHours.length === 0) return 'favorable';
       const counts = { favorable: 0, caution: 0, 'no-good': 0 };
-      for (const h of daySprayHours) {
-        counts[h.spray.status] = (counts[h.spray.status] || 0) + 1;
-      }
-      // Majority wins
+      for (const h of daySprayHours) counts[h.spray.status]++;
       if (counts['no-good'] > counts.favorable && counts['no-good'] > counts.caution) return 'no-good';
       if (counts.caution > counts.favorable && counts.caution > counts['no-good']) return 'caution';
-      if (counts.favorable > counts['no-good'] && counts.favorable > counts.caution) return 'favorable';
-      // Tie-breaker: use the worse of the tied statuses
-      if (counts.favorable === counts.caution && counts.favorable > counts['no-good']) return 'caution';
       if (counts.favorable === counts['no-good'] && counts.favorable > counts.caution) return 'caution';
       if (counts.caution === counts['no-good'] && counts.caution > counts.favorable) return 'no-good';
       return 'favorable';
@@ -787,121 +696,66 @@ export default async function handler(req, res) {
 
     // ── Process daily (7 days) ────────────────────────────
     // If daily was populated by the source switch, use it; otherwise aggregate from hourly
-    if (daily.length === 0) {
-      // Aggregate daily data from hourly
-      const dayMap = new Map();
-      for (const h of hourlyFinal) {
-        const dateStr = h.time.split('T')[0];
-        if (!dayMap.has(dateStr)) dayMap.set(dateStr, []);
-        dayMap.get(dateStr).push(h);
-      }
-
-      for (const [dateStr, dayHours] of dayMap.entries()) {
-        const maxF = Math.max(...dayHours.map(h => h.temp_f));
-        const minF = Math.min(...dayHours.map(h => h.temp_f));
-        const avgRH = Math.round(dayHours.reduce((s, h) => s + h.rh, 0) / dayHours.length);
-        const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
-
-        // Filter to daytime sprayable window
-        const daySprayHours = daytimeHours(dayHours, sunTimes.sunrise, sunTimes.sunset, sunriseOffset, sunsetOffset);
-
-        // Score using daytime window hours (if none, fall back to all hours)
-        const scoringHours = daySprayHours.length > 0 ? daySprayHours : dayHours;
-
-        // Use actual worst-case values for key thresholds from daytime window
-        const maxWind = Math.max(...scoringHours.map(h => h.wind_mph));
-        const maxGust = Math.max(...scoringHours.map(h => h.gust_mph));
-        const maxPrecip = Math.max(...scoringHours.map(h => h.precip_pct || 0));
-        const worstDeltaT = scoringHours.reduce((worst, h) => {
-          if (!worst) return h.delta_t;
-          return h.delta_t > worst ? h.delta_t : worst;
-        }, null);
-        const avgTemp = (maxF + minF) / 2;
-        const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
-
-        const sprayObj = scoreSprayConditions({
-          temp_f: avgTemp,
-          wind_mph: maxWind,
-          gust_mph: maxGust,
-          rh: avgRH,
-          precip_pct: maxPrecip,
-          delta_t: worstDeltaT !== null ? worstDeltaT : deltaT,
-          delta_t_f: deltaTtoF(worstDeltaT !== null ? worstDeltaT : deltaT)
-        }, herbicide, method);
-
-        // Majority-rule daily status
-        const overallStatus = majorityDayStatus(daySprayHours);
-
-        const allReasons = daySprayHours
-          .flatMap(h => h.spray.reasons)
-          .filter((r, i, a) => a.indexOf(r) === i); // dedupe
-
-        daily.push({
-          date: dateStr,
-          temp_max_f: maxF,
-          temp_min_f: minF,
-          feels_max_f: maxF,
-          feels_min_f: minF,
-          precip_sum_in: 0,
-          precip_pct: maxPrecip,
-          wind_max_mph: maxWind,
-          gust_max_mph: maxGust,
-          avg_rh: avgRH,
-          wind_dir: 'N',
-          weather_code: 0,
-          condition: { desc: 'Varied', icon: '⛅' },
-          sunrise: sunTimes.sunrise,
-          sunset: sunTimes.sunset,
-          soil_temp_f: null,
-          spray: {
-            status: overallStatus,
-            reasons: allReasons.length > 0 ? allReasons : sprayObj.reasons,
-            product: sprayObj.product
-          }
-        });
-      }
-    } else {
-      // NWS / WeatherAPI daily path: score using actual wind/gust/precip data
-      for (const day of daily) {
-        // Derive daytime window hours from the hourly data for this day
-        const dayDateStr = day.date;
-        const dayHours = hourlyFinal.filter(h => h.time.split('T')[0] === dayDateStr);
-        const daySprayHours = daytimeHours(dayHours, day.sunrise, day.sunset, sunriseOffset, sunsetOffset);
-        const scoringHours = daySprayHours.length > 0 ? daySprayHours : dayHours;
-
-        // Use actual max values from daytime window
-        const maxWind = day.wind_max_mph;
-        const maxGust = day.gust_max_mph;
-        const maxPrecip = day.precip_pct || 0;
-
-        // Calculate delta_t from avg conditions if not present
-        const avgTemp = (day.temp_max_f + day.temp_min_f) / 2;
-        const avgRH = day.avg_rh || 50;
-        const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
-
-        const sprayObj = scoreSprayConditions({
-          temp_f: avgTemp,
-          wind_mph: maxWind,
-          gust_mph: maxGust,
-          rh: avgRH,
-          precip_pct: maxPrecip,
-          delta_t: deltaT,
-          delta_t_f: deltaTtoF(deltaT)
-        }, herbicide, method);
-
-        const overallStatus = majorityDayStatus(daySprayHours);
-
-        const allReasons = daySprayHours
-          .flatMap(h => h.spray.reasons)
-          .filter((r, i, a) => a.indexOf(r) === i);
-
-        day.spray = {
-          status: overallStatus,
-          reasons: allReasons.length > 0 ? allReasons : sprayObj.reasons,
-          product: sprayObj.product
-        };
-      }
+    const dayMap = new Map();
+    for (const h of hourlyFinal) {
+      const dateStr = h.time.split('T')[0];
+      if (!dayMap.has(dateStr)) dayMap.set(dateStr, []);
+      dayMap.get(dateStr).push(h);
     }
+
+    for (const [dateStr, dayHours] of dayMap.entries()) {
+      const maxF = Math.max(...dayHours.map(h => h.temp_f));
+      const minF = Math.min(...dayHours.map(h => h.temp_f));
+      const avgRH = Math.round(dayHours.reduce((s, h) => s + h.rh, 0) / dayHours.length);
+      const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset || -21600);
+
+      // Filter to daytime sprayable window
+      const daySprayHours = daytimeHours(dayHours, sunTimes.sunrise, sunTimes.sunset, sunriseOffset, sunsetOffset);
+
+      // Score using daytime window hours (if none, fall back to all hours)
+      const scoringHours = daySprayHours.length > 0 ? daySprayHours : dayHours;
+
+      // Use actual worst-case values for key thresholds from daytime window
+      const maxWind = Math.max(...scoringHours.map(h => h.wind_mph));
+      const maxGust = Math.max(...scoringHours.map(h => h.gust_mph));
+      const maxPrecip = Math.max(...scoringHours.map(h => h.precip_pct));
+      const worstDeltaT = scoringHours.reduce((worst, h) => {
+        return h.delta_t > worst ? h.delta_t : worst;
+      }, 0);
+      const avgTemp = (maxF + minF) / 2;
+      const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
+
+      const sprayObj = scoreSprayConditions({
+        temp_f: avgTemp,
+        wind_mph: maxWind,
+        gust_mph: maxGust,
+        rh: avgRH,
+        precip_pct: maxPrecip,
+        delta_t: worstDeltaT,
+        delta_t_f: deltaTtoF(worstDeltaT)
+      }, herbicide, method);
+
+      // Majority-rule daily status
+      const overallStatus = majorityDayStatus(scoringHours);
+
+      const allReasons = daySprayHours
+        .flatMap(h => h.spray.reasons)
+        .filter((r, i, a) => a.indexOf(r) === i); // dedupe
+
+      daily.push({
+        date: dateStr,
+        temp_max_f: maxF,
+        temp_min_f: minF,
+        spray: {
+          status: overallStatus,
+          reasons: allReasons,
+          product: sprayObj.product
+        }
+      });
+    }
+
+    // Sort and limit daily to 7
+    daily.sort((a,b) => a.date.localeCompare(b.date));
 
     // ── Summary stats ─────────────────────────────────────
     const favorableCount = hourlyFinal.filter(h => h.spray.status === 'favorable').length;
@@ -911,7 +765,7 @@ export default async function handler(req, res) {
     let bestStart = null, bestLen = 0, curStart = null, curLen = 0;
     for (const h of hourlyFinal) {
       if (h.spray.status === 'favorable') {
-        if (!curStart) curStart = h.time;
+        if (curStart === null) curStart = h.time;
         curLen++;
         if (curLen > bestLen) { bestLen = curLen; bestStart = curStart; }
       } else { curStart = null; curLen = 0; }
@@ -919,39 +773,14 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       location: {
-        display: geoResult.display,
         lat: geoResult.lat,
-        lon: geoResult.lon
+        lon: geoResult.lon,
+        display: geoResult.display
       },
-      product: {
-        key:   herbicide,
-        name:  product.name,
-        notes: product.notes,
-        thresholds: {
-          max_wind_mph:  product.max_wind_mph,
-          max_gust_mph:  product.max_gust_mph,
-          min_temp_f:    product.min_temp_f,
-          max_temp_f:    product.max_temp_f,
-          min_rh:        product.min_rh,
-          max_rh:        product.max_rh,
-          max_precip_pct:product.max_precip_pct,
-          delta_t_range: `${product.min_delta_t}–${product.max_delta_t}°C  (${deltaTtoF(product.min_delta_t).toFixed(1)}–${deltaTtoF(product.max_delta_t).toFixed(1)}°F spread)`
-        }
-      },
-      summary: {
-        favorable_hours:    favorableCount,
-        caution_hours:      cautionCount,
-        no_good_hours:      noGoodCount,
-        best_window_start:  bestStart,
-        best_window_hours:  bestLen,
-        hours_until_rain:   rainIn,   // null = no rain in 96h window
-      },
-      inversion_alert: inversionAlert,
-      timezone: timezone || 'America/Chicago',
-      sprayWindow: {
-        sunriseOffset,
-        sunsetOffset
-      },
+      product: product.name,
+      inversion: inversionAlert,
+      rain_in_hours: rainIn,
+      summary: { favorable: favorableCount, caution: cautionCount, no_good: noGoodCount, best_window: { start: bestStart, hours: bestLen } },
       hourly: hourlyFinal,
       daily
     });
