@@ -113,13 +113,100 @@ function scoreSprayConditions(hour, product, method = 'clarity') {
 
   // ── Delta-T check (method-dependent) ──────────────────
   if (method === 'clarity') {
-    // Clarity: Delta-T 4-18°F (2.2-10°C) is Green
-    if (deltaTF < 4) {
-      status = 'caution';
-      reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too low — inversion risk (< 4°F)`);
-    } else if (deltaTF > 18) {
-      status = 'no-good';
-      reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too high — evaporation risk (> 18°F)`);
+    // Clarity updated guidelines (2026-05):
+    // Green:  Delta-T 4–18°F (daytime post-5am, midday, evening post-6pm)
+    //          Night delta-T 5–11°F also Green
+    // Yellow: Delta-T 4–7°F full night RH >59%  OR
+    //         Delta-T 17–18°F late afternoon RH <40% air temp >65°F  OR
+    //         Delta-T 6–10°F night (yellow/green transition confirmed)
+    // Red:    Delta-T ≥19°F peak heat air temp ≥73°F RH ≤36%
+    //         High wind/precip per product thresholds
+    const hourOfDay = hour.hour_of_day; // 0–23, from normalizeOpenMeteo / NWS normalize
+
+    if (hourOfDay !== undefined) {
+      // ── Time-aware Clarity scoring ──────────────────────
+      const isNight = hourOfDay < 5;           // pre-5am
+      const isEvening = hourOfDay >= 18;        // post-6pm (evening)
+      const isMidday = hourOfDay >= 5 && hourOfDay < 18;
+
+      if (!isNight) {
+        // ── Daytime: post-5am through evening ────────────
+        // Green: 4–18°F (morning, midday, evening)
+        if (deltaTF >= 4 && deltaTF <= 18) {
+          status = 'favorable';
+          if (deltaTF >= 5 && deltaTF <= 11) {
+            reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F — morning green hold confirmed`);
+          }
+        }
+        // Yellow: 4–7°F daytime RH >59% is borderline
+        else if (deltaTF >= 4 && deltaTF < 7 && hour.rh > 59) {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F borderline night/day — check wind`);
+        }
+        // Yellow: 17–18°F late afternoon RH <40% air temp >65°F
+        else if (deltaTF >= 17 && deltaTF <= 18 && hour.rh < 40 && hour.temp_f > 65) {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F late afternoon — low RH ${hour.rh}% + temp ${hour.temp_f}°F`);
+        }
+        // Red: ≥19°F peak heat
+        else if (deltaTF >= 19) {
+          status = 'no-good';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too high — evaporation risk (≥19°F)`);
+        }
+        // Below 4°F daytime
+        else if (deltaTF < 4) {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too low — inversion risk (<4°F daytime)`);
+        }
+        else {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F marginal`);
+        }
+      } else {
+        // ── Night: pre-5am ────────────────────────────────
+        // Green hold: 5–11°F
+        if (deltaTF >= 5 && deltaTF <= 11) {
+          status = 'favorable';
+        }
+        // Yellow/green transition: 6–10°F
+        else if (deltaTF >= 6 && deltaTF <= 10) {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F — night yellow/green transition`);
+        }
+        // Yellow: 4–7°F full night RH >59%
+        else if (deltaTF >= 4 && deltaTF <= 7 && hour.rh > 59) {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F night + RH ${hour.rh}%>59% — borderline`);
+        }
+        // Red: ≥19°F peak heat
+        else if (deltaTF >= 19) {
+          status = 'no-good';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F — extreme heat/evaporation risk`);
+        }
+        // Below 4°F night
+        else if (deltaTF < 4) {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too low night — inversion risk`);
+        }
+        // 12–18°F night: cautionary
+        else if (deltaTF > 11) {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F elevated night reading`);
+        }
+        else {
+          status = 'caution';
+          reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F night marginal`);
+        }
+      }
+    } else {
+      // Fallback: no hour_of_day — use simple 4–18°F range
+      if (deltaTF < 4) {
+        status = 'caution';
+        reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too low (< 4°F)`);
+      } else if (deltaTF > 18) {
+        status = 'no-good';
+        reasons.push(`Clarity Delta-T ${deltaTF.toFixed(1)}°F too high (> 18°F)`);
+      }
     }
   } else {
     // University: Delta-T 2-15°F is caution range
@@ -422,6 +509,7 @@ function normalizeOpenMeteo(raw) {
 
     hourly.push({
       time: h.time[i],
+      hour_of_day: new Date(h.time[i]).getHours(),
       temp_f: Math.round(tempF * 10) / 10,
       feels_like_f: Math.round((h.apparent_temperature[i] || tempF) * 10) / 10,
       dew_f: Math.round((h.dew_point_2m[i] || tempF) * 10) / 10,
@@ -557,6 +645,7 @@ export default async function handler(req, res) {
           const windDirDeg = cardinalToDeg(rawWindDir);
           hourly.push({
             time: new Date(p.startTime).toISOString(),
+            hour_of_day: new Date(p.startTime).getHours(),
             temp_f: tempF,
             feels_like_f: p.apparentTemperature || tempF,
             dew_f: Math.round(dewF),
