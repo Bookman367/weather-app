@@ -643,9 +643,10 @@ export default async function handler(req, res) {
           // Parse wind direction from NWS — may be cardinal string ("SSW") or {value: degrees}
           const rawWindDir = p.windDirection?.value ?? p.windDirection ?? null;
           const windDirDeg = cardinalToDeg(rawWindDir);
+          const nwsLocalHour = parseInt(p.startTime.split('T')[1].split(':')[0]);
           hourly.push({
             time: new Date(p.startTime).toISOString(),
-            hour_of_day: new Date(p.startTime).getHours(),
+            hour_of_day: nwsLocalHour,
             temp_f: tempF,
             feels_like_f: p.apparentTemperature || tempF,
             dew_f: Math.round(dewF),
