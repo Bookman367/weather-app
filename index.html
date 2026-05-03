@@ -691,7 +691,7 @@ async function fetchAndRender(loc, herb, meth, src, sunriseOffset = 0, sunsetOff
   showLoading();
   try {
     const params = new URLSearchParams({
-      location: loc, herbicide: herb, method: meth, source: src,
+      q: loc, herbicide: herb, method: meth, source: src,
       sunriseOffset, sunsetOffset
     });
     const resp = await fetch(`/api/forecast?${params}`);
@@ -801,6 +801,10 @@ function showError(msg) {
 // ════════════════════════════════════════════
 function renderAll() {
   const d      = state.data;
+  if (!d || !Array.isArray(d.hourly) || d.hourly.length === 0) {
+    showError('Weather data unavailable. Please try again.');
+    return;
+  }
   const now    = d.hourly[0];
   const status = now.spray.status;
 
