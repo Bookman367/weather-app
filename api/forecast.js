@@ -571,7 +571,119 @@ function normalizeOpenMeteo(raw) {
   return { hourly, daily, timezone: raw.timezone || 'America/Chicago' };
 }
 
-// ── Main Handler ─────────────────────────────────────────────
+// ── Normalize NWS Data ──────────────────────────────────────
+// NWS returns { periods: [{ startTime, endTime, temperature, windSpeed, ... }] }
+// Transform to match normalizeOpenMeteo() output format
+function normalizeNWS(raw) {
+  const periods = raw.hourly || [];
+  const dailyPeriods = raw.daily || [];
+  const tz = raw.tz || 'America/Chicago';
+  
+  // Filter out past periods
+  const now = new Date();
+  const futurePeriods = periods.filter(p => {
+    const startTime = new Date(p.startTime);
+    return startTime >= now;
+  });
+  
+  const hourly = [];
+  for (const p of futurePeriods.slice(0, 96)) {
+    const startTime = new Date(p.startTime);
+    const tempF = typeof p.temperature === 'object' ? p.temperature.value : parseFloat(p.temperature);
+    const tempC = (tempF - 32) * 5 / 9;
+    
+    // RH: may be object with .value or direct number
+    const rh = typeof p.relativeHumidity === 'object' ? p.relativeHumidity.value : parseFloat(p.relativeHumidity || 50);
+    
+    // Wind: string like "10 mph" or object with .value
+    let windMph = 0;
+    if (typeof p.windSpeed === 'object') {
+      windMph = p.windSpeed.value || 0;
+    } else if (typeof p.windSpeed === 'string') {
+      windMph = parseFloat(p.windSpeed) || 0;
+    }
+    
+    // Gust: may not exist
+    let gustMph = 0;
+    if (p.windGustSpeed) {
+      gustMph = typeof p.windGustSpeed === 'object' ? p.windGustSpeed.value : parseFloat(p.windGustSpeed) || 0;
+    } else if (p.windGust) {
+      gustMph = typeof p.windGust === 'object' ? p.windGust.value : parseFloat(p.windGust) || 0;
+    }
+    
+    // Wind direction: cardinal string or object with .value (degrees)
+    let windDirDeg = null;
+    let windDir = null;
+    if (p.windDirection) {
+      if (typeof p.windDirection === 'object' && p.windDirection.value !== null) {
+        windDirDeg = p.windDirection.value;
+        windDir = degToCardinal(windDirDeg);
+      } else if (typeof p.windDirection === 'string') {
+        windDir = p.windDirection;
+        windDirDeg = cardinalToDeg(windDir);
+      }
+    }
+    
+    // Dewpoint
+    let dewF = tempF;
+    if (p.dewpoint) {
+      const dewC = typeof p.dewpoint === 'object' ? p.dewpoint.value : parseFloat(p.dewpoint);
+      dewF = dewC * 9 / 5 + 32;
+    }
+    
+    // Probability of precipitation
+    const precipPct = p.probabilityOfPrecipitation ? (typeof p.probabilityOfPrecipitation === 'object' ? p.probabilityOfPrecipitation.value : parseFloat(p.probabilityOfPrecipitation)) : 0;
+    
+    const deltaT = calcDeltaT(tempC, rh);
+    const deltaTF = deltaTtoF(deltaT);
+    
+    hourly.push({
+      time: p.startTime,
+      hour_of_day: startTime.getHours(),
+      temp_f: Math.round(tempF * 10) / 10,
+      feels_like_f: Math.round(tempF * 10) / 10, // NWS doesn't provide apparent temp in hourly
+      dew_f: Math.round(dewF * 10) / 10,
+      rh: Math.round(rh),
+      delta_t: Math.round(deltaT * 10) / 10,
+      delta_t_f: Math.round(deltaTF * 10) / 10,
+      wind_mph: Math.round(windMph * 10) / 10,
+      gust_mph: Math.round(gustMph * 10) / 10,
+      wind_dir_deg: windDirDeg,
+      wind_dir: windDir,
+      precip_pct: Math.round(precipPct),
+      precip_in: 0, // NWS doesn't provide precip amount in hourly
+      cloud_pct: 50, // NWS doesn't provide cloud cover in hourly, use neutral default
+      weather_code: 0,
+      condition: 'Partly Cloudy',
+      inversion: deltaT < 2 && windMph < 5,
+      soil_temp_f: null // NWS doesn't provide soil temp
+    });
+  }
+  
+  const daily = [];
+  for (const p of dailyPeriods) {
+    const dateStr = p.startTime.split('T')[0];
+    daily.push({
+      date: dateStr,
+      temp_max_f: Math.round(typeof p.temperature === 'object' ? p.temperature.value : parseFloat(p.temperature)),
+      temp_min_f: Math.round(typeof p.minTemperature === 'object' ? p.minTemperature.value : parseFloat(p.minTemperature)),
+      wind_max_mph: Math.round(typeof p.windSpeed === 'object' ? p.windSpeed.value : parseFloat(p.windSpeed)),
+      gust_max_mph: 0, // NWS daily doesn't include gusts
+      avg_rh: 50,
+      wind_dir_deg: null,
+      wind_dir: null,
+      weather_code: 0,
+      condition: p.shortForecast || 'Unknown',
+      sunrise: 'N/A', // NWS doesn't provide sunrise/sunset in forecast
+      sunset: 'N/A',
+      soil_temp_f: null
+    });
+  }
+  
+  return { hourly, daily, timezone: tz };
+}
+
+// ── Cardinal/Direction Conversion Helpers ───────────────────
 /**
  * Main Vercel serverless request handler.
  */
@@ -608,8 +720,11 @@ async function handler(req, res) {
     // Fetch from selected weather source
     switch (source) {
       case 'nws':
-        const nwsData = await fetchWeatherNWS(geoResult.lat, geoResult.lon);
-        // NWS transformation would go here
+        const nwsRaw = await fetchWeatherNWS(geoResult.lat, geoResult.lon);
+        const nwsNorm = normalizeNWS(nwsRaw);
+        var hourly = nwsNorm.hourly;
+        var daily = nwsNorm.daily;
+        var timezone = nwsNorm.timezone;
         break;
       default:
         raw = await fetchWeather(geoResult.lat, geoResult.lon);
