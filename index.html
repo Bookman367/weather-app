@@ -840,7 +840,17 @@ function renderAll() {
 // ── Hero Location ─────────────────────────────
 function renderHeroLocation(d, now) {
   // Show city/state in large font, coords as small fine print
-  const displayParts = d.location.display.split(',');
+  const loc = d?.location;
+  if (!loc || !loc.display) {
+    return `<div class="hero-location">
+      <div>
+        <div class="hero-label">Hero Weather</div>
+        <div class="hero-city">Location unavailable</div>
+      </div>
+      <div class="hero-icon">${now?.condition?.icon || '❓'}</div>
+    </div>`;
+  }
+  const displayParts = loc.display.split(',');
   const cityState = displayParts.slice(0, 2).join(',').trim();
   const extra = displayParts.slice(2).join(',').trim();
 
@@ -849,7 +859,7 @@ function renderHeroLocation(d, now) {
       <div class="hero-label">Hero Weather</div>
       <div class="hero-city">${esc(cityState)}</div>
       ${extra ? `<div class="hero-coords" style="font-size:11px;color:var(--text-muted)">${esc(extra)}</div>` : ''}
-      <div class="hero-coords">${d.location.lat.toFixed(4)}°, ${d.location.lon.toFixed(4)}°</div>
+      <div class="hero-coords">${loc.lat.toFixed(4)}°, ${loc.lon.toFixed(4)}°</div>
     </div>
     <div class="hero-icon">${now.condition.icon}</div>
   </div>`;
@@ -1001,7 +1011,7 @@ function renderCurrentConditionsStrip(now) {
       <div class="nt-icon">🌡</div>
       <div class="nt-label">Temp</div>
       <div class="nt-value">${Math.round(now.temp_f)}°</div>
-      <div class="nt-sub">${now.condition.desc}</div>
+      <div class="nt-sub">${now.condition?.desc || ''}</div>
     </div>
     <div class="now-tile">
       <div class="nt-icon">💨</div>
@@ -1024,8 +1034,8 @@ function renderCurrentConditionsStrip(now) {
     <div class="now-tile">
       <div class="nt-icon">🌡</div>
       <div class="nt-label">Feels</div>
-      <div class="nt-value">${Math.round(now.feels_like_f)}°</div>
-      <div class="nt-sub">${now.feels_like_f < now.temp_f ? 'Wind chill' : now.feels_like_f > now.temp_f ? 'Heat index' : 'Actual'}</div>
+      <div class="nt-value">${now.feels_like_f != null ? Math.round(now.feels_like_f) : '--'}°</div>
+      <div class="nt-sub">${(now.feels_like_f != null && now.temp_f != null) ? (now.feels_like_f < now.temp_f ? 'Wind chill' : now.feels_like_f > now.temp_f ? 'Heat index' : 'Actual') : ''}</div>
     </div>
   </div>`;
 }
