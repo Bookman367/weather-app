@@ -933,7 +933,7 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
           <span class="wind-dir-arrow" style="transform:rotate(${windDeg}deg)">↑</span>
           ${now.wind_dir}
         </div>
-        <div class="metric-sub">Drift mgmt limit:<br>${product.thresholds.max_wind_mph} mph</div>
+        <div class="metric-sub">Drift mgmt limit:<br>${product?.thresholds?.max_wind_mph ?? 'N/A'} mph</div>
       </div>
 
       <!-- Task 2: Delta-T with °F equivalent -->
@@ -952,7 +952,7 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
         <div class="metric-icon">🌬</div>
         <div class="metric-label">Gusts</div>
         <div class="metric-value">${Math.round(now.gust_mph)}<span class="metric-unit">mph</span></div>
-        <div class="metric-sub">Limit:<br>${product.thresholds.max_gust_mph} mph</div>
+        <div class="metric-sub">Limit:<br>${product?.thresholds?.max_gust_mph ?? 'N/A'} mph</div>
       </div>
     </div>
 
@@ -1146,7 +1146,7 @@ function updateCommandCenter(h, d) {
           <span class="wind-dir-arrow" style="transform:rotate(${windDeg}deg)">↑</span>
           ${h.wind_dir}
         </div>
-        <div class="metric-sub">Drift mgmt limit:<br>${product.thresholds.max_wind_mph} mph</div>
+        <div class="metric-sub">Drift mgmt limit:<br>${product?.thresholds?.max_wind_mph ?? 'N/A'} mph</div>
       </div>
 
       <div class="metric-card">
@@ -1163,7 +1163,7 @@ function updateCommandCenter(h, d) {
         <div class="metric-icon">🌬</div>
         <div class="metric-label">Gusts</div>
         <div class="metric-value">${Math.round(h.gust_mph)}<span class="metric-unit">mph</span></div>
-        <div class="metric-sub">Limit:<br>${product.thresholds.max_gust_mph} mph</div>
+        <div class="metric-sub">Limit:<br>${product?.thresholds?.max_gust_mph ?? 'N/A'} mph</div>
       </div>`;
   }
 
@@ -1320,7 +1320,15 @@ function renderBottomCards(now) {
 
 // ── Thresholds Strip ──────────────────────────
 function renderThreshStrip(product) {
-  const t = product.thresholds;
+  const t = product?.thresholds;
+  if (!t) {
+    return `<div class="thresh-strip glass">
+      <div class="thresh-header">
+        <span>🧪 ${esc(product?.name || 'Product')} — Label Thresholds</span>
+      </div>
+      <div class="thresh-notes">⚠️ No threshold data available</div>
+    </div>`;
+  }
   const items = [
     { label: 'Max Wind',   val: `${t.max_wind_mph} mph` },
     { label: 'Max Gust',   val: `${t.max_gust_mph} mph` },
@@ -1345,7 +1353,7 @@ function renderThreshStrip(product) {
         <div class="thresh-item-val">${it.val}</div>
       </div>`).join('')}
     </div>
-    <div class="thresh-notes">📋 ${esc(product.notes)}</div>
+    <div class="thresh-notes">📋 ${esc(product?.notes || 'No additional notes')}</div>
   </div>`;
 }
 
