@@ -839,9 +839,16 @@ function renderAll() {
 
 // ── Hero Location ─────────────────────────────
 function renderHeroLocation(d, now) {
-  // Show city/state in large font, coords as small fine print
+  // Show city/state in large font, spray status on the right
   const loc = d?.location;
-  const conditionIcon = now?.condition?.icon || '❓';
+  const sprayStatus = now?.spray?.status || 'unknown';
+  const sprayIcon = sprayStatus === 'favorable' ? '✅' : sprayStatus === 'caution' ? '⚠️' : '🚫';
+  const statusLabel = sprayStatus === 'favorable' ? 'GOOD TO SPRAY' 
+                    : sprayStatus === 'caution' ? 'CAUTION' 
+                    : 'NOT RECOMMENDED';
+  const statusColor = sprayStatus === 'favorable' ? 'var(--green)' 
+                       : sprayStatus === 'caution' ? 'var(--yellow)' 
+                       : 'var(--red)';
   
   if (!loc || !loc.display) {
     return `<div class="hero-location">
@@ -849,7 +856,10 @@ function renderHeroLocation(d, now) {
         <div class="hero-label">Hero Weather</div>
         <div class="hero-city">Location unavailable</div>
       </div>
-      <div class="hero-icon">${conditionIcon}</div>
+      <div style="text-align:right">
+        <div style="font-size:28px">${sprayIcon}</div>
+        <div style="font-size:11px;color:${statusColor};font-weight:700">${statusLabel}</div>
+      </div>
     </div>`;
   }
   const displayParts = loc.display.split(',');
@@ -863,7 +873,11 @@ function renderHeroLocation(d, now) {
       ${extra ? `<div class="hero-coords" style="font-size:11px;color:var(--text-muted)">${esc(extra)}</div>` : ''}
       <div class="hero-coords">${loc.lat.toFixed(4)}°, ${loc.lon.toFixed(4)}°</div>
     </div>
-    <div class="hero-icon">${conditionIcon}</div>
+    <div style="text-align:right">
+      <div style="font-size:32px;line-height:1.2">${sprayIcon}</div>
+      <div style="font-size:12px;color:${statusColor};font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:0.5px">${statusLabel}</div>
+      ${now.delta_t != null ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">ΔT: ${now.delta_t.toFixed(1)}°C</div>` : ''}
+    </div>
   </div>`;
 }
 
