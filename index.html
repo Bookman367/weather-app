@@ -841,13 +841,15 @@ function renderAll() {
 function renderHeroLocation(d, now) {
   // Show city/state in large font, coords as small fine print
   const loc = d?.location;
+  const conditionIcon = now?.condition?.icon || '❓';
+  
   if (!loc || !loc.display) {
     return `<div class="hero-location">
       <div>
         <div class="hero-label">Hero Weather</div>
         <div class="hero-city">Location unavailable</div>
       </div>
-      <div class="hero-icon">${now?.condition?.icon || '❓'}</div>
+      <div class="hero-icon">${conditionIcon}</div>
     </div>`;
   }
   const displayParts = loc.display.split(',');
@@ -861,7 +863,7 @@ function renderHeroLocation(d, now) {
       ${extra ? `<div class="hero-coords" style="font-size:11px;color:var(--text-muted)">${esc(extra)}</div>` : ''}
       <div class="hero-coords">${loc.lat.toFixed(4)}°, ${loc.lon.toFixed(4)}°</div>
     </div>
-    <div class="hero-icon">${now.condition.icon}</div>
+    <div class="hero-icon">${conditionIcon}</div>
   </div>`;
 }
 
