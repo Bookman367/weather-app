@@ -822,7 +822,7 @@ function renderAll() {
 
   document.getElementById('app-content').innerHTML = `
     ${renderHeroLocation(d, now)}
-    ${d.inversion_alert.active ? renderInversionAlert(d.inversion_alert) : ''}
+    ${d.inversion_alert?.active ? renderInversionAlert(d.inversion_alert) : ''}
     ${renderCurrentConditionsStrip(now)}
     ${renderSprayWindow(first24)}
     ${renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc)}
