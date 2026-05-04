@@ -222,10 +222,10 @@ function scoreSprayConditions(hour, product, method = 'clarity') {
   const tempF = hour.temp_f;
   if (tempF < p.min_temp_f) {
     status = 'no-good';
-    reasons.push(`Temp ${tempF.toFixed(0)}°F below minimum (${p.min_temp_f}°F)`);
+    reasons.push(`Temp IS ${tempF.toFixed(0)}°F — below minimum ${p.min_temp_f}°F`);
   } else if (tempF > p.max_temp_f) {
     status = 'no-good';
-    reasons.push(`Temp ${tempF.toFixed(0)}°F above maximum (${p.max_temp_f}°F)`);
+    reasons.push(`Temp IS ${tempF.toFixed(0)}°F — above maximum ${p.max_temp_f}°F`);
   }
 
   const windMph = hour.wind_mph;

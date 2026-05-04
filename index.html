@@ -897,8 +897,8 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
   const product = d.product;
   const summary = d.summary;
   // Task 4: Rain countdown
-  const rainIn  = summary.hours_until_rain;
-  const rainHTML = rainIn === null
+  const rainIn  = summary?.hours_until_rain;
+  const rainHTML = !rainIn && rainIn !== 0
     ? `<div class="rain-countdown"><span class="rc-icon">☀️</span><span class="rc-label">No rain in 96-hour window</span></div>`
     : rainIn === 0
     ? `<div class="rain-countdown urgent"><span class="rc-icon">🌧</span><span class="rc-label">Rain occurring now —</span><span class="rc-val">Do not spray</span></div>`
@@ -1129,8 +1129,8 @@ function updateCommandCenter(h, d) {
     : `Feels like actual temp`;
 
   // Rain countdown
-  const rainIn  = summary.hours_until_rain;
-  const rainHTML = rainIn === null
+  const rainIn  = summary?.hours_until_rain;
+  const rainHTML = !rainIn && rainIn !== 0
     ? `<div class="rain-countdown"><span class="rc-icon">☀️</span><span class="rc-label">No rain in 96-hour window</span></div>`
     : rainIn === 0
     ? `<div class="rain-countdown urgent"><span class="rc-icon">🌧</span><span class="rc-label">Rain occurring now —</span><span class="rc-val">Do not spray</span></div>`
