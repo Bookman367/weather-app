@@ -821,7 +821,7 @@ function renderAll() {
   const first24 = d.hourly.slice(0, 24);
 
   document.getElementById('app-content').innerHTML = `
-    ${renderHeroLocation(d, now)}
+    ${renderHeroSprayStatus(d, now, d.summary)}
     ${d.inversion_alert?.active ? renderInversionAlert(d.inversion_alert) : ''}
     ${renderCurrentConditionsStrip(now)}
     ${renderSprayWindow(first24)}
@@ -877,6 +877,45 @@ function renderHeroLocation(d, now) {
       <div style="font-size:32px;line-height:1.2">${sprayIcon}</div>
       <div style="font-size:12px;color:${statusColor};font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:0.5px">${statusLabel}</div>
       ${now.delta_t != null ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">ΔT: ${now.delta_t.toFixed(1)}°C</div>` : ''}
+    </div>
+  </div>`;
+}
+
+// ── HERO SPRAY STATUS ─────────────────────────
+// Answers: "Can I spray?" + "How long do I have?"
+function renderHeroSprayStatus(d, now, summary) {
+  const sprayStatus = now?.spray?.status || 'unknown';
+  const sprayIcon = sprayStatus === 'favorable' ? '✅' : sprayStatus === 'caution' ? '⚠️' : '🚫';
+  const statusLabel = sprayStatus === 'favorable' ? 'SPRAY WINDOW OPEN' 
+                    : sprayStatus === 'caution' ? 'SPRAY WITH CAUTION' 
+                    : 'SPRAY WINDOW CLOSED';
+  const statusColor = sprayStatus === 'favorable' ? '#3ddc84' 
+                       : sprayStatus === 'caution' ? '#ffc107' 
+                       : '#ff4d4d';
+  const goodHours = (d.hourly || []).slice(0, 24).filter(h => h.spray.status === 'favorable').length;
+  const rainIn = summary?.hours_until_rain;
+  const rainText = !rainIn && rainIn !== 0 ? 'No rain in 96h' 
+                 : rainIn === 0 ? '🌧 Rain occurring now' 
+                 : `🌦 Rain in ${rainIn}h`;
+  const loc = d?.location;
+  const locName = loc?.display ? loc.display.split(',')[0] : 'Unknown';
+
+  return `<div class="hero-spray-status glass" style="background:${statusColor}20;border-left:4px solid ${statusColor};border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,0.3)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span style="font-size:32px;line-height:1">${sprayIcon}</span>
+          <div>
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:700">Spray Status</div>
+            <div style="font-size:20px;color:${statusColor};font-weight:800;line-height:1.2">${statusLabel}</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:13px">
+          <span style="color:var(--text-dim)">📍 ${esc(locName)}</span>
+          <span style="color:var(--text-dim)">⏱ <strong style="color:var(--text)">${goodHours}h</strong> sprayable in 24h</span>
+          <span style="color:var(--text-dim)">🌧 <strong style="color:var(--text)">${rainText}</strong></span>
+        </div>
+      </div>
     </div>
   </div>`;
 }
