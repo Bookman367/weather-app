@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/api/forecast", "destination": "/api/forecast.js" },
+    { "source": "/api/spray-window", "destination": "/api/spray-window.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
