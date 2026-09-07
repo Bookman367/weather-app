@@ -20,7 +20,12 @@ function setHeaders(res) {
   res.setHeader('Access-Control-Allow-Origin', CORS_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+  // public + CDN-Cache-Control so Vercel edge honors s-maxage (plain
+  // Cache-Control alone is rewritten to max-age=0 on serverless).
+  const cache = 'public, s-maxage=300, stale-while-revalidate=600';
+  res.setHeader('Cache-Control', cache);
+  res.setHeader('CDN-Cache-Control', cache);
+  res.setHeader('Vercel-CDN-Cache-Control', cache);
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
 }
 
