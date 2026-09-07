@@ -183,20 +183,21 @@
     }
     .settings-icon-btn:hover { background: rgba(255,255,255,0.18); }
 
-    /* Current conditions strip */
+    /* Current conditions strip — 6 squares, 3×2 on phone / 6×1 on desktop */
     .now-strip {
-      display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto;
-      -webkit-overflow-scrolling: touch; padding-bottom: 4px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
     }
     .now-tile {
       background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius-sm); padding: 10px 12px; flex-shrink: 0;
-      min-width: 70px; text-align: center;
+      border-radius: var(--radius-sm); padding: 10px 6px; min-width: 0; text-align: center;
     }
-    .now-tile .nt-icon { font-size: 18px; margin-bottom: 2px; }
-    .now-tile .nt-label { font-size: 9px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
-    .now-tile .nt-value { font-size: 16px; font-weight: 700; line-height: 1; }
-    .now-tile .nt-sub { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+    .now-tile .nt-icon { font-size: 16px; margin-bottom: 2px; }
+    .now-tile .nt-label { font-size: 9px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+    .now-tile .nt-value { font-size: 15px; font-weight: 700; line-height: 1.15; }
+    .now-tile .nt-sub { font-size: 9px; color: var(--text-muted); margin-top: 3px; line-height: 1.25; word-break: break-word; }
     [data-theme="light"] .now-tile { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); }
 
     /* Settings panel */
@@ -502,6 +503,11 @@
       .app { padding: 28px 24px; }
       .hero-city { font-size: 38px; }
     }
+    @media (min-width: 640px) {
+      .now-strip { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      .now-tile { padding: 10px 8px; }
+      .now-tile .nt-value { font-size: 16px; }
+    }
   </style>
 </head>
 <body>
@@ -666,6 +672,32 @@
 //  STATE
 // ════════════════════════════════════════════
 let state = { data: null };
+
+const EMPTY = '—';
+
+function skyCondition(condition) {
+  if (condition && typeof condition === 'object') {
+    const icon = condition.icon && String(condition.icon) !== 'undefined' ? condition.icon : '';
+    const desc = condition.desc && String(condition.desc) !== 'undefined' ? condition.desc : '';
+    if (icon || desc) return { icon: icon || EMPTY, desc: desc || EMPTY };
+  }
+  if (typeof condition === 'string') {
+    const desc = condition.trim();
+    if (desc && desc !== 'undefined') return { icon: EMPTY, desc };
+  }
+  return { icon: EMPTY, desc: EMPTY };
+}
+
+function fmtMph(val) {
+  if (val == null || val === '' || Number.isNaN(Number(val))) return EMPTY;
+  return String(Math.round(Number(val)));
+}
+
+function fmtNum(val, digits) {
+  if (val == null || val === '' || Number.isNaN(Number(val))) return EMPTY;
+  const n = Number(val);
+  return digits == null ? String(Math.round(n)) : n.toFixed(digits);
+}
 
 // ════════════════════════════════════════════
 //  SEARCH & FETCH
@@ -993,7 +1025,7 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
       <div class="metric-card">
         <div class="metric-icon">💨</div>
         <div class="metric-label">Wind</div>
-        <div class="metric-value">${Math.round(now.wind_mph)}<span class="metric-unit">mph</span></div>
+        <div class="metric-value">${fmtMph(now.wind_mph)}${fmtMph(now.wind_mph) !== EMPTY ? '<span class="metric-unit">mph</span>' : ''}</div>
         <div class="wind-arrow-badge">
           <span class="wind-dir-arrow" style="transform:rotate(${windDeg}deg)">↑</span>
           ${now.wind_dir}
@@ -1006,8 +1038,8 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
         <div class="metric-icon">🌡</div>
         <div class="metric-label">Delta-T</div>
         <div class="dt-dual">
-          <span class="dt-primary ${dtCls}">${dt.toFixed(1)}<span style="font-size:13px;font-weight:400">°C</span></span>
-          <span class="dt-secondary">${dtF.toFixed(1)}°F spread</span>
+          <span class="dt-primary ${dtCls}">${dt != null ? dt.toFixed(1) : EMPTY}<span style="font-size:13px;font-weight:400">°C</span></span>
+          <span class="dt-secondary">${dtF != null ? dtF.toFixed(1) : EMPTY}°F spread</span>
         </div>
         <div class="metric-sub" style="margin-top:5px">${dtDesc}</div>
       </div>
@@ -1016,7 +1048,7 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
       <div class="metric-card">
         <div class="metric-icon">🌬</div>
         <div class="metric-label">Gusts</div>
-        <div class="metric-value">${Math.round(now.gust_mph)}<span class="metric-unit">mph</span></div>
+        <div class="metric-value">${fmtMph(now.gust_mph)}${fmtMph(now.gust_mph) !== EMPTY ? '<span class="metric-unit">mph</span>' : ''}</div>
         <div class="metric-sub">Limit:<br>${product?.thresholds?.max_gust_mph ?? 'N/A'} mph</div>
       </div>
     </div>
@@ -1061,35 +1093,44 @@ function renderCurrentConditionsStrip(now) {
   const precipColor = now.precip_pct >= 50 ? 'var(--red)' : now.precip_pct >= 25 ? 'var(--yellow)' : 'var(--blue)';
   const dewColor = (now.temp_f - now.dew_f) < 8 ? 'var(--yellow)' : 'var(--green)';
 
+  const sky = skyCondition(now.condition);
+  const gustVal = fmtMph(now.gust_mph);
+
   return `<div class="now-strip">
     <div class="now-tile">
       <div class="nt-icon">🌡</div>
       <div class="nt-label">Temp</div>
-      <div class="nt-value">${Math.round(now.temp_f)}°</div>
-      <div class="nt-sub">${now.condition?.desc || ''}</div>
+      <div class="nt-value">${fmtNum(now.temp_f)}°</div>
+      <div class="nt-sub">${sky.desc !== EMPTY ? esc(sky.desc) : EMPTY}</div>
     </div>
     <div class="now-tile">
       <div class="nt-icon">💨</div>
       <div class="nt-label">Wind</div>
-      <div class="nt-value">${Math.round(now.wind_mph)} <span style="font-size:11px;font-weight:400">mph</span></div>
+      <div class="nt-value">${fmtMph(now.wind_mph)} <span style="font-size:11px;font-weight:400">mph</span></div>
       <div class="nt-sub">${windArrow} ${windDir}</div>
+    </div>
+    <div class="now-tile">
+      <div class="nt-icon">🌬</div>
+      <div class="nt-label">Wind Gust</div>
+      <div class="nt-value">${gustVal}${gustVal !== EMPTY ? ' <span style="font-size:11px;font-weight:400">mph</span>' : ''}</div>
+      <div class="nt-sub">${gustVal !== EMPTY ? 'Peak gust' : 'No gust data'}</div>
     </div>
     <div class="now-tile">
       <div class="nt-icon">💧</div>
       <div class="nt-label">RH</div>
-      <div class="nt-value">${now.rh}<span style="font-size:11px;font-weight:400">%</span></div>
-      <div class="nt-sub">Dew ${Math.round(now.dew_f)}°F</div>
+      <div class="nt-value">${now.rh != null ? now.rh : EMPTY}<span style="font-size:11px;font-weight:400">%</span></div>
+      <div class="nt-sub">Dew ${fmtNum(now.dew_f)}°F</div>
     </div>
     <div class="now-tile">
       <div class="nt-icon">🌧</div>
       <div class="nt-label">Precip</div>
-      <div class="nt-value" style="color:${precipColor}">${now.precip_pct}<span style="font-size:11px;font-weight:400">%</span></div>
+      <div class="nt-value" style="color:${precipColor}">${now.precip_pct != null ? now.precip_pct : EMPTY}<span style="font-size:11px;font-weight:400">%</span></div>
       <div class="nt-sub">${now.precip_in > 0 ? now.precip_in.toFixed(2)+'in' : 'No rain'}</div>
     </div>
     <div class="now-tile">
       <div class="nt-icon">🌡</div>
       <div class="nt-label">Feels</div>
-      <div class="nt-value">${now.feels_like_f != null ? Math.round(now.feels_like_f) : '--'}°</div>
+      <div class="nt-value">${now.feels_like_f != null ? fmtNum(now.feels_like_f) : EMPTY}°</div>
       <div class="nt-sub">${(now.feels_like_f != null && now.temp_f != null) ? (now.feels_like_f < now.temp_f ? 'Wind chill' : now.feels_like_f > now.temp_f ? 'Heat index' : 'Actual') : ''}</div>
     </div>
   </div>`;
@@ -1206,7 +1247,7 @@ function updateCommandCenter(h, d) {
       <div class="metric-card">
         <div class="metric-icon">💨</div>
         <div class="metric-label">Wind</div>
-        <div class="metric-value">${Math.round(h.wind_mph)}<span class="metric-unit">mph</span></div>
+        <div class="metric-value">${fmtMph(h.wind_mph)}${fmtMph(h.wind_mph) !== EMPTY ? '<span class="metric-unit">mph</span>' : ''}</div>
         <div class="wind-arrow-badge">
           <span class="wind-dir-arrow" style="transform:rotate(${windDeg}deg)">↑</span>
           ${h.wind_dir}
@@ -1218,8 +1259,8 @@ function updateCommandCenter(h, d) {
         <div class="metric-icon">🌡</div>
         <div class="metric-label">Delta-T</div>
         <div class="dt-dual">
-          <span class="dt-primary ${dtCls}">${dt.toFixed(1)}<span style="font-size:13px;font-weight:400">°C</span></span>
-          <span class="dt-secondary">${dtF.toFixed(1)}°F spread</span>
+          <span class="dt-primary ${dtCls}">${dt != null ? dt.toFixed(1) : EMPTY}<span style="font-size:13px;font-weight:400">°C</span></span>
+          <span class="dt-secondary">${dtF != null ? dtF.toFixed(1) : EMPTY}°F spread</span>
         </div>
         <div class="metric-sub" style="margin-top:5px">${dtDesc}</div>
       </div>
@@ -1227,7 +1268,7 @@ function updateCommandCenter(h, d) {
       <div class="metric-card">
         <div class="metric-icon">🌬</div>
         <div class="metric-label">Gusts</div>
-        <div class="metric-value">${Math.round(h.gust_mph)}<span class="metric-unit">mph</span></div>
+        <div class="metric-value">${fmtMph(h.gust_mph)}${fmtMph(h.gust_mph) !== EMPTY ? '<span class="metric-unit">mph</span>' : ''}</div>
         <div class="metric-sub">Limit:<br>${product?.thresholds?.max_gust_mph ?? 'N/A'} mph</div>
       </div>`;
   }
@@ -1429,8 +1470,16 @@ function openModal(id) {
   document.getElementById(id).classList.add('open');
   document.body.style.overflow = 'hidden';
   if (!state.data) return;
-  if (id === 'modal-hourly') renderHourlyModal();
-  if (id === 'modal-daily')  renderDailyModal();
+  try {
+    if (id === 'modal-hourly') renderHourlyModal();
+    if (id === 'modal-daily')  renderDailyModal();
+  } catch (err) {
+    const bodyId = id === 'modal-hourly' ? 'modal-hourly-body' : id === 'modal-daily' ? 'modal-daily-body' : null;
+    if (bodyId) {
+      document.getElementById(bodyId).innerHTML =
+        `<div style="padding:20px;color:#ffaaaa;text-align:center">Could not load this forecast. ${esc(err.message || '')}</div>`;
+    }
+  }
 }
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
@@ -1443,6 +1492,11 @@ document.querySelectorAll('.modal-backdrop').forEach(el =>
 // Task 6: Hourly modal — better columns, day dividers, precip in hundredths
 function renderHourlyModal() {
   const hours = state.data.hourly;
+  if (!Array.isArray(hours) || hours.length === 0) {
+    document.getElementById('modal-hourly-body').innerHTML =
+      `<div style="padding:20px;color:var(--text-dim);text-align:center">Hourly forecast unavailable.</div>`;
+    return;
+  }
   let lastDay = null;
   let rows = '';
 
@@ -1472,13 +1526,18 @@ function renderHourlyModal() {
       ? `<span style="color:rgba(255,255,255,0.4);font-size:10px">(${Math.round(h.feels_like_f)}°)</span>`
       : '';
 
+    const sky = skyCondition(h.condition);
+    const skyCell = sky.desc === EMPTY && sky.icon === EMPTY
+      ? EMPTY
+      : `${sky.icon !== EMPTY ? sky.icon + ' ' : ''}${esc(sky.desc)}`;
+
     rows += `<tr>
       <td style="color:rgba(255,255,255,0.55);font-size:11px">${timeStr}</td>
-      <td>${h.condition.icon}</td>
+      <td>${skyCell}</td>
       <td><span class="status-dot ${h.spray.status}">${h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'OK'}</span></td>
-      <td>${Math.round(h.temp_f)}°F ${feelsCell}</td>
-      <td>${Math.round(h.wind_mph)} <span style="color:rgba(255,255,255,0.4);font-size:10px;font-weight:700">${h.wind_dir_deg != null ? `<span style="display:inline-block;transform:rotate(${h.wind_dir_deg}deg);font-size:14px">↑</span>` : '—'}</span></td>
-      <td style="color:#2176d4">${Math.round(h.gust_mph)}</td>
+      <td>${fmtNum(h.temp_f)}°F ${feelsCell}</td>
+      <td>${fmtMph(h.wind_mph)} <span style="color:rgba(255,255,255,0.4);font-size:10px;font-weight:700">${h.wind_dir_deg != null ? `<span style="display:inline-block;transform:rotate(${h.wind_dir_deg}deg);font-size:14px">↑</span>` : '—'}</span></td>
+      <td style="color:#2176d4">${fmtMph(h.gust_mph)}</td>
       <td>${h.precip_pct}%</td>
       <td style="color:var(--blue)">${Math.round(h.dew_f)}°</td>
       <td>${h.rh}%</td>
@@ -1507,14 +1566,21 @@ function renderHourlyModal() {
     // Task 7 + 10: Daily modal with real RH, feels-like range, sunrise/sunset
 function renderDailyModal() {
   const days = state.data.daily;
+  if (!Array.isArray(days) || days.length === 0) {
+    document.getElementById('modal-daily-body').innerHTML =
+      `<div style="padding:20px;color:var(--text-dim);text-align:center">Daily forecast unavailable.</div>`;
+    return;
+  }
   const cards = days.map(day => {
     const dt   = new Date(day.date + 'T12:00:00');
     const dow  = dt.toLocaleDateString('en-US', { weekday: 'short' });
     const date = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const sprayLabel = day.spray.status === 'no-good' ? 'No Good'
-                     : day.spray.status === 'caution' ? 'Caution' : 'Favorable';
-    const reason = day.spray.reasons[0] || '';
-    const reasonCount = day.spray.reasons.length;
+    const spray = day.spray || { status: 'favorable', reasons: [] };
+    const sprayLabel = spray.status === 'no-good' ? 'No Good'
+                     : spray.status === 'caution' ? 'Caution' : 'Favorable';
+    const reason = spray.reasons[0] || '';
+    const reasonCount = (spray.reasons || []).length;
+    const sky = skyCondition(day.condition);
 
     // Task 10: Sunrise/sunset
     const sunLine = (day.sunrise && day.sunrise !== 'N/A')
@@ -1543,29 +1609,30 @@ function renderDailyModal() {
 
     const reasonsHTML = reasonCount > 0
       ? `<div style="font-size:10px;color:rgba(255,180,180,0.75);line-height:1.5;margin-top:3px">
-           ⚠ ${day.spray.reasons.slice(0,3).map(esc).join('<br>⚠ ')}
+           ⚠ ${(spray.reasons || []).slice(0,3).map(esc).join('<br>⚠ ')}
            ${reasonCount > 3 ? `<br>⚠ +${reasonCount-3} more` : ''}
          </div>`
       : `<div style="font-size:10px;color:rgba(61,220,132,0.75);margin-top:3px">✅ All daytime params within label thresholds</div>`;
 
-    return `<div class="daily-row ${day.spray.status}">
+    return `<div class="daily-row ${spray.status}">
       <div class="dr-day">${dow}</div>
       <div class="dr-date">${date}</div>
-      <div class="dr-icon">${day.condition.icon}</div>
+      <div class="dr-icon" title="${esc(sky.desc)}">${sky.icon}</div>
       <div class="dr-temps">
-        <span class="dr-high">${Math.round(day.temp_max_f)}°</span>
-        <span class="dr-low">${Math.round(day.temp_min_f)}°</span>
+        <span class="dr-high">${fmtNum(day.temp_max_f)}°</span>
+        <span class="dr-low">${fmtNum(day.temp_min_f)}°</span>
       </div>
       <div class="dr-meta">
         ${feelsLine ? `<span style="color:rgba(255,255,255,0.4)">${feelsLine}</span><br>` : ''}
-        💨 ${Math.round(day.wind_max_mph)}/${Math.round(day.gust_max_mph)} mph${day.wind_dir_deg != null ? ` <span style="display:inline-block;transform:rotate(${day.wind_dir_deg}deg);font-size:14px;font-weight:700">↑</span>` : ' —'}
-        &nbsp;·&nbsp; 🌧 ${day.precip_pct}%
+        💨 ${fmtMph(day.wind_max_mph)}/${fmtMph(day.gust_max_mph)} mph${day.wind_dir_deg != null ? ` <span style="display:inline-block;transform:rotate(${day.wind_dir_deg}deg);font-size:14px;font-weight:700">↑</span>` : ' —'}
+        &nbsp;·&nbsp; 🌧 ${day.precip_pct != null ? day.precip_pct : EMPTY}%
         ${rhNote ? `&nbsp;·&nbsp; ${rhNote}` : ''}
+        ${sky.desc !== EMPTY ? `<div style="font-size:10px;color:var(--text-muted)">${sky.icon !== EMPTY ? sky.icon + ' ' : ''}${esc(sky.desc)}</div>` : ''}
         ${reasonsHTML}
         ${sunLine ? `<div class="dr-sun">${sunLine}${soilLine ? '&nbsp;&nbsp;' + soilLine : ''}</div>` : ''}
         <div style="font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px">${windowNote}</div>
       </div>
-      <div class="dr-spray ${day.spray.status}">${sprayLabel}</div>
+      <div class="dr-spray ${spray.status}">${sprayLabel}</div>
     </div>`;
   }).join('');
 

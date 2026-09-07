@@ -16,6 +16,7 @@ const {
   fetchWeatherNWS,
   normalizeOpenMeteo,
   normalizeNWS,
+  normalizeCondition,
   parseLatLon
 } = require('../lib/spray-logic');
 
@@ -152,7 +153,48 @@ async function handler(req, res) {
     }
 
     // ── Process daily (7 days) ────────────────────────────
-    // If daily was populated by the source switch, use it; otherwise aggregate from hourly
+    // Merge spray scores into source daily rows. Never append duplicate
+    // dates — the UI crashes on source-only rows that lack day.spray.
+    function finiteMax(values) {
+      const nums = values.filter(v => v != null && Number.isFinite(Number(v))).map(Number);
+      return nums.length ? Math.max(...nums) : null;
+    }
+    function finiteMin(values) {
+      const nums = values.filter(v => v != null && Number.isFinite(Number(v))).map(Number);
+      return nums.length ? Math.min(...nums) : null;
+    }
+
+    const sourceByDate = new Map();
+    for (const day of daily) {
+      if (!day || !day.date) continue;
+      const incoming = {
+        ...day,
+        condition: normalizeCondition(day.condition)
+      };
+      const existing = sourceByDate.get(day.date);
+      if (!existing) {
+        sourceByDate.set(day.date, incoming);
+        continue;
+      }
+      existing.temp_max_f = finiteMax([existing.temp_max_f, incoming.temp_max_f]);
+      existing.temp_min_f = finiteMin([existing.temp_min_f, incoming.temp_min_f]);
+      existing.wind_max_mph = finiteMax([existing.wind_max_mph, incoming.wind_max_mph]);
+      existing.gust_max_mph = finiteMax([existing.gust_max_mph, incoming.gust_max_mph]);
+      if ((!existing.condition || !existing.condition.desc) && incoming.condition && incoming.condition.desc) {
+        existing.condition = incoming.condition;
+      }
+      if ((!existing.sunrise || existing.sunrise === 'N/A') && incoming.sunrise && incoming.sunrise !== 'N/A') {
+        existing.sunrise = incoming.sunrise;
+      }
+      if ((!existing.sunset || existing.sunset === 'N/A') && incoming.sunset && incoming.sunset !== 'N/A') {
+        existing.sunset = incoming.sunset;
+      }
+      if (existing.wind_dir_deg == null && incoming.wind_dir_deg != null) {
+        existing.wind_dir_deg = incoming.wind_dir_deg;
+        existing.wind_dir = incoming.wind_dir;
+      }
+    }
+
     const dayMap = new Map();
     for (const h of hourlyFinal) {
       const dateStr = h.time.split('T')[0];
@@ -160,10 +202,11 @@ async function handler(req, res) {
       dayMap.get(dateStr).push(h);
     }
 
+    const sprayByDate = new Map();
     for (const [dateStr, dayHours] of dayMap.entries()) {
-      const maxF = Math.max(...dayHours.map(h => h.temp_f));
-      const minF = Math.min(...dayHours.map(h => h.temp_f));
-      const avgRH = Math.round(dayHours.reduce((s, h) => s + h.rh, 0) / dayHours.length);
+      const maxF = finiteMax(dayHours.map(h => h.temp_f));
+      const minF = finiteMin(dayHours.map(h => h.temp_f));
+      const avgRH = Math.round(dayHours.reduce((s, h) => s + (h.rh || 0), 0) / dayHours.length);
       const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset || -21600);
 
       // Filter to daytime sprayable window
@@ -173,21 +216,21 @@ async function handler(req, res) {
       const scoringHours = daySprayHours.length > 0 ? daySprayHours : dayHours;
 
       // Use actual worst-case values for key thresholds from daytime window
-      const maxWind = Math.max(...scoringHours.map(h => h.wind_mph));
-      const maxGust = Math.max(...scoringHours.map(h => h.gust_mph));
-      const maxPrecip = Math.max(...scoringHours.map(h => h.precip_pct));
+      const maxWind = finiteMax(scoringHours.map(h => h.wind_mph));
+      const maxGust = finiteMax(scoringHours.map(h => h.gust_mph));
+      const maxPrecip = finiteMax(scoringHours.map(h => h.precip_pct));
       const worstDeltaT = scoringHours.reduce((worst, h) => {
         return h.delta_t > worst ? h.delta_t : worst;
       }, 0);
-      const avgTemp = (maxF + minF) / 2;
+      const avgTemp = (maxF != null && minF != null) ? (maxF + minF) / 2 : (maxF ?? minF ?? 0);
       const deltaT = calcDeltaT((avgTemp - 32) * 5 / 9, avgRH);
 
       const sprayObj = scoreSprayConditions({
         temp_f: avgTemp,
-        wind_mph: maxWind,
+        wind_mph: maxWind ?? 0,
         gust_mph: maxGust,
         rh: avgRH,
-        precip_pct: maxPrecip,
+        precip_pct: maxPrecip ?? 0,
         delta_t: worstDeltaT,
         delta_t_f: deltaTtoF(worstDeltaT)
       }, herbicide, method);
@@ -199,10 +242,21 @@ async function handler(req, res) {
         .flatMap(h => h.spray.reasons)
         .filter((r, i, a) => a.indexOf(r) === i); // dedupe
 
-      daily.push({
+      // Hourly-derived sky when source daily has none
+      const skyHour = scoringHours.find(h => h.condition && (h.condition.desc || h.condition.icon))
+        || dayHours.find(h => h.condition && (h.condition.desc || h.condition.icon));
+
+      sprayByDate.set(dateStr, {
         date: dateStr,
         temp_max_f: maxF,
         temp_min_f: minF,
+        wind_max_mph: maxWind,
+        gust_max_mph: maxGust,
+        avg_rh: avgRH,
+        precip_pct: maxPrecip ?? 0,
+        condition: skyHour ? normalizeCondition(skyHour.condition) : { desc: null, icon: null },
+        sunrise: sunTimes.sunrise,
+        sunset: sunTimes.sunset,
         spray: {
           status: overallStatus,
           reasons: allReasons,
@@ -211,8 +265,32 @@ async function handler(req, res) {
       });
     }
 
-    // Sort and limit daily to 7
-    daily.sort((a,b) => a.date.localeCompare(b.date));
+    const allDates = [...new Set([...sourceByDate.keys(), ...sprayByDate.keys()])].sort();
+    daily = allDates.slice(0, 7).map(dateStr => {
+      const src = sourceByDate.get(dateStr) || {};
+      const scored = sprayByDate.get(dateStr) || {};
+      return {
+        date: dateStr,
+        temp_max_f: src.temp_max_f ?? scored.temp_max_f,
+        temp_min_f: src.temp_min_f ?? scored.temp_min_f,
+        wind_max_mph: finiteMax([src.wind_max_mph, scored.wind_max_mph]),
+        gust_max_mph: finiteMax([src.gust_max_mph, scored.gust_max_mph]),
+        avg_rh: scored.avg_rh ?? src.avg_rh,
+        precip_pct: scored.precip_pct ?? src.precip_pct ?? 0,
+        wind_dir_deg: src.wind_dir_deg ?? scored.wind_dir_deg ?? null,
+        wind_dir: src.wind_dir ?? scored.wind_dir ?? null,
+        weather_code: src.weather_code ?? scored.weather_code,
+        condition: (src.condition && src.condition.desc) ? src.condition : (scored.condition || { desc: null, icon: null }),
+        sunrise: (src.sunrise && src.sunrise !== 'N/A') ? src.sunrise : scored.sunrise,
+        sunset: (src.sunset && src.sunset !== 'N/A') ? src.sunset : scored.sunset,
+        soil_temp_f: src.soil_temp_f ?? scored.soil_temp_f ?? null,
+        spray: scored.spray || {
+          status: 'favorable',
+          reasons: [],
+          product: product.name
+        }
+      };
+    });
 
     // ── Summary stats ─────────────────────────────────────
     const favorableCount = hourlyFinal.filter(h => h.spray.status === 'favorable').length;
