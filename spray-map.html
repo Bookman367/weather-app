@@ -537,7 +537,21 @@
 
     function renderSprayWindow() {
       if (!gridData || !gridData.points || gridData.points.length === 0) return;
-      const hours = gridData.points[0].hourly; // Center point's hours
+
+      // Calculate the index of the center point in the grid.
+      // We assume a square grid. The total points is gridData.points.length.
+      // So gridSize is Math.sqrt(totalPoints).
+      // The center point is at row = Math.floor(gridSize/2), col = Math.floor(gridSize/2).
+      const totalPoints = gridData.points.length;
+      const gridSize = Math.round(Math.sqrt(totalPoints));
+      let centerIndex = 0; // Default fallback
+      if (gridSize * gridSize === totalPoints) {
+          const centerRow = Math.floor(gridSize / 2);
+          const centerCol = Math.floor(gridSize / 2);
+          centerIndex = centerRow * gridSize + centerCol;
+      }
+
+      const hours = gridData.points[centerIndex].hourly; // Center point's hours
 
       let htmlOutput = '';
       let currentDayString = '';
