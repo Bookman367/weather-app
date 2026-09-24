@@ -67,7 +67,7 @@
     #map {
       position: absolute;
       top: 60px;
-      bottom: 120px;
+      bottom: 200px;
       left: 0;
       right: 0;
       z-index: 1;
@@ -76,7 +76,7 @@
     /* Loading overlay */
     #loading {
       position: absolute;
-      top: 60px; bottom: 120px; left: 0; right: 0;
+      top: 60px; bottom: 200px; left: 0; right: 0;
       z-index: 1001;
       background: rgba(8, 15, 30, 0.7);
       display: flex;
@@ -98,7 +98,7 @@
     /* Controls Panel */
     .controls-panel {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
+      bottom: 80px; left: 0; right: 0;
       height: 120px;
       z-index: 1000;
       background: var(--glass-bg);
@@ -262,9 +262,10 @@
     /* Map search button */
     .search-area-btn {
       position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 70px;
+      left: auto;
+      right: 20px;
+      transform: none;
       z-index: 1000;
       background: rgba(15,25,45,0.9);
       border: 1px solid rgba(255,255,255,0.3);
