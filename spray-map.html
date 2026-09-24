@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hero Weather — Spray Conditions Map</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:        #3ddc84;
+      --yellow:       #ffc107;
+      --red:          #ff4d4d;
+      --glass-bg:     rgba(15,25,45,0.85);
+      --glass-border: rgba(255,255,255,0.18);
+      --blur:         blur(10px);
+      --text:         #ffffff;
+      --text-dim:     rgba(255,255,255,0.7);
+      --text-muted:   rgba(255,255,255,0.4);
+    }
+
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+      color: var(--text);
+      height: 100%;
+      overflow: hidden;
+      background: #080f1e;
+    }
+
+    /* Header */
+    header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .header-title { font-weight: 700; font-size: 16px; }
+
+    .btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .btn:active { background: rgba(255,255,255,0.2); }
+
+    /* Map Container */
+    #map {
+      position: absolute;
+      top: 60px;
+      bottom: 120px;
+      left: 0;
+      right: 0;
+      z-index: 1;
+    }
+
+    /* Loading overlay */
+    #loading {
+      position: absolute;
+      top: 60px; bottom: 120px; left: 0; right: 0;
+      z-index: 1001;
+      background: rgba(8, 15, 30, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      display: none;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Controls Panel */
+    .controls-panel {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 120px;
+      z-index: 1000;
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-top: 1px solid var(--glass-border);
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .selector {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 6px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+    }
+    .selector option { background: #1a2535; }
+
+    /* Timeline */
+    .timeline-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .play-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .play-btn:active { background: rgba(255,255,255,0.25); }
+
+    .slider-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .time-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 20px; width: 20px;
+      border-radius: 50%;
+      background: white;
+      cursor: pointer;
+      margin-top: -8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%; height: 4px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+    }
+
+    /* Map Popup Customization */
+    .leaflet-popup-content-wrapper {
+      background: rgba(15,25,45,0.95);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+    }
+    .leaflet-popup-tip { background: rgba(15,25,45,0.95); }
+    .popup-content { font-size: 13px; line-height: 1.4; }
+    .popup-title { font-weight: bold; font-size: 15px; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .popup-status { font-weight: bold; margin-bottom: 4px; }
+    .status-favorable { color: var(--green); }
+    .status-caution { color: var(--yellow); }
+    .status-no-good { color: var(--red); }
+
+    /* Legend */
+    .legend {
+      position: absolute;
+      top: 70px;
+      right: 10px;
+      z-index: 1000;
+      background: rgba(15,25,45,0.85);
+      backdrop-filter: var(--blur);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.5); }
+
+
+    /* ── SPRAY WINDOW ─────────────────────────────────────── */
+    .spray-window { padding: 0 10px; margin-bottom: 0px; width: 100%; overflow: hidden; }
+    .sw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .sw-title  { font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
+    .sw-subtitle { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .sw-tabs   { display: flex; gap: 6px; }
+    .sw-tab {
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-pill); color: var(--text-dim);
+      cursor: pointer; font-size: 11px; font-weight: 600; padding: 5px 12px; transition: all 0.2s;
+    }
+    .sw-tab.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: var(--text); }
+
+    .spray-gradient-bar { height: 6px; border-radius: 3px; margin: 4px 0 12px; }
+
+    .spray-bar-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 6px; padding-bottom: 4px; }
+    .spray-bar-track { display: flex; gap: 3px; min-width: max-content; }
+    .spray-segment { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; width: 36px; }
+    .spray-block {
+      border-radius: 6px; height: 40px; width: 100%;
+      transition: transform 0.15s; cursor: pointer; position: relative;
+    }
+    .spray-block:hover { transform: scaleY(1.15); }
+    .spray-block.favorable { background: linear-gradient(180deg,#3ddc84,#26a85f); box-shadow: 0 2px 8px rgba(61,220,132,0.35); }
+    .spray-block.caution   { background: linear-gradient(180deg,#ffc107,#e09000); box-shadow: 0 2px 8px rgba(255,193,7,0.35); }
+    .spray-block.no-good   { background: linear-gradient(180deg,#ff4d4d,#cc2222); box-shadow: 0 2px 8px rgba(255,77,77,0.35); }
+
+    /* Scroll-sync active segment highlight */
+    .spray-segment.active-segment .spray-block {
+      transform: scaleY(1.2);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.7), 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .spray-segment.active-segment .spray-time {
+      color: var(--text) !important;
+      font-weight: 700;
+    }
+    .spray-time { font-size: 13px; color: var(--text-muted); text-align: center; white-space: nowrap; font-weight: 600; }
+    .spray-time.bold { color: var(--text-dim); font-weight: 600; }
+
+
+    /* Map search button */
+    .search-area-btn {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(15,25,45,0.9);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/index.html" class="btn">← Back</a>
+    <div class="header-title">Spray Conditions Map</div>
+    <div style="width: 70px;"></div> <!-- spacer -->
+  </header>
+
+  <div id="map"></div>
+  <button id="search-area" class="search-area-btn">Search this area</button>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <div style="color:rgba(255,255,255,0.7);font-size:14px">Loading map data...</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background: rgba(61,220,132,0.4)"></div> Go</div>
+    <div class="legend-item"><div class="legend-color" style="background: rgba(255,193,7,0.4)"></div> Caution</div>
+    <div class="legend-item"><div class="legend-color" style="background: rgba(255,77,77,0.4)"></div> No-Go</div>
+  </div>
+
+  <div class="controls-panel">
+    <div class="controls-row">
+      <select id="product-select" class="selector">
+        <option value="general">General Ag</option>
+        <option value="2,4-D Amine">2,4-D Amine</option>
+        <option value="Dicamba">Dicamba</option>
+        <option value="Roundup (Glyphosate)">Roundup</option>
+      </select>
+    </div>
+
+    <div class="timeline-container">
+      <button id="play-pause" class="play-btn">▶</button>
+
+      <div class="spray-window">
+        <div class="spray-bar-wrap" id="spray-bar-wrap">
+          <div class="spray-bar-track" id="spray-bar-track">
+            <!-- Timeline elements injected here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <script>
+    // Initialize map
+    const map = L.map('map', {
+      zoomControl: false // move to bottom right or custom if needed
+    });
+
+    // Move zoom control
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    // Dark theme map tiles (CartoDB Dark Matter)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    let currentLat = 42.35;
+    let currentLon = -97.79;
+
+    // Set initial view
+    map.setView([currentLat, currentLon], 9);
+
+    let gridData = null;
+    let currentHourIndex = 0;
+    let rectangles = [];
+
+    const productSelect = document.getElementById('product-select');
+    const searchAreaBtn = document.getElementById('search-area');
+    const loadingEl = document.getElementById('loading');
+
+
+
+    // Try to get user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          currentLat = pos.coords.latitude;
+          currentLon = pos.coords.longitude;
+          map.setView([currentLat, currentLon], 9);
+          fetchGridData();
+        },
+        (err) => {
+          console.log("Geolocation error or denied, using default location.");
+          fetchGridData();
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      fetchGridData();
+    }
+
+    // Show search button if map is panned
+    map.on('moveend', () => {
+      const center = map.getCenter();
+      // If moved more than a fraction of a degree, show button
+      if (Math.abs(center.lat - currentLat) > 0.05 || Math.abs(center.lng - currentLon) > 0.05) {
+        searchAreaBtn.style.display = 'block';
+      }
+    });
+
+    searchAreaBtn.addEventListener('click', () => {
+      const center = map.getCenter();
+      currentLat = center.lat;
+      currentLon = center.lng;
+      searchAreaBtn.style.display = 'none';
+      fetchGridData();
+    });
+
+    productSelect.addEventListener('change', fetchGridData);
+
+    async function fetchGridData() {
+      loadingEl.style.display = 'flex';
+
+      const radius = 30; // Hardcoded to 30 miles
+      const product = productSelect.value;
+
+      try {
+        const res = await fetch(`/api/spray-map.js?lat=${currentLat}&lon=${currentLon}&radius=${radius}&product=${encodeURIComponent(product)}`);
+
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        gridData = await res.json();
+
+        if (gridData && gridData.points && gridData.points.length > 0) {
+          // Initialize slider bounds
+          const firstPoint = gridData.points[0];
+          rectangles.forEach(rect => map.removeLayer(rect)); rectangles = [];
+          renderSprayWindow();
+        }
+      } catch (err) {
+        console.error("Failed to fetch grid data:", err);
+        alert("Failed to load map data. Please try again.");
+      } finally {
+        loadingEl.style.display = 'none';
+      }
+    }
+
+    function getColorForStatus(status) {
+      if (status === 'favorable') return 'rgba(61,220,132,0.4)';
+      if (status === 'caution') return 'rgba(255,193,7,0.4)';
+      if (status === 'no-good') return 'rgba(255,77,77,0.4)';
+      return 'transparent';
+    }
+
+    function getBorderColorForStatus(status) {
+      if (status === 'favorable') return '#3ddc84';
+      if (status === 'caution') return '#ffc107';
+      if (status === 'no-good') return '#ff4d4d';
+      return 'transparent';
+    }
+
+
+    const sprayBarTrack = document.getElementById('spray-bar-track');
+    const sprayBarWrap = document.getElementById('spray-bar-wrap');
+
+    function renderSprayWindow() {
+      if (!gridData || !gridData.points || gridData.points.length === 0) return;
+      const hours = gridData.points[0].hourly; // Center point's hours
+
+      const segments = hours.map((h, i) => {
+        // Add Z if missing so browser treats it as UTC, or just parse correctly if we know the string format
+        const timeStr = h.time.length === 16 ? h.time + ":00Z" : h.time;
+        // In api/spray-map.js, we filtered based on local time but didn't shift the timestamp
+        // Actually, if Open-Meteo gives local time, just parsing it without 'Z' assumes local time.
+        const dt = new Date(h.time.replace('T', ' '));
+        const hr    = dt.getHours();
+        const hr12  = hr % 12 || 12;
+        const ampm  = hr < 12 ? 'a' : 'p';
+        const bold  = hr === 0 || hr === 6 || hr === 12 || hr === 18;
+        const tip   = h.status + (h.reasons[0] ? ': ' + h.reasons[0] : '');
+        return `<div class="spray-segment" data-index="${i}">
+          <div class="spray-block ${h.status}" title="${h.reasons.join(', ')}"></div>
+          <div class="spray-time ${bold ? 'bold' : ''}">${hr12}${ampm}</div>
+        </div>`;
+      }).join('');
+
+      sprayBarTrack.innerHTML = segments;
+
+      // Bind click events
+      sprayBarTrack.querySelectorAll('.spray-segment').forEach(seg => {
+        seg.addEventListener('click', (e) => {
+          const idx = parseInt(seg.getAttribute('data-index'), 10);
+          syncToIndex(idx);
+        });
+      });
+
+      syncToIndex(0); // Initial selection
+    }
+
+    function syncToIndex(idx) {
+      if (!gridData || !gridData.points) return;
+      currentHourIndex = idx;
+
+      // Highlight segment
+      sprayBarTrack.querySelectorAll('.spray-segment').forEach((el, i) => {
+        el.classList.toggle('active-segment', i === idx);
+      });
+
+      // Scroll into view gently
+      const activeEl = sprayBarTrack.children[idx];
+      if (activeEl && sprayBarWrap) {
+        const wrapCenter = sprayBarWrap.clientWidth / 2;
+        const elCenter = activeEl.offsetLeft + (activeEl.offsetWidth / 2);
+        sprayBarWrap.scrollTo({ left: elCenter - wrapCenter, behavior: 'smooth' });
+      }
+
+      updateGridOverlay();
+    }
+
+
+    function generatePopupContent(point, hourData) {
+      const statusLabel = hourData.status === 'favorable' ? 'Go'
+                        : hourData.status === 'caution' ? 'Caution'
+                        : 'No-Go';
+      const reasons = hourData.reasons && hourData.reasons.length > 0
+                    ? `<div style="margin-top:6px;font-size:11px;color:#ffaaaa;">${hourData.reasons.join('<br>')}</div>`
+                    : `<div style="margin-top:6px;font-size:11px;color:#aaffaa;">All parameters within label limits</div>`;
+
+      return `
+        <div class="popup-content">
+          <div class="popup-title">Location: ${point.lat}, ${point.lon}</div>
+          <div class="popup-status status-${hourData.status}">Status: ${statusLabel}</div>
+          <div>🌡️ Temp: ${hourData.temp}°F</div>
+          <div>💨 Wind: ${hourData.wind} mph (Gust: ${hourData.gust})</div>
+          <div>💧 RH: ${hourData.rh}%</div>
+          <div>🌧️ Precip: ${hourData.precip}%</div>
+          ${reasons}
+        </div>
+      `;
+    }
+
+
+    function updateGridOverlay() {
+      if (!gridData || !gridData.points) return;
+
+      const isFirstRender = rectangles.length === 0;
+
+      gridData.points.forEach((point, idx) => {
+        const hourData = point.hourly[currentHourIndex];
+        if (!hourData) return;
+
+        const status = hourData.status;
+        const color = getColorForStatus(status);
+        const borderColor = getBorderColorForStatus(status);
+
+        if (isFirstRender) {
+          const rect = L.rectangle(point.bounds, {
+            color: borderColor,
+            weight: 1,
+            fillColor: color,
+            fillOpacity: 1
+          }).addTo(map);
+
+          rect.bindPopup(() => generatePopupContent(point, point.hourly[currentHourIndex]));
+          rectangles.push(rect);
+        } else {
+          const rect = rectangles[idx];
+          rect.setStyle({ fillColor: color, color: borderColor });
+          rect.getPopup().setContent(generatePopupContent(point, hourData));
+        }
+      });
+    }
+
+
+
+    const playPauseBtn = document.getElementById('play-pause');
+    let playInterval = null;
+
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener('click', () => {
+        if (playInterval) {
+          clearInterval(playInterval);
+          playInterval = null;
+          playPauseBtn.textContent = '▶';
+        } else {
+          playPauseBtn.textContent = '⏸';
+          playInterval = setInterval(() => {
+            if (!gridData || !gridData.points) return;
+            const maxIdx = gridData.points[0].hourly.length - 1;
+            let nextIdx = currentHourIndex + 1;
+            if (nextIdx > maxIdx) {
+              nextIdx = 0; // loop back to start
+            }
+            syncToIndex(nextIdx);
+          }, 1000); // 1 second per hour
+        }
+      });
+    }
+
+  </script>
+</body></html>
