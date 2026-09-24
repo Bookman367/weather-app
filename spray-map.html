@@ -378,6 +378,24 @@
     map.setView([currentLat, currentLon], 9);
     let centerMarker = L.marker([currentLat, currentLon]).addTo(map);
 
+    // Allow clicking anywhere on the map to trigger a search popup
+    map.on('click', (e) => {
+      const lat = e.latlng.lat.toFixed(4);
+      const lon = e.latlng.lng.toFixed(4);
+
+      const popupContent = `
+        <div class="popup-content" style="text-align: center; padding: 5px;">
+          <div style="font-size: 12px; margin-bottom: 8px; color: var(--text-dim);">${lat}, ${lon}</div>
+          <button class="search-here-btn" onclick="searchAtLocation(${lat}, ${lon})">Search Here</button>
+        </div>
+      `;
+
+      L.popup()
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
+    });
+
 
     let gridData = null;
     let currentHourIndex = 0;
