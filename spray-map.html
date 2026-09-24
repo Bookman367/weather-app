@@ -218,6 +218,47 @@
     .legend-item { display: flex; align-items: center; gap: 6px; }
     .legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.5); }
 
+
+    /* ── SPRAY WINDOW ─────────────────────────────────────── */
+    .spray-window { padding: 0 10px; margin-bottom: 0px; width: 100%; overflow: hidden; }
+    .sw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .sw-title  { font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
+    .sw-subtitle { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .sw-tabs   { display: flex; gap: 6px; }
+    .sw-tab {
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-pill); color: var(--text-dim);
+      cursor: pointer; font-size: 11px; font-weight: 600; padding: 5px 12px; transition: all 0.2s;
+    }
+    .sw-tab.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: var(--text); }
+
+    .spray-gradient-bar { height: 6px; border-radius: 3px; margin: 4px 0 12px; }
+
+    .spray-bar-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 6px; padding-bottom: 4px; }
+    .spray-bar-track { display: flex; gap: 3px; min-width: max-content; }
+    .spray-segment { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; width: 36px; }
+    .spray-block {
+      border-radius: 6px; height: 40px; width: 100%;
+      transition: transform 0.15s; cursor: pointer; position: relative;
+    }
+    .spray-block:hover { transform: scaleY(1.15); }
+    .spray-block.favorable { background: linear-gradient(180deg,#3ddc84,#26a85f); box-shadow: 0 2px 8px rgba(61,220,132,0.35); }
+    .spray-block.caution   { background: linear-gradient(180deg,#ffc107,#e09000); box-shadow: 0 2px 8px rgba(255,193,7,0.35); }
+    .spray-block.no-good   { background: linear-gradient(180deg,#ff4d4d,#cc2222); box-shadow: 0 2px 8px rgba(255,77,77,0.35); }
+
+    /* Scroll-sync active segment highlight */
+    .spray-segment.active-segment .spray-block {
+      transform: scaleY(1.2);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.7), 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .spray-segment.active-segment .spray-time {
+      color: var(--text) !important;
+      font-weight: 700;
+    }
+    .spray-time { font-size: 13px; color: var(--text-muted); text-align: center; white-space: nowrap; font-weight: 600; }
+    .spray-time.bold { color: var(--text-dim); font-weight: 600; }
+
+
     /* Map search button */
     .search-area-btn {
       position: absolute;
@@ -262,10 +303,6 @@
 
   <div class="controls-panel">
     <div class="controls-row">
-      <select id="radius-select" class="selector">
-        <option value="30">30 Mile Radius</option>
-        <option value="60">60 Mile Radius</option>
-      </select>
       <select id="product-select" class="selector">
         <option value="general">General Ag</option>
         <option value="2,4-D Amine">2,4-D Amine</option>
@@ -276,9 +313,13 @@
 
     <div class="timeline-container">
       <button id="play-pause" class="play-btn">▶</button>
-      <div class="slider-container">
-        <div id="time-display" class="time-label">Loading timeline...</div>
-        <input type="range" id="time-slider" min="0" max="0" value="0" step="1" disabled>
+
+      <div class="spray-window">
+        <div class="spray-bar-wrap" id="spray-bar-wrap">
+          <div class="spray-bar-track" id="spray-bar-track">
+            <!-- Timeline elements injected here -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -311,12 +352,11 @@
     let currentHourIndex = 0;
     let rectangles = [];
 
-    const radiusSelect = document.getElementById('radius-select');
     const productSelect = document.getElementById('product-select');
     const searchAreaBtn = document.getElementById('search-area');
     const loadingEl = document.getElementById('loading');
-    const timeDisplay = document.getElementById('time-display');
-    const timeSlider = document.getElementById('time-slider');
+
+
 
     // Try to get user location
     if (navigator.geolocation) {
@@ -354,13 +394,12 @@
       fetchGridData();
     });
 
-    radiusSelect.addEventListener('change', fetchGridData);
     productSelect.addEventListener('change', fetchGridData);
 
     async function fetchGridData() {
       loadingEl.style.display = 'flex';
 
-      const radius = radiusSelect.value;
+      const radius = 30; // Hardcoded to 30 miles
       const product = productSelect.value;
 
       try {
@@ -375,13 +414,8 @@
         if (gridData && gridData.points && gridData.points.length > 0) {
           // Initialize slider bounds
           const firstPoint = gridData.points[0];
-          timeSlider.max = firstPoint.hourly.length - 1;
-          timeSlider.value = 0;
-          timeSlider.disabled = false;
-          currentHourIndex = 0;
-
-          updateGridOverlay();
-          updateTimelineDisplay();
+          rectangles.forEach(rect => map.removeLayer(rect)); rectangles = [];
+          renderSprayWindow();
         }
       } catch (err) {
         console.error("Failed to fetch grid data:", err);
@@ -405,6 +439,65 @@
       return 'transparent';
     }
 
+
+    const sprayBarTrack = document.getElementById('spray-bar-track');
+    const sprayBarWrap = document.getElementById('spray-bar-wrap');
+
+    function renderSprayWindow() {
+      if (!gridData || !gridData.points || gridData.points.length === 0) return;
+      const hours = gridData.points[0].hourly; // Center point's hours
+
+      const segments = hours.map((h, i) => {
+        // Add Z if missing so browser treats it as UTC, or just parse correctly if we know the string format
+        const timeStr = h.time.length === 16 ? h.time + ":00Z" : h.time;
+        // In api/spray-map.js, we filtered based on local time but didn't shift the timestamp
+        // Actually, if Open-Meteo gives local time, just parsing it without 'Z' assumes local time.
+        const dt = new Date(h.time.replace('T', ' '));
+        const hr    = dt.getHours();
+        const hr12  = hr % 12 || 12;
+        const ampm  = hr < 12 ? 'a' : 'p';
+        const bold  = hr === 0 || hr === 6 || hr === 12 || hr === 18;
+        const tip   = h.status + (h.reasons[0] ? ': ' + h.reasons[0] : '');
+        return `<div class="spray-segment" data-index="${i}">
+          <div class="spray-block ${h.status}" title="${h.reasons.join(', ')}"></div>
+          <div class="spray-time ${bold ? 'bold' : ''}">${hr12}${ampm}</div>
+        </div>`;
+      }).join('');
+
+      sprayBarTrack.innerHTML = segments;
+
+      // Bind click events
+      sprayBarTrack.querySelectorAll('.spray-segment').forEach(seg => {
+        seg.addEventListener('click', (e) => {
+          const idx = parseInt(seg.getAttribute('data-index'), 10);
+          syncToIndex(idx);
+        });
+      });
+
+      syncToIndex(0); // Initial selection
+    }
+
+    function syncToIndex(idx) {
+      if (!gridData || !gridData.points) return;
+      currentHourIndex = idx;
+
+      // Highlight segment
+      sprayBarTrack.querySelectorAll('.spray-segment').forEach((el, i) => {
+        el.classList.toggle('active-segment', i === idx);
+      });
+
+      // Scroll into view gently
+      const activeEl = sprayBarTrack.children[idx];
+      if (activeEl && sprayBarWrap) {
+        const wrapCenter = sprayBarWrap.clientWidth / 2;
+        const elCenter = activeEl.offsetLeft + (activeEl.offsetWidth / 2);
+        sprayBarWrap.scrollTo({ left: elCenter - wrapCenter, behavior: 'smooth' });
+      }
+
+      updateGridOverlay();
+    }
+
+
     function generatePopupContent(point, hourData) {
       const statusLabel = hourData.status === 'favorable' ? 'Go'
                         : hourData.status === 'caution' ? 'Caution'
@@ -426,14 +519,13 @@
       `;
     }
 
+
     function updateGridOverlay() {
       if (!gridData || !gridData.points) return;
 
-      // Clear existing rectangles
-      rectangles.forEach(rect => map.removeLayer(rect));
-      rectangles = [];
+      const isFirstRender = rectangles.length === 0;
 
-      gridData.points.forEach(point => {
+      gridData.points.forEach((point, idx) => {
         const hourData = point.hourly[currentHourIndex];
         if (!hourData) return;
 
@@ -441,59 +533,49 @@
         const color = getColorForStatus(status);
         const borderColor = getBorderColorForStatus(status);
 
-        const rect = L.rectangle(point.bounds, {
-          color: borderColor,
-          weight: 1,
-          fillColor: color,
-          fillOpacity: 1
-        }).addTo(map);
+        if (isFirstRender) {
+          const rect = L.rectangle(point.bounds, {
+            color: borderColor,
+            weight: 1,
+            fillColor: color,
+            fillOpacity: 1
+          }).addTo(map);
 
-        // Add click popup
-        rect.bindPopup(() => generatePopupContent(point, hourData));
-
-        rectangles.push(rect);
+          rect.bindPopup(() => generatePopupContent(point, point.hourly[currentHourIndex]));
+          rectangles.push(rect);
+        } else {
+          const rect = rectangles[idx];
+          rect.setStyle({ fillColor: color, color: borderColor });
+          rect.getPopup().setContent(generatePopupContent(point, hourData));
+        }
       });
     }
 
-    function updateTimelineDisplay() {
-      if (!gridData || !gridData.points || gridData.points.length === 0) return;
-      const hourData = gridData.points[0].hourly[currentHourIndex];
-      if (!hourData) return;
 
-      const date = new Date(hourData.time);
-      const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
-      timeDisplay.textContent = date.toLocaleDateString('en-US', options);
-    }
-  </script>
-<script>
-    // Slider functionality
-    const timeSlider = document.getElementById('time-slider');
+
     const playPauseBtn = document.getElementById('play-pause');
     let playInterval = null;
 
-    timeSlider.addEventListener('input', (e) => {
-      currentHourIndex = parseInt(e.target.value, 10);
-      updateGridOverlay();
-      updateTimelineDisplay();
-    });
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener('click', () => {
+        if (playInterval) {
+          clearInterval(playInterval);
+          playInterval = null;
+          playPauseBtn.textContent = '▶';
+        } else {
+          playPauseBtn.textContent = '⏸';
+          playInterval = setInterval(() => {
+            if (!gridData || !gridData.points) return;
+            const maxIdx = gridData.points[0].hourly.length - 1;
+            let nextIdx = currentHourIndex + 1;
+            if (nextIdx > maxIdx) {
+              nextIdx = 0; // loop back to start
+            }
+            syncToIndex(nextIdx);
+          }, 1000); // 1 second per hour
+        }
+      });
+    }
 
-    playPauseBtn.addEventListener('click', () => {
-      if (playInterval) {
-        clearInterval(playInterval);
-        playInterval = null;
-        playPauseBtn.textContent = '▶';
-      } else {
-        playPauseBtn.textContent = '⏸';
-        playInterval = setInterval(() => {
-          currentHourIndex++;
-          if (currentHourIndex >= parseInt(timeSlider.max, 10)) {
-            currentHourIndex = 0; // loop back to start
-          }
-          timeSlider.value = currentHourIndex;
-          updateGridOverlay();
-          updateTimelineDisplay();
-        }, 1000); // 1 second per hour
-      }
-    });
-</script>
+  </script>
 </body></html>

@@ -144,8 +144,14 @@ async function handler(req, res) {
       const rawLocationData = resultsArray[index];
       const norm = normalizeOpenMeteo(rawLocationData);
 
-      // We only care about the next ~48 hours
-      const futureHours = futureHoursFromNow(norm.hourly);
+      // Open-Meteo returns time strings in local time when timezone=auto.
+      // To accurately filter past hours, we compare them against the current local time.
+      const currentLocalTime = new Date(Date.now() + norm.utcOffsetSeconds * 1000);
+      // Create an ISO-like string YYYY-MM-DDTHH:00 to match Open-Meteo's format
+      const localIso = currentLocalTime.toISOString().slice(0, 14) + "00";
+
+      // We only care about the next ~48 hours starting from the current local hour
+      const futureHours = norm.hourly.filter(h => h.time >= localIso).slice(0, 48);
 
       // Score the hours
       const scoredHourly = scoreHourly(futureHours, product, 'clarity');
