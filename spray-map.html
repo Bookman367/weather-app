@@ -277,7 +277,30 @@
       display: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-  </style>
+      .midnight-divider {
+      width: 2px;
+      height: 40px;
+      background-color: var(--text-muted);
+      margin: 0 10px;
+      flex-shrink: 0;
+    }
+
+    .day-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: bold;
+      margin: 0 10px 0 5px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Smooth map color transitions */
+    .leaflet-interactive {
+      transition: fill 0.3s ease-in-out, stroke 0.3s ease-in-out;
+    }
+</style>
 </head>
 <body>
 
@@ -302,6 +325,10 @@
   </div>
 
   <div class="controls-panel">
+    <div class="controls-row" style="margin-bottom: 10px;">
+      <input type="text" id="location-search-input" class="selector" style="flex: 1; margin-right: 10px;" placeholder="Search location, zip, or coordinates">
+      <button id="location-search-btn" class="play-btn" style="width: auto; padding: 0 15px; font-size: 14px;">Search</button>
+    </div>
     <div class="controls-row">
       <select id="product-select" class="selector">
         <option value="general">General Ag</option>
@@ -313,6 +340,12 @@
 
     <div class="timeline-container">
       <button id="play-pause" class="play-btn">▶</button>
+      <select id="playback-speed" class="selector" style="margin-left: 10px; width: auto; font-size: 12px; padding: 4px;">
+        <option value="2000">0.5x</option>
+        <option value="1000" selected>1x</option>
+        <option value="667">1.5x</option>
+        <option value="500">2x</option>
+      </select>
 
       <div class="spray-window">
         <div class="spray-bar-wrap" id="spray-bar-wrap">
@@ -347,6 +380,8 @@
 
     // Set initial view
     map.setView([currentLat, currentLon], 9);
+    let centerMarker = L.marker([currentLat, currentLon]).addTo(map);
+
 
     let gridData = null;
     let currentHourIndex = 0;
@@ -364,7 +399,8 @@
         (pos) => {
           currentLat = pos.coords.latitude;
           currentLon = pos.coords.longitude;
-          map.setView([currentLat, currentLon], 9);
+          centerMarker.setLatLng([currentLat, currentLon]);
+
           fetchGridData();
         },
         (err) => {
@@ -391,7 +427,59 @@
       currentLat = center.lat;
       currentLon = center.lng;
       searchAreaBtn.style.display = 'none';
+      centerMarker.setLatLng([currentLat, currentLon]);
       fetchGridData();
+    });
+
+    const locationSearchInput = document.getElementById('location-search-input');
+    const locationSearchBtn = document.getElementById('location-search-btn');
+
+    async function performLocationSearch() {
+      const query = locationSearchInput.value.trim();
+      if (!query) return;
+
+      loadingEl.style.display = 'flex';
+      try {
+        // Simple coordinate check (e.g. "42.35, -97.79")
+        const coordsMatch = query.match(/^\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*$/);
+        if (coordsMatch) {
+          currentLat = parseFloat(coordsMatch[1]);
+          currentLon = parseFloat(coordsMatch[3]);
+          map.setView([currentLat, currentLon], 9);
+          centerMarker.setLatLng([currentLat, currentLon]);
+          fetchGridData();
+          return;
+        }
+
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`, {
+          headers: {
+            'User-Agent': 'HeroWeatherApp/1.0'
+          }
+        });
+        const data = await res.json();
+
+        if (data && data.length > 0) {
+          currentLat = parseFloat(data[0].lat);
+          currentLon = parseFloat(data[0].lon);
+          map.setView([currentLat, currentLon], 9);
+          centerMarker.setLatLng([currentLat, currentLon]);
+          fetchGridData();
+        } else {
+          alert('Location not found. Try a different search term.');
+          loadingEl.style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Geocoding error:', err);
+        alert('Failed to search location.');
+        loadingEl.style.display = 'none';
+      }
+    }
+
+    locationSearchBtn.addEventListener('click', performLocationSearch);
+    locationSearchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performLocationSearch();
+      }
     });
 
     productSelect.addEventListener('change', fetchGridData);
@@ -447,24 +535,36 @@
       if (!gridData || !gridData.points || gridData.points.length === 0) return;
       const hours = gridData.points[0].hourly; // Center point's hours
 
-      const segments = hours.map((h, i) => {
-        // Add Z if missing so browser treats it as UTC, or just parse correctly if we know the string format
-        const timeStr = h.time.length === 16 ? h.time + ":00Z" : h.time;
-        // In api/spray-map.js, we filtered based on local time but didn't shift the timestamp
-        // Actually, if Open-Meteo gives local time, just parsing it without 'Z' assumes local time.
+      let htmlOutput = '';
+      let currentDayString = '';
+
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      hours.forEach((h, i) => {
         const dt = new Date(h.time.replace('T', ' '));
         const hr    = dt.getHours();
         const hr12  = hr % 12 || 12;
         const ampm  = hr < 12 ? 'a' : 'p';
         const bold  = hr === 0 || hr === 6 || hr === 12 || hr === 18;
-        const tip   = h.status + (h.reasons[0] ? ': ' + h.reasons[0] : '');
-        return `<div class="spray-segment" data-index="${i}">
+
+        const dayStr = `${daysOfWeek[dt.getDay()]} ${months[dt.getMonth()]} ${dt.getDate()}`;
+
+        if (i === 0 || (currentDayString !== '' && currentDayString !== dayStr)) {
+            if (i !== 0) {
+                htmlOutput += `<div class="midnight-divider"></div>`;
+            }
+            htmlOutput += `<div class="day-label">${dayStr}</div>`;
+            currentDayString = dayStr;
+        }
+
+        htmlOutput += `<div class="spray-segment" data-index="${i}">
           <div class="spray-block ${h.status}" title="${h.reasons.join(', ')}"></div>
           <div class="spray-time ${bold ? 'bold' : ''}">${hr12}${ampm}</div>
         </div>`;
-      }).join('');
+      });
 
-      sprayBarTrack.innerHTML = segments;
+      sprayBarTrack.innerHTML = htmlOutput;
 
       // Bind click events
       sprayBarTrack.querySelectorAll('.spray-segment').forEach(seg => {
@@ -556,6 +656,22 @@
     const playPauseBtn = document.getElementById('play-pause');
     let playInterval = null;
 
+    const playbackSpeedSelect = document.getElementById('playback-speed');
+
+    function startPlayback() {
+      if (playInterval) clearInterval(playInterval);
+      const intervalMs = parseInt(playbackSpeedSelect.value, 10) || 1000;
+      playInterval = setInterval(() => {
+        if (!gridData || !gridData.points) return;
+        const maxIdx = gridData.points[0].hourly.length - 1;
+        let nextIdx = currentHourIndex + 1;
+        if (nextIdx > maxIdx) {
+          nextIdx = 0; // loop back to start
+        }
+        syncToIndex(nextIdx);
+      }, intervalMs);
+    }
+
     if (playPauseBtn) {
       playPauseBtn.addEventListener('click', () => {
         if (playInterval) {
@@ -564,15 +680,15 @@
           playPauseBtn.textContent = '▶';
         } else {
           playPauseBtn.textContent = '⏸';
-          playInterval = setInterval(() => {
-            if (!gridData || !gridData.points) return;
-            const maxIdx = gridData.points[0].hourly.length - 1;
-            let nextIdx = currentHourIndex + 1;
-            if (nextIdx > maxIdx) {
-              nextIdx = 0; // loop back to start
-            }
-            syncToIndex(nextIdx);
-          }, 1000); // 1 second per hour
+          startPlayback();
+        }
+      });
+    }
+
+    if (playbackSpeedSelect) {
+      playbackSpeedSelect.addEventListener('change', () => {
+        if (playInterval) {
+          startPlayback(); // restart with new speed
         }
       });
     }
