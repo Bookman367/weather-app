@@ -154,7 +154,8 @@ async function handler(req, res) {
       const futureHours = norm.hourly.filter(h => h.time >= localIso).slice(0, 48);
 
       // Score the hours
-      const scoredHourly = scoreHourly(futureHours, product, 'clarity');
+      // The third argument is the nozzle type, we can default to 'medium' if not provided
+      const scoredHourly = scoreHourly(futureHours, product, 'medium');
 
       // Map down to what the frontend needs to save bandwidth
       const simplifiedHourly = scoredHourly.map(h => ({
