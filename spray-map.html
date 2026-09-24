@@ -259,26 +259,7 @@
     .spray-time.bold { color: var(--text-dim); font-weight: 600; }
 
 
-    /* Map search button */
-    .search-area-btn {
-      position: absolute;
-      top: 70px;
-      left: auto;
-      right: 20px;
-      transform: none;
-      z-index: 1000;
-      background: rgba(15,25,45,0.9);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-      .midnight-divider {
+    .midnight-divider {
       width: 2px;
       height: 40px;
       background-color: var(--text-muted);
@@ -297,6 +278,22 @@
       flex-shrink: 0;
     }
 
+    /* Search Here button inside popups */
+    .search-here-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .search-here-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
     /* Smooth map color transitions */
     .leaflet-interactive {
       transition: fill 0.3s ease-in-out, stroke 0.3s ease-in-out;
@@ -312,8 +309,6 @@
   </header>
 
   <div id="map"></div>
-  <button id="search-area" class="search-area-btn">Search this area</button>
-
   <div id="loading">
     <div class="spinner"></div>
     <div style="color:rgba(255,255,255,0.7);font-size:14px">Loading map data...</div>
@@ -389,7 +384,6 @@
     let rectangles = [];
 
     const productSelect = document.getElementById('product-select');
-    const searchAreaBtn = document.getElementById('search-area');
     const loadingEl = document.getElementById('loading');
 
 
@@ -414,23 +408,14 @@
       fetchGridData();
     }
 
-    // Show search button if map is panned
-    map.on('moveend', () => {
-      const center = map.getCenter();
-      // If moved more than a fraction of a degree, show button
-      if (Math.abs(center.lat - currentLat) > 0.05 || Math.abs(center.lng - currentLon) > 0.05) {
-        searchAreaBtn.style.display = 'block';
-      }
-    });
-
-    searchAreaBtn.addEventListener('click', () => {
-      const center = map.getCenter();
-      currentLat = center.lat;
-      currentLon = center.lng;
-      searchAreaBtn.style.display = 'none';
-      centerMarker.setLatLng([currentLat, currentLon]);
+    window.searchAtLocation = function(lat, lon) {
+      currentLat = lat;
+      currentLon = lon;
+      map.setView([lat, lon], 9);
+      centerMarker.setLatLng([lat, lon]);
+      map.closePopup();
       fetchGridData();
-    });
+    };
 
     const locationSearchInput = document.getElementById('location-search-input');
     const locationSearchBtn = document.getElementById('location-search-btn');
@@ -588,7 +573,7 @@
       });
 
       // Scroll into view gently
-      const activeEl = sprayBarTrack.children[idx];
+      const activeEl = sprayBarTrack.querySelectorAll('.spray-segment')[idx];
       if (activeEl && sprayBarWrap) {
         const wrapCenter = sprayBarWrap.clientWidth / 2;
         const elCenter = activeEl.offsetLeft + (activeEl.offsetWidth / 2);
@@ -610,8 +595,11 @@
       return `
         <div class="popup-content">
           <div class="popup-title">Location: ${point.lat}, ${point.lon}</div>
-          <div class="popup-status status-${hourData.status}">Status: ${statusLabel}</div>
-          <div>🌡️ Temp: ${hourData.temp}°F</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="popup-status status-${hourData.status}" style="margin: 0;">Status: ${statusLabel}</div>
+            <button class="search-here-btn" onclick="searchAtLocation(${point.lat}, ${point.lon})">Search Here</button>
+          </div>
+          <div style="margin-top: 5px;">🌡️ Temp: ${hourData.temp}°F</div>
           <div>💨 Wind: ${hourData.wind} mph (Gust: ${hourData.gust})</div>
           <div>💧 RH: ${hourData.rh}%</div>
           <div>🌧️ Precip: ${hourData.precip}%</div>
