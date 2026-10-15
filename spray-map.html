@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hero Weather — Spray Conditions Map</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:        #3ddc84;
+      --yellow:       #ffc107;
+      --red:          #ff4d4d;
+      --glass-bg:     rgba(15,25,45,0.85);
+      --glass-border: rgba(255,255,255,0.18);
+      --blur:         blur(10px);
+      --text:         #ffffff;
+      --text-dim:     rgba(255,255,255,0.7);
+      --text-muted:   rgba(255,255,255,0.4);
+      --radius-pill:  50px;
+    }
+
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+      color: var(--text);
+      height: 100%;
+      overflow: hidden;
+      background: #080f1e;
+    }
+
+    /* Header */
+    header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .header-title { font-weight: 700; font-size: 16px; }
+
+    .btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .btn:active { background: rgba(255,255,255,0.2); }
+
+    /* Map Container */
+    #map {
+      position: absolute;
+      top: 60px;
+      bottom: 270px;
+      left: 0;
+      right: 0;
+      z-index: 1;
+    }
+
+    /* Loading overlay */
+    #loading {
+      position: absolute;
+      top: 60px; bottom: 270px; left: 0; right: 0;
+      z-index: 1001;
+      background: rgba(8, 15, 30, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      display: none;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Controls Panel */
+    .controls-panel {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: auto;
+      min-height: 220px;
+      z-index: 1000;
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-top: 1px solid var(--glass-border);
+      padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .selector {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 6px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+    }
+    .selector option { background: #1a2535; }
+
+    /* Timeline */
+    .timeline-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .play-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .play-btn:active { background: rgba(255,255,255,0.25); }
+
+    .slider-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .time-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 20px; width: 20px;
+      border-radius: 50%;
+      background: white;
+      cursor: pointer;
+      margin-top: -8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%; height: 4px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+    }
+
+    /* Map Popup Customization */
+    .leaflet-popup-content-wrapper {
+      background: rgba(15,25,45,0.95);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+    }
+    .leaflet-popup-tip { background: rgba(15,25,45,0.95); }
+    .popup-content { font-size: 13px; line-height: 1.4; }
+    .popup-title { font-weight: bold; font-size: 15px; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .popup-status { font-weight: bold; margin-bottom: 4px; }
+    .status-favorable { color: var(--green); }
+    .status-caution { color: var(--yellow); }
+    .status-no-good { color: var(--red); }
+
+    /* Legend */
+    .legend {
+      position: absolute;
+      top: 70px;
+      right: 10px;
+      z-index: 1000;
+      background: rgba(15,25,45,0.85);
+      backdrop-filter: var(--blur);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.5); }
+
+
+    /* ── SPRAY WINDOW ─────────────────────────────────────── */
+    .spray-window { padding: 0; margin-bottom: 0; flex: 1; min-width: 0; overflow: hidden; }
+    .sw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .sw-title  { font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
+    .sw-subtitle { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .sw-tabs   { display: flex; gap: 6px; }
+    .sw-tab {
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-pill); color: var(--text-dim);
+      cursor: pointer; font-size: 11px; font-weight: 600; padding: 5px 12px; transition: all 0.2s;
+    }
+    .sw-tab.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: var(--text); }
+
+    .selection-details {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.35;
+      min-height: 30px;
+      max-height: 58px;
+      overflow-y: auto;
+      padding: 0 2px;
+    }
+    .selection-details strong { color: var(--text); }
+
+    .spray-gradient-bar { height: 6px; border-radius: 3px; margin: 4px 0 12px; }
+
+    .spray-bar-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 2px; padding-bottom: 4px; scroll-snap-type: x proximity; }
+    .spray-bar-track { display: flex; gap: 3px; min-width: max-content; }
+    .spray-segment { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; width: 36px; }
+    .spray-block {
+      border-radius: 6px; height: 40px; width: 100%;
+      transition: transform 0.15s; cursor: pointer; position: relative;
+    }
+    .spray-block:hover { transform: scaleY(1.15); }
+    .spray-block.favorable { background: linear-gradient(180deg,#3ddc84,#26a85f); box-shadow: 0 2px 8px rgba(61,220,132,0.35); }
+    .spray-block.caution   { background: linear-gradient(180deg,#ffc107,#e09000); box-shadow: 0 2px 8px rgba(255,193,7,0.35); }
+    .spray-block.no-good   { background: linear-gradient(180deg,#ff4d4d,#cc2222); box-shadow: 0 2px 8px rgba(255,77,77,0.35); }
+
+    /* Scroll-sync active segment highlight */
+    .spray-segment.active-segment .spray-block {
+      transform: scaleY(1.2);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.7), 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .spray-segment.active-segment .spray-time {
+      color: var(--text) !important;
+      font-weight: 700;
+    }
+    .spray-time { font-size: 13px; color: var(--text-muted); text-align: center; white-space: nowrap; font-weight: 600; }
+    .spray-time.bold { color: var(--text-dim); font-weight: 600; }
+
+
+    .midnight-divider {
+      width: 2px;
+      height: 40px;
+      background-color: var(--text-muted);
+      margin: 0 10px;
+      flex-shrink: 0;
+    }
+
+    .day-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: bold;
+      margin: 0 10px 0 5px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+
+    .spray-segment.daily-segment {
+      width: 56px;
+      scroll-snap-align: start;
+    }
+    .spray-segment.daily-segment .spray-block { height: 44px; }
+    .spray-segment.daily-segment .spray-time { font-size: 11px; }
+    .spray-segment.daily-segment.lower-confidence .spray-block {
+      opacity: 0.62;
+      background-image: repeating-linear-gradient(
+        135deg,
+        rgba(8, 15, 30, 0.28) 0 3px,
+        transparent 3px 7px
+      );
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+    }
+    .spray-segment.daily-segment.lower-confidence .spray-time { color: var(--text-muted); }
+    .trend-mark {
+      font-size: 9px;
+      letter-spacing: 0.02em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .confidence-break {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 18px;
+      margin: 0 4px;
+      color: var(--text-muted);
+      font-size: 9px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.15;
+      border-left: 2px dashed rgba(255,255,255,0.35);
+      padding-left: 4px;
+    }
+
+    /* Search Here button inside popups */
+    .search-here-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .search-here-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Smooth map color transitions */
+    .leaflet-interactive {
+      transition: fill 0.3s ease-in-out, stroke 0.3s ease-in-out;
+    }
+</style>
+</head>
+<body>
+
+  <header>
+    <a href="/index.html" class="btn">← Back</a>
+    <div class="header-title">Spray Conditions Map</div>
+    <div style="width: 70px;"></div> <!-- spacer -->
+  </header>
+
+  <div id="map"></div>
+  <div id="loading">
+    <div class="spinner"></div>
+    <div style="color:rgba(255,255,255,0.7);font-size:14px">Loading map data...</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background: rgba(61,220,132,0.4)"></div> Go</div>
+    <div class="legend-item"><div class="legend-color" style="background: rgba(255,193,7,0.4)"></div> Caution</div>
+    <div class="legend-item"><div class="legend-color" style="background: rgba(255,77,77,0.4)"></div> No-Go</div>
+  </div>
+
+  <div class="controls-panel">
+    <div class="controls-row" style="margin-bottom: 10px;">
+      <input type="text" id="location-search-input" class="selector" style="flex: 1; margin-right: 10px;" placeholder="Search location, zip, or coordinates">
+      <button id="location-search-btn" class="play-btn" style="width: auto; padding: 0 15px; font-size: 14px;">Search</button>
+    </div>
+    <div class="controls-row">
+      <select id="product-select" class="selector">
+        <option value="general">General Ag</option>
+        <option value="2,4-D Amine">2,4-D Amine</option>
+        <option value="Dicamba">Dicamba</option>
+        <option value="Roundup">Roundup (Glyphosate)</option>
+      </select>
+      <div class="sw-tabs" id="view-tabs" role="tablist" aria-label="Timeline view">
+        <button type="button" class="sw-tab active" data-view="hourly">Hourly</button>
+        <button type="button" class="sw-tab" data-view="daily">Daily</button>
+      </div>
+    </div>
+    <div class="sw-subtitle" id="view-legend">Hourly: each block is 1 hour across 7 days. Scroll sideways — play and 2x still work.</div>
+
+    <div class="timeline-container">
+      <button id="play-pause" class="play-btn">▶</button>
+      <select id="playback-speed" class="selector" style="width: auto; font-size: 12px; padding: 4px;">
+        <option value="2000">0.5x</option>
+        <option value="1000" selected>1x</option>
+        <option value="667">1.5x</option>
+        <option value="500">2x</option>
+      </select>
+
+      <div class="spray-window">
+        <div class="spray-bar-wrap" id="spray-bar-wrap">
+          <div class="spray-bar-track" id="spray-bar-track">
+            <!-- Timeline elements injected here -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="selection-details" class="selection-details"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <script>
+    // Initialize map
+    const map = L.map('map', {
+      zoomControl: false // move to bottom right or custom if needed
+    });
+
+    // Move zoom control
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    // Dark theme map tiles (CartoDB Dark Matter)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    let currentLat = 42.35;
+    let currentLon = -97.79;
+
+    // Set initial view
+    map.setView([currentLat, currentLon], 9);
+    let centerMarker = L.marker([currentLat, currentLon]).addTo(map);
+
+    // Allow clicking anywhere on the map to trigger a search popup
+    map.on('click', (e) => {
+      const lat = e.latlng.lat.toFixed(4);
+      const lon = e.latlng.lng.toFixed(4);
+
+      const popupContent = `
+        <div class="popup-content" style="text-align: center; padding: 5px;">
+          <div style="font-size: 12px; margin-bottom: 8px; color: var(--text-dim);">${lat}, ${lon}</div>
+          <button class="search-here-btn" onclick="searchAtLocation(${lat}, ${lon})">Search Here</button>
+        </div>
+      `;
+
+      L.popup()
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
+    });
+
+
+    let gridData = null;
+    let currentHourIndex = 0;
+    let currentDayIndex = 0;
+    let viewMode = 'hourly';
+    let rectangles = [];
+
+    const productSelect = document.getElementById('product-select');
+    const loadingEl = document.getElementById('loading');
+    const viewTabs = document.getElementById('view-tabs');
+    const viewLegend = document.getElementById('view-legend');
+    const selectionDetails = document.getElementById('selection-details');
+
+    const VIEW_LEGENDS = {
+      hourly: 'Hourly: each block is 1 hour across 7 days. Scroll sideways — play and 2x still work.',
+      daily: 'Daily: 16 days. First 7 use the usual majority-of-daytime-hours rule. Hatched days after that are trend guidance, not reliable go/no-go.'
+    };
+
+
+
+    // Try to get user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          currentLat = pos.coords.latitude;
+          currentLon = pos.coords.longitude;
+          centerMarker.setLatLng([currentLat, currentLon]);
+
+          fetchGridData();
+        },
+        (err) => {
+          console.log("Geolocation error or denied, using default location.");
+          fetchGridData();
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      fetchGridData();
+    }
+
+    window.searchAtLocation = function(lat, lon) {
+      currentLat = lat;
+      currentLon = lon;
+      map.setView([lat, lon], 9);
+      centerMarker.setLatLng([lat, lon]);
+      map.closePopup();
+      fetchGridData();
+    };
+
+    const locationSearchInput = document.getElementById('location-search-input');
+    const locationSearchBtn = document.getElementById('location-search-btn');
+
+    async function performLocationSearch() {
+      const query = locationSearchInput.value.trim();
+      if (!query) return;
+
+      loadingEl.style.display = 'flex';
+      try {
+        // Simple coordinate check (e.g. "42.35, -97.79")
+        const coordsMatch = query.match(/^\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*$/);
+        if (coordsMatch) {
+          currentLat = parseFloat(coordsMatch[1]);
+          currentLon = parseFloat(coordsMatch[3]);
+          map.setView([currentLat, currentLon], 9);
+          centerMarker.setLatLng([currentLat, currentLon]);
+          fetchGridData();
+          return;
+        }
+
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`, {
+          headers: {
+            'User-Agent': 'HeroWeatherApp/1.0'
+          }
+        });
+        const data = await res.json();
+
+        if (data && data.length > 0) {
+          currentLat = parseFloat(data[0].lat);
+          currentLon = parseFloat(data[0].lon);
+          map.setView([currentLat, currentLon], 9);
+          centerMarker.setLatLng([currentLat, currentLon]);
+          fetchGridData();
+        } else {
+          alert('Location not found. Try a different search term.');
+          loadingEl.style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Geocoding error:', err);
+        alert('Failed to search location.');
+        loadingEl.style.display = 'none';
+      }
+    }
+
+    locationSearchBtn.addEventListener('click', performLocationSearch);
+    locationSearchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performLocationSearch();
+      }
+    });
+
+    productSelect.addEventListener('change', fetchGridData);
+
+    async function fetchGridData() {
+      loadingEl.style.display = 'flex';
+
+      const radius = 30; // Hardcoded to 30 miles
+      const product = productSelect.value;
+
+      try {
+        const res = await fetch(`/api/spray-map.js?lat=${currentLat}&lon=${currentLon}&radius=${radius}&product=${encodeURIComponent(product)}`);
+
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        gridData = await res.json();
+
+        if (gridData && gridData.points && gridData.points.length > 0) {
+          rectangles.forEach(rect => map.removeLayer(rect)); rectangles = [];
+          currentHourIndex = 0;
+          currentDayIndex = 0;
+          renderSprayWindow({ reset: true });
+        }
+      } catch (err) {
+        console.error("Failed to fetch grid data:", err);
+        alert("Failed to load map data. Please try again.");
+      } finally {
+        loadingEl.style.display = 'none';
+      }
+    }
+
+    function getColorForStatus(status) {
+      if (status === 'favorable') return 'rgba(61,220,132,0.4)';
+      if (status === 'caution') return 'rgba(255,193,7,0.4)';
+      if (status === 'no-good') return 'rgba(255,77,77,0.4)';
+      return 'transparent';
+    }
+
+    function getBorderColorForStatus(status) {
+      if (status === 'favorable') return '#3ddc84';
+      if (status === 'caution') return '#ffc107';
+      if (status === 'no-good') return '#ff4d4d';
+      return 'transparent';
+    }
+
+
+    const sprayBarTrack = document.getElementById('spray-bar-track');
+    const sprayBarWrap = document.getElementById('spray-bar-wrap');
+
+    const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    function centerPointIndex() {
+      if (!gridData || !gridData.points) return 0;
+      const totalPoints = gridData.points.length;
+      const gridSize = Math.round(Math.sqrt(totalPoints));
+      if (gridSize * gridSize === totalPoints) {
+        const centerRow = Math.floor(gridSize / 2);
+        const centerCol = Math.floor(gridSize / 2);
+        return centerRow * gridSize + centerCol;
+      }
+      return 0;
+    }
+
+    function getCenterPoint() {
+      if (!gridData || !gridData.points || !gridData.points.length) return null;
+      return gridData.points[centerPointIndex()];
+    }
+
+    function parseLocalDate(timeStr) {
+      return new Date(String(timeStr || '').replace('T', ' '));
+    }
+
+    function formatDayLabel(timeOrDate) {
+      const dt = parseLocalDate(timeOrDate.length === 10 ? `${timeOrDate}T12:00` : timeOrDate);
+      return `${DAYS_OF_WEEK[dt.getDay()]} ${MONTHS[dt.getMonth()]} ${dt.getDate()}`;
+    }
+
+    function statusLabel(status) {
+      if (status === 'favorable') return 'Go';
+      if (status === 'caution') return 'Caution';
+      return 'No-Go';
+    }
+
+    function renderSprayWindow(opts) {
+      if (!gridData || !gridData.points || gridData.points.length === 0) return;
+
+      const center = getCenterPoint();
+      if (!center) return;
+
+      const hours = center.hourly || [];
+      const days = center.daily || [];
+      let htmlOutput = '';
+
+      if (viewMode === 'daily') {
+        days.forEach((day, i) => {
+          const dt = parseLocalDate(`${day.date}T12:00`);
+          const dow = DAYS_OF_WEEK[dt.getDay()];
+          const dateLabel = `${MONTHS[dt.getMonth()]} ${dt.getDate()}`;
+          const low = !!day.lowerConfidence;
+          if (low && (i === 0 || !days[i - 1].lowerConfidence)) {
+            htmlOutput += `<div class="confidence-break">Trend<br>only</div>`;
+          }
+          htmlOutput += `<div class="spray-segment daily-segment${low ? ' lower-confidence' : ''}" data-index="${i}">
+            <div class="spray-block ${day.status}" title="${(day.reasons || []).join(', ')}"></div>
+            <div class="spray-time bold">${dow}</div>
+            <div class="spray-time">${dateLabel}</div>
+            ${low ? '<div class="trend-mark">trend</div>' : ''}
+          </div>`;
+        });
+      } else {
+        let currentDayString = '';
+        hours.forEach((h, i) => {
+          const dt = parseLocalDate(h.time);
+          const hr = dt.getHours();
+          const hr12 = hr % 12 || 12;
+          const ampm = hr < 12 ? 'a' : 'p';
+          const bold = hr === 0 || hr === 6 || hr === 12 || hr === 18;
+          const dayStr = formatDayLabel(h.time);
+
+          if (i === 0 || (currentDayString !== '' && currentDayString !== dayStr)) {
+            if (i !== 0) htmlOutput += `<div class="midnight-divider"></div>`;
+            htmlOutput += `<div class="day-label">${dayStr}</div>`;
+            currentDayString = dayStr;
+          }
+
+          htmlOutput += `<div class="spray-segment" data-index="${i}">
+            <div class="spray-block ${h.status}" title="${(h.reasons || []).join(', ')}"></div>
+            <div class="spray-time ${bold ? 'bold' : ''}">${hr12}${ampm}</div>
+          </div>`;
+        });
+      }
+
+      sprayBarTrack.innerHTML = htmlOutput;
+
+      sprayBarTrack.querySelectorAll('.spray-segment').forEach(seg => {
+        seg.addEventListener('click', () => {
+          const idx = parseInt(seg.getAttribute('data-index'), 10);
+          syncToIndex(idx);
+        });
+      });
+
+      const maxIdx = viewMode === 'daily' ? Math.max(0, days.length - 1) : Math.max(0, hours.length - 1);
+      const startIdx = opts && opts.reset ? 0 : (viewMode === 'daily' ? currentDayIndex : currentHourIndex);
+      syncToIndex(Math.min(Math.max(0, startIdx), maxIdx));
+    }
+
+    function updateSelectionDetails() {
+      if (!selectionDetails) return;
+      const center = getCenterPoint();
+      if (!center) {
+        selectionDetails.innerHTML = '';
+        return;
+      }
+
+      if (viewMode === 'daily') {
+        const day = (center.daily || [])[currentDayIndex];
+        if (!day) {
+          selectionDetails.innerHTML = '';
+          return;
+        }
+        const goList = (day.goHours || []).map(h => h.label).join(', ') || 'none';
+        const windowText = day.bestWindow
+          ? `${day.bestWindow.startLabel}–${day.bestWindow.endLabel} (${day.bestWindow.hours}h ${statusLabel(day.bestWindow.status)})`
+          : 'none';
+        const reasonText = (day.reasons && day.reasons.length)
+          ? day.reasons.slice(0, 2).join(' · ')
+          : 'All daytime params within label limits';
+        const confidenceNote = day.lowerConfidence
+          ? ' · Lower confidence — trend guidance, not a reliable go/no-go'
+          : '';
+        selectionDetails.innerHTML =
+          `<strong>${formatDayLabel(day.date)}</strong> · ${statusLabel(day.status)}` +
+          ` · Best window: ${windowText}` +
+          ` · Worst: ${statusLabel(day.worstStatus)}` +
+          ` · Go hours: ${goList}` +
+          `${confidenceNote}` +
+          `<br>${reasonText}`;
+        return;
+      }
+
+      const hour = (center.hourly || [])[currentHourIndex];
+      if (!hour) {
+        selectionDetails.innerHTML = '';
+        return;
+      }
+      const dt = parseLocalDate(hour.time);
+      const hr12 = dt.getHours() % 12 || 12;
+      const ampm = dt.getHours() < 12 ? 'a' : 'p';
+      const reasonText = (hour.reasons && hour.reasons.length)
+        ? hour.reasons.slice(0, 2).join(' · ')
+        : 'All parameters within label limits';
+      selectionDetails.innerHTML =
+        `<strong>${formatDayLabel(hour.time)} ${hr12}${ampm}</strong> · ${statusLabel(hour.status)}` +
+        ` · ${hour.temp}°F · ${hour.wind} mph` +
+        `<br>${reasonText}`;
+    }
+
+    function syncToIndex(idx) {
+      if (!gridData || !gridData.points) return;
+      if (viewMode === 'daily') currentDayIndex = idx;
+      else currentHourIndex = idx;
+
+      sprayBarTrack.querySelectorAll('.spray-segment').forEach((el, i) => {
+        el.classList.toggle('active-segment', i === idx);
+      });
+
+      const activeEl = sprayBarTrack.querySelectorAll('.spray-segment')[idx];
+      if (activeEl && sprayBarWrap) {
+        const wrapCenter = sprayBarWrap.clientWidth / 2;
+        const elCenter = activeEl.offsetLeft + (activeEl.offsetWidth / 2);
+        sprayBarWrap.scrollTo({ left: elCenter - wrapCenter, behavior: 'smooth' });
+      }
+
+      updateSelectionDetails();
+      updateGridOverlay();
+    }
+
+    function generateHourlyPopupContent(point, hourData) {
+      const reasons = hourData.reasons && hourData.reasons.length > 0
+                    ? `<div style="margin-top:6px;font-size:11px;color:#ffaaaa;">${hourData.reasons.join('<br>')}</div>`
+                    : `<div style="margin-top:6px;font-size:11px;color:#aaffaa;">All parameters within label limits</div>`;
+
+      return `
+        <div class="popup-content">
+          <div class="popup-title">Location: ${point.lat}, ${point.lon}</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="popup-status status-${hourData.status}" style="margin: 0;">Status: ${statusLabel(hourData.status)}</div>
+            <button class="search-here-btn" onclick="searchAtLocation(${point.lat}, ${point.lon})">Search Here</button>
+          </div>
+          <div style="margin-top: 5px;">🌡️ Temp: ${hourData.temp}°F</div>
+          <div>💨 Wind: ${hourData.wind} mph (Gust: ${hourData.gust})</div>
+          <div>💧 RH: ${hourData.rh}%</div>
+          <div>🌧️ Precip: ${hourData.precip}%</div>
+          ${reasons}
+        </div>
+      `;
+    }
+
+    function generateDailyPopupContent(point, day) {
+      const goList = (day.goHours || []).map(h => h.label).join(', ') || 'none';
+      const windowText = day.bestWindow
+        ? `${day.bestWindow.startLabel}–${day.bestWindow.endLabel} (${day.bestWindow.hours}h ${statusLabel(day.bestWindow.status)})`
+        : 'none';
+      const reasons = day.reasons && day.reasons.length > 0
+                    ? `<div style="margin-top:6px;font-size:11px;color:#ffaaaa;">${day.reasons.join('<br>')}</div>`
+                    : `<div style="margin-top:6px;font-size:11px;color:#aaffaa;">All daytime params within label limits</div>`;
+      const tempLine = (day.tempMin != null && day.tempMax != null)
+        ? `${day.tempMin}–${day.tempMax}°F`
+        : (day.temp != null ? `${day.temp}°F` : '—');
+
+      return `
+        <div class="popup-content">
+          <div class="popup-title">${formatDayLabel(day.date)} · ${point.lat}, ${point.lon}</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="popup-status status-${day.status}" style="margin: 0;">Day: ${statusLabel(day.status)}</div>
+            <button class="search-here-btn" onclick="searchAtLocation(${point.lat}, ${point.lon})">Search Here</button>
+          </div>
+          ${day.lowerConfidence ? '<div style="margin-top:5px;font-size:11px;color:#ffc107;">Lower confidence — trend guidance past ~7 days, not a reliable go/no-go</div>' : ''}
+          <div style="margin-top: 5px;">Worst hour: ${statusLabel(day.worstStatus)}</div>
+          <div>Best window: ${windowText}</div>
+          <div>Go hours: ${goList}</div>
+          <div>🌡️ Temp: ${tempLine}</div>
+          <div>💨 Wind: ${day.wind != null ? day.wind : '—'} mph (Gust: ${day.gust != null ? day.gust : '—'})</div>
+          <div>💧 RH: ${day.rh != null ? day.rh : '—'}%</div>
+          <div>🌧️ Precip: ${day.precip != null ? day.precip : '—'}%</div>
+          ${reasons}
+        </div>
+      `;
+    }
+
+    function selectedSlot(point) {
+      if (viewMode === 'daily') return (point.daily || [])[currentDayIndex];
+      return (point.hourly || [])[currentHourIndex];
+    }
+
+    function generatePopupContent(point, slot) {
+      if (viewMode === 'daily') return generateDailyPopupContent(point, slot);
+      return generateHourlyPopupContent(point, slot);
+    }
+
+    function updateGridOverlay() {
+      if (!gridData || !gridData.points) return;
+
+      const isFirstRender = rectangles.length === 0;
+
+      gridData.points.forEach((point, idx) => {
+        const slot = selectedSlot(point);
+        if (!slot) return;
+
+        const status = slot.status;
+        const color = getColorForStatus(status);
+        const borderColor = getBorderColorForStatus(status);
+        const fillOpacity = (viewMode === 'daily' && slot.lowerConfidence) ? 0.55 : 1;
+
+        if (isFirstRender) {
+          const rect = L.rectangle(point.bounds, {
+            color: borderColor,
+            weight: 1,
+            fillColor: color,
+            fillOpacity
+          }).addTo(map);
+
+          rect.bindPopup(() => generatePopupContent(point, selectedSlot(point)));
+          rectangles.push(rect);
+        } else {
+          const rect = rectangles[idx];
+          rect.setStyle({ fillColor: color, color: borderColor, fillOpacity });
+          rect.getPopup().setContent(generatePopupContent(point, slot));
+        }
+      });
+    }
+
+    function setViewMode(nextView) {
+      if (nextView !== 'hourly' && nextView !== 'daily') return;
+      const center = getCenterPoint();
+      if (nextView !== viewMode && center) {
+        if (nextView === 'daily') {
+          const hour = (center.hourly || [])[currentHourIndex];
+          const date = hour && hour.time ? hour.time.slice(0, 10) : null;
+          const idx = (center.daily || []).findIndex(d => d.date === date);
+          currentDayIndex = idx >= 0 ? idx : 0;
+        } else {
+          const day = (center.daily || [])[currentDayIndex];
+          const date = day && day.date;
+          const idx = (center.hourly || []).findIndex(h => String(h.time).startsWith(date));
+          currentHourIndex = idx >= 0 ? idx : 0;
+        }
+      }
+      viewMode = nextView;
+      if (viewTabs) {
+        viewTabs.querySelectorAll('.sw-tab').forEach(tab => {
+          tab.classList.toggle('active', tab.getAttribute('data-view') === viewMode);
+        });
+      }
+      if (viewLegend) viewLegend.textContent = VIEW_LEGENDS[viewMode];
+      renderSprayWindow();
+    }
+
+    if (viewTabs) {
+      viewTabs.addEventListener('click', (e) => {
+        const tab = e.target.closest('.sw-tab');
+        if (!tab) return;
+        setViewMode(tab.getAttribute('data-view'));
+      });
+    }
+
+
+
+    const playPauseBtn = document.getElementById('play-pause');
+    let playInterval = null;
+
+    const playbackSpeedSelect = document.getElementById('playback-speed');
+
+    function currentMaxIndex() {
+      const center = getCenterPoint() || (gridData && gridData.points && gridData.points[0]);
+      if (!center) return 0;
+      if (viewMode === 'daily') return Math.max(0, (center.daily || []).length - 1);
+      return Math.max(0, (center.hourly || []).length - 1);
+    }
+
+    function startPlayback() {
+      if (playInterval) clearInterval(playInterval);
+      const intervalMs = parseInt(playbackSpeedSelect.value, 10) || 1000;
+      playInterval = setInterval(() => {
+        if (!gridData || !gridData.points) return;
+        const maxIdx = currentMaxIndex();
+        const current = viewMode === 'daily' ? currentDayIndex : currentHourIndex;
+        let nextIdx = current + 1;
+        if (nextIdx > maxIdx) {
+          nextIdx = 0; // loop back to start
+        }
+        syncToIndex(nextIdx);
+      }, intervalMs);
+    }
+
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener('click', () => {
+        if (playInterval) {
+          clearInterval(playInterval);
+          playInterval = null;
+          playPauseBtn.textContent = '▶';
+        } else {
+          playPauseBtn.textContent = '⏸';
+          startPlayback();
+        }
+      });
+    }
+
+    if (playbackSpeedSelect) {
+      playbackSpeedSelect.addEventListener('change', () => {
+        if (playInterval) {
+          startPlayback(); // restart with new speed
+        }
+      });
+    }
+
+  </script>
+</body></html>
