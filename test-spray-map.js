@@ -3,7 +3,10 @@ const {
   generateGrid,
   buildForecastUrl,
   FORECAST_DAYS,
+  HOURLY_DAYS,
   HOURLY_LIMIT,
+  FETCH_HOURS,
+  CONFIDENT_DAYS,
   CACHE_TTL_MS,
   getCacheKey,
   majorityDayStatus,
@@ -11,7 +14,9 @@ const {
   findBestWindow,
   daytimeHours,
   rollupDaily,
-  formatHourShort
+  formatHourShort,
+  markLowerConfidence,
+  applyViewWindows
 } = require('./api/spray-map.js');
 const { scoreHourly, normalizeOpenMeteo } = require('./lib/spray-logic.js');
 
@@ -103,23 +108,29 @@ async function runTests() {
     assert.strictEqual(scored[0].spray.status, 'favorable', 'Status should be favorable for optimal conditions');
   });
 
-  check('Open-Meteo request asks for 7 days / 168 hours in one batched URL', () => {
-    assert.strictEqual(FORECAST_DAYS, 7);
+  check('Open-Meteo request asks for 16 days in one batched URL; Hourly stays 7 days', () => {
+    assert.strictEqual(FORECAST_DAYS, 16);
+    assert.strictEqual(HOURLY_DAYS, 7);
     assert.strictEqual(HOURLY_LIMIT, 168);
+    assert.strictEqual(FETCH_HOURS, 384);
+    assert.strictEqual(CONFIDENT_DAYS, 7);
     const url = buildForecastUrl('42.35,42.4', '-97.79,-97.7');
-    assert(url.includes('forecast_days=7'), 'URL must request 7 forecast days');
+    assert(url.includes('forecast_days=16'), 'URL must request 16 forecast days');
     assert(!url.includes('forecast_days=2'), 'URL must not still request 2 days');
+    assert(!url.includes('forecast_days=7'), 'Daily needs the 16-day fetch, not a 7-day fetch');
     assert(url.includes('latitude=42.35,42.4'), 'URL must batch multiple latitudes');
     assert(url.includes('longitude=-97.79,-97.7'), 'URL must batch multiple longitudes');
     assert.strictEqual(url.indexOf('https://api.open-meteo.com/v1/forecast'), 0);
   });
 
-  check('normalizeOpenMeteo default stays 96; 168-hour window is opt-in', () => {
-    const raw = makeRawHours(168);
+  check('normalizeOpenMeteo default stays 96; 16-day hourly is opt-in', () => {
+    const raw = makeRawHours(384);
     const defaultNorm = normalizeOpenMeteo(raw);
     assert.strictEqual(defaultNorm.hourly.length, 96, 'Default cap stays 96 for the main forecast');
     const weekNorm = normalizeOpenMeteo(raw, HOURLY_LIMIT);
-    assert.strictEqual(weekNorm.hourly.length, 168, 'Spray map can normalize a full 7-day hourly set');
+    assert.strictEqual(weekNorm.hourly.length, 168, '7-day hourly cap still works');
+    const fullNorm = normalizeOpenMeteo(raw, FETCH_HOURS);
+    assert.strictEqual(fullNorm.hourly.length, 384, 'Spray map can normalize the full 16-day hourly set');
   });
 
   check('in-memory cache key and TTL are unchanged', () => {
@@ -243,6 +254,48 @@ async function runTests() {
     assert.strictEqual(day2.tempMax, 82);
     assert.strictEqual(day2.wind, 14);
     assert.strictEqual(day2.gust, 22);
+  });
+
+  check('16-day daily rollup; Hourly view still tops out at 168 hours', () => {
+    const hours = [];
+    for (let d = 1; d <= 16; d++) {
+      const date = `2023-10-${String(d).padStart(2, '0')}`;
+      for (let i = 0; i < 24; i++) {
+        const hr = String(i).padStart(2, '0');
+        const status = d <= 7 && i >= 6 && i <= 20 ? 'favorable' : 'caution';
+        hours.push(hour(`${date}T${hr}:00`, status, {
+          temp: 70, wind: 8, gust: 12, rh: 45, precip: 5
+        }));
+      }
+    }
+    assert.strictEqual(hours.length, 384);
+
+    const windows = applyViewWindows(hours);
+    assert.strictEqual(windows.hourly.length, 168, 'Hourly payload stays at 7 days / 168h');
+    assert.strictEqual(windows.hourly[0].time, '2023-10-01T00:00');
+    assert.strictEqual(windows.hourly[167].time, '2023-10-07T23:00');
+    assert.ok(!windows.hourly.some(h => h.time.startsWith('2023-10-08')), 'Hourly must not include day 8+');
+
+    assert.strictEqual(windows.daily.length, 16, 'Daily rollup covers all 16 days');
+    assert.strictEqual(windows.daily[0].date, '2023-10-01');
+    assert.strictEqual(windows.daily[15].date, '2023-10-16');
+    windows.daily.forEach((day, i) => {
+      assert.strictEqual(day.lowerConfidence, i >= 7, `Day ${i + 1} lowerConfidence`);
+    });
+    assert.strictEqual(windows.daily.filter(d => !d.lowerConfidence).length, 7);
+    assert.strictEqual(windows.daily.filter(d => d.lowerConfidence).length, 9);
+    assert.strictEqual(windows.daily[0].status, 'favorable');
+    assert.ok(windows.daily[0].bestWindow);
+    assert.ok(windows.daily[15].worstStatus);
+  });
+
+  check('markLowerConfidence flags only days after the first 7', () => {
+    const marked = markLowerConfidence(
+      Array.from({ length: 16 }, (_, i) => ({ date: `d${i + 1}`, status: 'caution' }))
+    );
+    assert.strictEqual(marked.length, 16);
+    assert.strictEqual(marked[6].lowerConfidence, false);
+    assert.strictEqual(marked[7].lowerConfidence, true);
   });
 
   console.log(`All ${passed} tests passed!`);

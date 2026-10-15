@@ -4,9 +4,13 @@ const {
   calcSunriseSunset
 } = require('../lib/spray-logic');
 
-// Open-Meteo hourly forecast_days max is 16; 7 days = 168 hours.
-const FORECAST_DAYS = 7;
-const HOURLY_LIMIT = 168;
+// Open-Meteo forecast_days max is 16. Daily uses the full 16-day set.
+// Hourly view stays at 7 days (168h) so the client payload stays small.
+const FORECAST_DAYS = 16;
+const HOURLY_DAYS = 7;
+const HOURLY_LIMIT = HOURLY_DAYS * 24;
+const FETCH_HOURS = FORECAST_DAYS * 24;
+const CONFIDENT_DAYS = 7;
 
 // Hero daily spray window defaults (same as /api/forecast):
 // sunrise + 0h through sunset + 2h.
@@ -229,6 +233,21 @@ function rollupDaily(hourly, options = {}) {
   return days;
 }
 
+function markLowerConfidence(days, confidentDays = CONFIDENT_DAYS) {
+  return (days || []).map((day, i) => ({
+    ...day,
+    lowerConfidence: i >= confidentDays
+  }));
+}
+
+// Score the full 16-day hourly set, then keep only 7 days of hours for the
+// Hourly strip. Daily rollup uses every scored hour.
+function applyViewWindows(scoredHours, rollupOptions = {}) {
+  const daily = markLowerConfidence(rollupDaily(scoredHours, rollupOptions), CONFIDENT_DAYS);
+  const hourly = (scoredHours || []).slice(0, HOURLY_LIMIT);
+  return { hourly, daily };
+}
+
 function getCacheKey(lat, lon, radius, product) {
   // Round lat/lon to ~0.05 degrees (approx 3.5 miles) to increase cache hits
   // when users pan slightly.
@@ -318,7 +337,7 @@ async function handler(req, res) {
     const lats = points.map(p => p.lat).join(',');
     const lons = points.map(p => p.lon).join(',');
 
-    // One batched Open-Meteo call for the whole 7x7 grid (7-day / 168h hourly).
+    // One batched Open-Meteo call for the whole 7x7 grid (16-day hourly).
     const url = buildForecastUrl(lats, lons);
 
     const response = await fetch(url);
@@ -337,7 +356,7 @@ async function handler(req, res) {
 
     const scoredPoints = points.map((p, index) => {
       const rawLocationData = resultsArray[index];
-      const norm = normalizeOpenMeteo(rawLocationData, HOURLY_LIMIT);
+      const norm = normalizeOpenMeteo(rawLocationData, FETCH_HOURS);
 
       // Open-Meteo returns time strings in local time when timezone=auto.
       // To accurately filter past hours, we compare them against the current local time.
@@ -345,14 +364,14 @@ async function handler(req, res) {
       // Create an ISO-like string YYYY-MM-DDTHH:00 to match Open-Meteo's format
       const localIso = currentLocalTime.toISOString().slice(0, 14) + "00";
 
-      // Next 7 days (up to 168 hours) starting from the current local hour
-      const futureHours = norm.hourly.filter(h => h.time >= localIso).slice(0, HOURLY_LIMIT);
+      // Score the full 16-day hourly set (needed for Daily), then cap Hourly at 168h.
+      const futureHours = norm.hourly.filter(h => h.time >= localIso).slice(0, FETCH_HOURS);
 
       // Score with Hero spray rules (Clarity method + product label thresholds).
       const scoredHourly = scoreHourly(futureHours, product, 'clarity');
 
       // Map down to what the frontend needs to save bandwidth
-      const simplifiedHourly = scoredHourly.map(h => ({
+      const simplifiedAll = scoredHourly.map(h => ({
         time: h.time,
         status: h.spray.status,
         reasons: h.spray.reasons,
@@ -363,14 +382,16 @@ async function handler(req, res) {
         precip: h.precip_pct
       }));
 
+      const windows = applyViewWindows(simplifiedAll, {
+        lat: p.lat,
+        lon: p.lon,
+        utcOffsetSeconds: norm.utcOffsetSeconds
+      });
+
       return {
         ...p,
-        hourly: simplifiedHourly,
-        daily: rollupDaily(simplifiedHourly, {
-          lat: p.lat,
-          lon: p.lon,
-          utcOffsetSeconds: norm.utcOffsetSeconds
-        })
+        hourly: windows.hourly,
+        daily: windows.daily
       };
     });
 
@@ -380,6 +401,7 @@ async function handler(req, res) {
       product,
       forecastDays: FORECAST_DAYS,
       forecastHours: HOURLY_LIMIT,
+      confidentDays: CONFIDENT_DAYS,
       points: scoredPoints
     };
 
@@ -397,8 +419,13 @@ module.exports = handler;
 module.exports.generateGrid = generateGrid;
 module.exports.buildForecastUrl = buildForecastUrl;
 module.exports.FORECAST_DAYS = FORECAST_DAYS;
+module.exports.HOURLY_DAYS = HOURLY_DAYS;
 module.exports.HOURLY_LIMIT = HOURLY_LIMIT;
+module.exports.FETCH_HOURS = FETCH_HOURS;
+module.exports.CONFIDENT_DAYS = CONFIDENT_DAYS;
 module.exports.CACHE_TTL_MS = CACHE_TTL_MS;
+module.exports.markLowerConfidence = markLowerConfidence;
+module.exports.applyViewWindows = applyViewWindows;
 module.exports.getCacheKey = getCacheKey;
 module.exports.majorityDayStatus = majorityDayStatus;
 module.exports.worstCaseStatus = worstCaseStatus;

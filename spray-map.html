@@ -294,11 +294,44 @@
     }
 
     .spray-segment.daily-segment {
-      width: 72px;
+      width: 56px;
       scroll-snap-align: start;
     }
     .spray-segment.daily-segment .spray-block { height: 44px; }
     .spray-segment.daily-segment .spray-time { font-size: 11px; }
+    .spray-segment.daily-segment.lower-confidence .spray-block {
+      opacity: 0.62;
+      background-image: repeating-linear-gradient(
+        135deg,
+        rgba(8, 15, 30, 0.28) 0 3px,
+        transparent 3px 7px
+      );
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+    }
+    .spray-segment.daily-segment.lower-confidence .spray-time { color: var(--text-muted); }
+    .trend-mark {
+      font-size: 9px;
+      letter-spacing: 0.02em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .confidence-break {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 18px;
+      margin: 0 4px;
+      color: var(--text-muted);
+      font-size: 9px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.15;
+      border-left: 2px dashed rgba(255,255,255,0.35);
+      padding-left: 4px;
+    }
 
     /* Search Here button inside popups */
     .search-here-btn {
@@ -439,7 +472,7 @@
 
     const VIEW_LEGENDS = {
       hourly: 'Hourly: each block is 1 hour across 7 days. Scroll sideways — play and 2x still work.',
-      daily: 'Daily: color is the majority of daytime hours (sunrise to 2h after sunset) — same rule as the main forecast. Tap a day for Go hours, the best window, and the worst hour.'
+      daily: 'Daily: 16 days. First 7 use the usual majority-of-daytime-hours rule. Hatched days after that are trend guidance, not reliable go/no-go.'
     };
 
 
@@ -623,10 +656,15 @@
           const dt = parseLocalDate(`${day.date}T12:00`);
           const dow = DAYS_OF_WEEK[dt.getDay()];
           const dateLabel = `${MONTHS[dt.getMonth()]} ${dt.getDate()}`;
-          htmlOutput += `<div class="spray-segment daily-segment" data-index="${i}">
+          const low = !!day.lowerConfidence;
+          if (low && (i === 0 || !days[i - 1].lowerConfidence)) {
+            htmlOutput += `<div class="confidence-break">Trend<br>only</div>`;
+          }
+          htmlOutput += `<div class="spray-segment daily-segment${low ? ' lower-confidence' : ''}" data-index="${i}">
             <div class="spray-block ${day.status}" title="${(day.reasons || []).join(', ')}"></div>
             <div class="spray-time bold">${dow}</div>
             <div class="spray-time">${dateLabel}</div>
+            ${low ? '<div class="trend-mark">trend</div>' : ''}
           </div>`;
         });
       } else {
@@ -687,11 +725,15 @@
         const reasonText = (day.reasons && day.reasons.length)
           ? day.reasons.slice(0, 2).join(' · ')
           : 'All daytime params within label limits';
+        const confidenceNote = day.lowerConfidence
+          ? ' · Lower confidence — trend guidance, not a reliable go/no-go'
+          : '';
         selectionDetails.innerHTML =
           `<strong>${formatDayLabel(day.date)}</strong> · ${statusLabel(day.status)}` +
           ` · Best window: ${windowText}` +
           ` · Worst: ${statusLabel(day.worstStatus)}` +
           ` · Go hours: ${goList}` +
+          `${confidenceNote}` +
           `<br>${reasonText}`;
         return;
       }
@@ -773,6 +815,7 @@
             <div class="popup-status status-${day.status}" style="margin: 0;">Day: ${statusLabel(day.status)}</div>
             <button class="search-here-btn" onclick="searchAtLocation(${point.lat}, ${point.lon})">Search Here</button>
           </div>
+          ${day.lowerConfidence ? '<div style="margin-top:5px;font-size:11px;color:#ffc107;">Lower confidence — trend guidance past ~7 days, not a reliable go/no-go</div>' : ''}
           <div style="margin-top: 5px;">Worst hour: ${statusLabel(day.worstStatus)}</div>
           <div>Best window: ${windowText}</div>
           <div>Go hours: ${goList}</div>
@@ -807,20 +850,21 @@
         const status = slot.status;
         const color = getColorForStatus(status);
         const borderColor = getBorderColorForStatus(status);
+        const fillOpacity = (viewMode === 'daily' && slot.lowerConfidence) ? 0.55 : 1;
 
         if (isFirstRender) {
           const rect = L.rectangle(point.bounds, {
             color: borderColor,
             weight: 1,
             fillColor: color,
-            fillOpacity: 1
+            fillOpacity
           }).addTo(map);
 
           rect.bindPopup(() => generatePopupContent(point, selectedSlot(point)));
           rectangles.push(rect);
         } else {
           const rect = rectangles[idx];
-          rect.setStyle({ fillColor: color, color: borderColor });
+          rect.setStyle({ fillColor: color, color: borderColor, fillOpacity });
           rect.getPopup().setContent(generatePopupContent(point, slot));
         }
       });
