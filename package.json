@@ -1,0 +1,8 @@
+{
+  "name": "hero-weather",
+  "private": true,
+  "description": "Hero spray weather app",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}
