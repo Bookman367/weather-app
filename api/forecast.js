@@ -19,6 +19,10 @@ const {
   normalizeCondition,
   parseLatLon
 } = require('../lib/spray-logic');
+const {
+  parseLimitsParam,
+  recommendedSetting
+} = require('../lib/spray-settings');
 
 async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,6 +31,8 @@ async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   let locationStr, herbicide, method, source, sunriseOffset, sunsetOffset, coordQuery;
+  let customLimits = null;
+  let spraySetting = recommendedSetting();
   if (req.method === 'GET') {
     const { query } = req;
     coordQuery = query;
@@ -36,6 +42,14 @@ async function handler(req, res) {
     source      = query.source || 'open-meteo';
     sunriseOffset = parseInt(query.sunriseOffset || '0');
     sunsetOffset  = parseInt(query.sunsetOffset || '2');
+    customLimits = parseLimitsParam(query.limits);
+    if (query.settingName) {
+      spraySetting = {
+        id: query.settingId || 'custom',
+        name: String(query.settingName),
+        builtIn: false
+      };
+    }
   } else {
     const body = req.body || {};
     coordQuery = body;
@@ -45,6 +59,14 @@ async function handler(req, res) {
     source      = body.source || 'open-meteo';
     sunriseOffset = parseInt(body.sunriseOffset || '0');
     sunsetOffset  = parseInt(body.sunsetOffset || '2');
+    customLimits = parseLimitsParam(body.limits);
+    if (body.settingName) {
+      spraySetting = {
+        id: body.settingId || 'custom',
+        name: String(body.settingName),
+        builtIn: false
+      };
+    }
   }
 
   try {
@@ -79,10 +101,13 @@ async function handler(req, res) {
     }
 
     const product = PRODUCTS[herbicide] || PRODUCTS.general;
+    const limitsForScore = customLimits
+      ? Object.assign({ name: spraySetting.name }, customLimits)
+      : undefined;
 
     // Add spray conditions to each hour
     for (const hour of hourly) {
-      hour.spray = scoreSprayConditions(hour, herbicide, method);
+      hour.spray = scoreSprayConditions(hour, herbicide, method, limitsForScore);
     }
 
     // Time alignment: return only the next 96 hours starting from now
@@ -233,7 +258,7 @@ async function handler(req, res) {
         precip_pct: maxPrecip ?? 0,
         delta_t: worstDeltaT,
         delta_t_f: deltaTtoF(worstDeltaT)
-      }, herbicide, method);
+      }, herbicide, method, limitsForScore);
 
       // Majority-rule daily status
       const overallStatus = majorityDayStatus(scoringHours);
@@ -313,6 +338,7 @@ async function handler(req, res) {
         display: geoResult.display
       },
       product: product.name,
+      spraySetting: { id: spraySetting.id, name: spraySetting.name },
       inversion: inversionAlert,
       rain_in_hours: rainIn,
       summary: { favorable: favorableCount, caution: cautionCount, no_good: noGoodCount, best_window: { start: bestStart, hours: bestLen } },

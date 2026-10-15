@@ -257,6 +257,55 @@
     }
     .product-select option { background: #1a2535; color: white; }
 
+    .setting-select-row { margin-bottom: 16px; }
+    .setting-select-row > label {
+      font-size: 12px; color: var(--text-dim); margin-bottom: 5px; display: block;
+    }
+    .setting-select-wrap { display: flex; gap: 8px; align-items: stretch; }
+    .setting-select-wrap .product-select { margin-bottom: 0; }
+    .manage-settings-btn {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      color: var(--text); font-size: 13px; font-weight: 600;
+      padding: 0 14px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    }
+    .manage-settings-btn:hover { background: rgba(255,255,255,0.18); }
+    .setting-used {
+      margin-top: 4px; font-size: 11px; color: var(--text-muted); font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .cc-status-text .setting-used { margin-top: 6px; font-weight: 600; text-transform: none; letter-spacing: 0.2px; }
+    .ss-editor-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin-top: 12px;
+    }
+    .ss-field label { display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+    .ss-field input[type="number"], .ss-field input[type="text"] {
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; color: var(--text); font-size: 13px; padding: 7px 8px; outline: none;
+    }
+    .ss-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .ss-actions button {
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; color: var(--text); font-size: 12px; font-weight: 600;
+      padding: 7px 12px; cursor: pointer;
+    }
+    .ss-actions button.primary { background: var(--green); border-color: var(--green); color: #0b1a12; }
+    .ss-actions button.danger { color: #ff8a8a; }
+    .ss-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 16px; }
+    .ss-item {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 8px 10px; flex-wrap: wrap;
+    }
+    .ss-item.active { border-color: var(--green); }
+    .ss-item .ss-name { font-size: 13px; font-weight: 600; }
+    .ss-item .ss-meta { font-size: 10px; color: var(--text-muted); }
+    [data-theme="light"] .manage-settings-btn { background: rgba(255,255,255,0.7); color: #1a2035; border-color: rgba(0,0,0,0.12); }
+    [data-theme="light"] .ss-field input { background: rgba(255,255,255,0.9); color: #1a2035; border-color: rgba(0,0,0,0.12); }
+    [data-theme="light"] .ss-item { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
+
     /* ── Hero Location ────────────────────────────────────── */
     .hero-location {
       display: flex; justify-content: space-between;
@@ -538,6 +587,14 @@
     <option value="Detonate + 2,4-D">🧪⛔ Detonate + 2,4-D (Pasture near Soybeans)</option>
   </select>
 
+  <div class="setting-select-row">
+    <label for="spray-setting-select">Spray setting</label>
+    <div class="setting-select-wrap">
+      <select class="product-select" id="spray-setting-select"></select>
+      <button type="button" class="manage-settings-btn" id="manage-settings-btn">Manage</button>
+    </div>
+  </div>
+
   <!-- Weather Source Dropdown -->
   <div style="margin-bottom: 15px;">
     <label style="font-size: 12px; color: var(--text-dim); margin-bottom: 5px; display: block;">Weather Data Source</label>
@@ -656,6 +713,17 @@
   </div>
 </div>
 
+<!-- Spray settings modal -->
+<div class="modal-backdrop" id="modal-spray-settings">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span class="modal-title">⚙️ Named spray settings</span>
+      <button class="modal-close" onclick="closeModal('modal-spray-settings')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-spray-settings-body"></div>
+  </div>
+</div>
+
 <!-- Daily Modal -->
 <div class="modal-backdrop" id="modal-daily">
   <div class="modal-card">
@@ -667,6 +735,7 @@
   </div>
 </div>
 
+<script src="/lib/spray-settings.js"></script>
 <script>
 // ════════════════════════════════════════════
 //  STATE
@@ -700,6 +769,170 @@ function fmtNum(val, digits) {
 }
 
 // ════════════════════════════════════════════
+//  NAMED SPRAY SETTINGS (localStorage)
+// ════════════════════════════════════════════
+function settingsReady() { return typeof SpraySettings !== 'undefined'; }
+function settingsStorage() {
+  try { return window.localStorage; } catch (e) { return settingsReady() ? SpraySettings.memoryStorage() : { getItem(){return null;}, setItem(){}, removeItem(){} }; }
+}
+function loadSprayDoc() { return settingsReady() ? SpraySettings.loadStore(settingsStorage()) : null; }
+function activeSpraySetting() {
+  if (!settingsReady()) return { id: 'recommended', name: 'Recommended', builtIn: true };
+  return SpraySettings.resolveActive(loadSprayDoc());
+}
+function settingUsedLabel(name) {
+  const label = name || (state.data && state.data.spraySetting && state.data.spraySetting.name) || activeSpraySetting().name;
+  return `<div class="setting-used">Rules: ${esc(label)}</div>`;
+}
+function refreshSettingSelect() {
+  const sel = document.getElementById('spray-setting-select');
+  if (!sel || !settingsReady()) return;
+  const doc = loadSprayDoc();
+  const active = SpraySettings.resolveActive(doc);
+  sel.innerHTML = SpraySettings.listSettings(doc).map(s =>
+    `<option value="${esc(s.id)}"${s.id === active.id ? ' selected' : ''}>${esc(s.name)}${s.builtIn ? ' (default)' : ''}</option>`
+  ).join('');
+}
+function applyLimitsToForecastParams(params) {
+  if (!settingsReady()) return params;
+  const active = activeSpraySetting();
+  if (!SpraySettings.isCustomActive(active)) return params;
+  params.set('limits', JSON.stringify(active.limits));
+  params.set('settingName', active.name);
+  params.set('settingId', active.id);
+  return params;
+}
+function refillForecast() {
+  const loc = document.getElementById('loc-input').value.trim();
+  if (!state.data || !loc) return;
+  const herb = document.getElementById('herb-select').value;
+  const meth = document.getElementById('method-select').value;
+  const src  = document.getElementById('source-select').value;
+  const sunriseOffset = document.getElementById('settings-sunrise-offset').value;
+  const sunsetOffset  = document.getElementById('settings-sunset-offset').value;
+  fetchAndRender(loc, herb, meth, src, sunriseOffset, sunsetOffset);
+}
+function renderSpraySettingsModal() {
+  const body = document.getElementById('modal-spray-settings-body');
+  if (!body) return;
+  const doc = loadSprayDoc();
+  const active = SpraySettings.resolveActive(doc);
+  const editingId = body.dataset.editingId || '';
+  const editing = SpraySettings.listSettings(doc).find(s => s.id === editingId && !s.builtIn);
+  const draft = editing || { name: '', limits: SpraySettings.recommendedLimits() };
+  const fields = SpraySettings.EDITOR_FIELDS.map(f => {
+    if (f.type === 'boolean') {
+      return `<div class="ss-field" style="grid-column:1/-1">
+        <label><input type="checkbox" id="ss-${f.key}" ${draft.limits[f.key] ? 'checked' : ''}> ${esc(f.label)}</label>
+      </div>`;
+    }
+    return `<div class="ss-field">
+      <label for="ss-${f.key}">${esc(f.label)}</label>
+      <input type="number" id="ss-${f.key}" value="${draft.limits[f.key] != null ? draft.limits[f.key] : ''}">
+    </div>`;
+  }).join('');
+  const items = SpraySettings.listSettings(doc).map(s => `
+    <div class="ss-item${s.id === active.id ? ' active' : ''}">
+      <div>
+        <div class="ss-name">${esc(s.name)}</div>
+        <div class="ss-meta">${s.builtIn ? 'Built-in recommended preset' : 'Saved in this browser'}</div>
+      </div>
+      <div class="ss-actions" style="margin-top:0">
+        <button type="button" onclick="useSpraySetting('${esc(s.id)}')">Use</button>
+        ${s.builtIn ? '' : `<button type="button" onclick="editSpraySetting('${esc(s.id)}')">Edit</button>
+        <button type="button" class="danger" onclick="deleteSpraySetting('${esc(s.id)}')">Delete</button>`}
+      </div>
+    </div>`).join('');
+  body.innerHTML = `
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">
+      Recommended is the default and matches today’s General Ag rules. Custom names are saved in this browser only.
+      Per-field overrides live in Ops — this export is ready for them to import later.
+    </p>
+    <div class="ss-list">${items}</div>
+    <div style="font-size:13px;font-weight:700;margin-top:6px">${editing ? 'Edit setting' : 'Create a named setting'}</div>
+    <div class="ss-field" style="margin-top:8px">
+      <label for="ss-name">Name</label>
+      <input type="text" id="ss-name" placeholder="Herbicide - drift sensitive" value="${esc(draft.name)}">
+    </div>
+    <div class="ss-editor-grid">${fields}</div>
+    <div class="ss-actions">
+      <button type="button" class="primary" onclick="saveSpraySetting()">${editing ? 'Save changes' : 'Save setting'}</button>
+      ${editing ? '<button type="button" onclick="clearSprayEditor()">Cancel edit</button>' : ''}
+      <button type="button" onclick="exportSpraySettings()">Copy JSON for Ops</button>
+    </div>
+    <p id="ss-export-status" style="font-size:11px;color:var(--text-muted);margin-top:8px"></p>
+  `;
+}
+function useSpraySetting(id) {
+  SpraySettings.setActive(settingsStorage(), id);
+  refreshSettingSelect();
+  renderSpraySettingsModal();
+  refillForecast();
+}
+function editSpraySetting(id) {
+  const body = document.getElementById('modal-spray-settings-body');
+  if (body) body.dataset.editingId = id;
+  renderSpraySettingsModal();
+}
+function clearSprayEditor() {
+  const body = document.getElementById('modal-spray-settings-body');
+  if (body) delete body.dataset.editingId;
+  renderSpraySettingsModal();
+}
+function readEditorLimits() {
+  const limits = SpraySettings.recommendedLimits();
+  SpraySettings.EDITOR_FIELDS.forEach(f => {
+    const el = document.getElementById('ss-' + f.key);
+    if (!el) return;
+    if (f.type === 'boolean') limits[f.key] = el.checked;
+    else if (el.value !== '') limits[f.key] = Number(el.value);
+  });
+  return limits;
+}
+function saveSpraySetting() {
+  const name = (document.getElementById('ss-name') || {}).value || '';
+  const body = document.getElementById('modal-spray-settings-body');
+  const editingId = body && body.dataset.editingId;
+  try {
+    SpraySettings.upsertSetting(settingsStorage(), {
+      id: editingId || undefined,
+      name,
+      limits: readEditorLimits()
+    });
+    if (body) delete body.dataset.editingId;
+    refreshSettingSelect();
+    renderSpraySettingsModal();
+    refillForecast();
+  } catch (err) {
+    alert(err.message || 'Could not save setting');
+  }
+}
+function deleteSpraySetting(id) {
+  if (!confirm('Delete this spray setting?')) return;
+  SpraySettings.deleteSetting(settingsStorage(), id);
+  refreshSettingSelect();
+  renderSpraySettingsModal();
+  refillForecast();
+}
+function exportSpraySettings() {
+  const payload = JSON.stringify(SpraySettings.exportDocument(loadSprayDoc()), null, 2);
+  const status = document.getElementById('ss-export-status');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(payload).then(() => {
+      if (status) status.textContent = 'Copied. Ops can import this JSON later (user scope; job/field left empty).';
+    }).catch(() => { if (status) status.textContent = payload; });
+  } else if (status) {
+    status.textContent = payload;
+  }
+}
+window.useSpraySetting = useSpraySetting;
+window.editSpraySetting = editSpraySetting;
+window.clearSprayEditor = clearSprayEditor;
+window.saveSpraySetting = saveSpraySetting;
+window.deleteSpraySetting = deleteSpraySetting;
+window.exportSpraySettings = exportSpraySettings;
+
+// ════════════════════════════════════════════
 //  SEARCH & FETCH
 // ════════════════════════════════════════════
 async function doSearch() {
@@ -726,6 +959,7 @@ async function fetchAndRender(loc, herb, meth, src, sunriseOffset = 0, sunsetOff
       q: loc, herbicide: herb, method: meth, source: src,
       sunriseOffset, sunsetOffset
     });
+    applyLimitsToForecastParams(params);
     const resp = await fetch(`/api/forecast?${params}`);
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({ error: `HTTP ${resp.status}` }));
@@ -907,7 +1141,8 @@ function renderHeroLocation(d, now) {
     </div>
     <div style="text-align:right">
       <div style="font-size:32px;line-height:1.2">${sprayIcon}</div>
-      <div style="font-size:12px;color:${statusColor};font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:0.5px">${statusLabel}</div>
+        <div style="font-size:12px;color:${statusColor};font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:0.5px">${statusLabel}</div>
+      ${settingUsedLabel()}
       ${now.delta_t != null ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">ΔT: ${now.delta_t.toFixed(1)}°C</div>` : ''}
     </div>
   </div>`;
@@ -940,6 +1175,7 @@ function renderHeroSprayStatus(d, now, summary) {
           <div>
             <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:700">Spray Status</div>
             <div style="font-size:20px;color:${statusColor};font-weight:800;line-height:1.2">${statusLabel}</div>
+            ${settingUsedLabel()}
           </div>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:13px">
@@ -1012,7 +1248,7 @@ function renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc
     <div class="cc-header">
       <div>
         <div class="cc-title">Spray Status Command Center</div>
-        <div class="cc-status-text ${status}">${statusLabel}</div>
+        <div class="cc-status-text ${status}">${statusLabel}${settingUsedLabel()}</div>
       </div>
     </div>
 
@@ -1236,7 +1472,7 @@ function updateCommandCenter(h, d) {
     oldHeader.innerHTML = `
       <div>
         <div class="cc-title">Spray Status Command Center</div>
-        <div class="cc-status-text ${status}">${statusLabel}</div>
+        <div class="cc-status-text ${status}">${statusLabel}${settingUsedLabel()}</div>
       </div>`;
   }
 
@@ -1469,6 +1705,10 @@ function renderThreshStrip(product) {
 function openModal(id) {
   document.getElementById(id).classList.add('open');
   document.body.style.overflow = 'hidden';
+  if (id === 'modal-spray-settings') {
+    try { renderSpraySettingsModal(); } catch (err) { console.error(err); }
+    return;
+  }
   if (!state.data) return;
   try {
     if (id === 'modal-hourly') renderHourlyModal();
@@ -1534,7 +1774,7 @@ function renderHourlyModal() {
     rows += `<tr>
       <td style="color:rgba(255,255,255,0.55);font-size:11px">${timeStr}</td>
       <td>${skyCell}</td>
-      <td><span class="status-dot ${h.spray.status}">${h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'OK'}</span></td>
+      <td><span class="status-dot ${h.spray.status}">${h.spray.status === 'no-good' ? 'No Good' : h.spray.status === 'caution' ? 'Caution' : 'OK'}</span>${settingUsedLabel()}</td>
       <td>${fmtNum(h.temp_f)}°F ${feelsCell}</td>
       <td>${fmtMph(h.wind_mph)} <span style="color:rgba(255,255,255,0.4);font-size:10px;font-weight:700">${h.wind_dir_deg != null ? `<span style="display:inline-block;transform:rotate(${h.wind_dir_deg}deg);font-size:14px">↑</span>` : '—'}</span></td>
       <td style="color:#2176d4">${fmtMph(h.gust_mph)}</td>
@@ -1632,7 +1872,7 @@ function renderDailyModal() {
         ${sunLine ? `<div class="dr-sun">${sunLine}${soilLine ? '&nbsp;&nbsp;' + soilLine : ''}</div>` : ''}
         <div style="font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px">${windowNote}</div>
       </div>
-      <div class="dr-spray ${spray.status}">${sprayLabel}</div>
+      <div class="dr-spray ${spray.status}">${sprayLabel}${settingUsedLabel()}</div>
     </div>`;
   }).join('');
 
@@ -1681,6 +1921,15 @@ window.addEventListener('DOMContentLoaded', () => {
   if (savedTheme === 'light') {
     document.documentElement.setAttribute('data-theme', 'light');
   }
+
+  refreshSettingSelect();
+  document.getElementById('spray-setting-select').addEventListener('change', e => {
+    if (settingsReady()) SpraySettings.setActive(settingsStorage(), e.target.value);
+    refillForecast();
+  });
+  document.getElementById('manage-settings-btn').addEventListener('click', () => {
+    openModal('modal-spray-settings');
+  });
 
   // Settings gear button
   document.getElementById('settings-btn').addEventListener('click', openSettings);
@@ -1746,6 +1995,7 @@ window.addEventListener('DOMContentLoaded', () => {
 window.doSearch   = doSearch;
 window.openModal  = openModal;
 window.closeModal = closeModal;
+window.renderSpraySettingsModal = renderSpraySettingsModal;
 </script>
 </body>
 </html>
