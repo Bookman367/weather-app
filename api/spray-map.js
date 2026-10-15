@@ -1,13 +1,233 @@
 const {
   scoreHourly,
   normalizeOpenMeteo,
-  futureHoursFromNow,
-  PRODUCTS
+  calcSunriseSunset
 } = require('../lib/spray-logic');
+
+// Open-Meteo hourly forecast_days max is 16; 7 days = 168 hours.
+const FORECAST_DAYS = 7;
+const HOURLY_LIMIT = 168;
+
+// Hero daily spray window defaults (same as /api/forecast):
+// sunrise + 0h through sunset + 2h.
+const DEFAULT_SUNRISE_OFFSET = 0;
+const DEFAULT_SUNSET_OFFSET = 2;
 
 // Simple in-memory cache
 const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
 const cache = new Map();
+
+const HOURLY_VARS = [
+  'temperature_2m','apparent_temperature','dew_point_2m',
+  'relative_humidity_2m','precipitation_probability','precipitation',
+  'cloud_cover','weather_code','wind_speed_10m','wind_gusts_10m',
+  'wind_direction_10m','soil_temperature_0cm'
+].join(',');
+
+const DAILY_VARS = [
+  'temperature_2m_max','temperature_2m_min',
+  'apparent_temperature_max','apparent_temperature_min',
+  'precipitation_sum','precipitation_probability_max',
+  'weather_code','wind_speed_10m_max','wind_gusts_10m_max',
+  'wind_direction_10m_dominant','sunrise','sunset'
+].join(',');
+
+function buildForecastUrl(lats, lons) {
+  return [
+    `https://api.open-meteo.com/v1/forecast`,
+    `?latitude=${lats}&longitude=${lons}`,
+    `&hourly=${HOURLY_VARS}`,
+    `&daily=${DAILY_VARS}`,
+    `&forecast_days=${FORECAST_DAYS}`,
+    `&temperature_unit=fahrenheit`,
+    `&wind_speed_unit=mph`,
+    `&precipitation_unit=inch`,
+    `&timezone=auto`
+  ].join('');
+}
+
+function hourStatus(hour) {
+  if (hour && hour.spray && hour.spray.status) return hour.spray.status;
+  return hour && hour.status;
+}
+
+function hourReasons(hour) {
+  if (hour && hour.reasons && hour.reasons.length) return hour.reasons;
+  if (hour && hour.spray && hour.spray.reasons) return hour.spray.reasons;
+  return [];
+}
+
+function hourOfDay(hour) {
+  if (hour && typeof hour.hour_of_day === 'number') return hour.hour_of_day;
+  const match = String(hour && hour.time || '').match(/T(\d{2})/);
+  return match ? parseInt(match[1], 10) : 0;
+}
+
+function formatHourShort(time) {
+  const match = String(time || '').match(/T(\d{2})/);
+  const hr = match ? parseInt(match[1], 10) : 0;
+  const hr12 = hr % 12 || 12;
+  const ampm = hr < 12 ? 'a' : 'p';
+  return `${hr12}${ampm}`;
+}
+
+function parseSunHour(sunStr) {
+  if (!sunStr || typeof sunStr !== 'string') return null;
+  const m = sunStr.match(/(\d+):(\d+)\s+(AM|PM)/i);
+  if (!m) return null;
+  let h = parseInt(m[1], 10);
+  if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
+  if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
+  return h + parseInt(m[2], 10) / 60;
+}
+
+// Same daytime window used by /api/forecast (Hero daily spray hours).
+function daytimeHours(dayHours, sunriseStr, sunsetStr, sunriseOffset, sunsetOffset) {
+  if (!sunriseStr || !sunsetStr || sunriseStr === 'N/A' || sunsetStr === 'N/A') return dayHours;
+  const sunriseH = parseSunHour(sunriseStr);
+  const rawSunsetH = parseSunHour(sunsetStr);
+  if (sunriseH === null || rawSunsetH === null) return dayHours;
+
+  const startSprayH = (sunriseH + sunriseOffset + 24) % 24;
+  const endSprayH = (rawSunsetH + sunsetOffset + 24) % 24;
+
+  return dayHours.filter(h => {
+    const hour = hourOfDay(h);
+    if (startSprayH < endSprayH) {
+      return hour >= startSprayH && hour <= endSprayH;
+    }
+    return hour >= startSprayH || hour <= endSprayH;
+  });
+}
+
+// Copied from /api/forecast — "what the majority of hours show = what the day shows"
+function majorityDayStatus(daySprayHours) {
+  if (!daySprayHours || daySprayHours.length === 0) return 'favorable';
+  const counts = { favorable: 0, caution: 0, 'no-good': 0 };
+  for (const h of daySprayHours) {
+    const status = hourStatus(h);
+    if (counts[status] !== undefined) counts[status]++;
+  }
+  if (counts['no-good'] > counts.favorable && counts['no-good'] > counts.caution) return 'no-good';
+  if (counts.caution > counts.favorable && counts.caution > counts['no-good']) return 'caution';
+  if (counts.favorable === counts['no-good'] && counts.favorable > counts.caution) return 'caution';
+  if (counts.caution === counts['no-good'] && counts.caution > counts.favorable) return 'no-good';
+  return 'favorable';
+}
+
+const STATUS_RANK = { favorable: 0, caution: 1, 'no-good': 2 };
+
+function worstCaseStatus(dayHours) {
+  let worst = 'favorable';
+  for (const h of dayHours || []) {
+    const status = hourStatus(h);
+    if ((STATUS_RANK[status] || 0) > (STATUS_RANK[worst] || 0)) worst = status;
+  }
+  return worst;
+}
+
+function findBestWindow(dayHours, wanted = 'favorable') {
+  let best = null;
+  let current = [];
+  for (const h of dayHours || []) {
+    if (hourStatus(h) === wanted) {
+      current.push(h);
+    } else {
+      if (current.length > (best ? best.length : 0)) best = current;
+      current = [];
+    }
+  }
+  if (current.length > (best ? best.length : 0)) best = current;
+  if (!best || best.length === 0) return null;
+  const last = best[best.length - 1];
+  return {
+    start: best[0].time,
+    end: last.time,
+    startLabel: formatHourShort(best[0].time),
+    endLabel: formatHourShort(last.time),
+    hours: best.length,
+    status: wanted
+  };
+}
+
+function finiteNums(values) {
+  return values.filter(v => v != null && Number.isFinite(Number(v))).map(Number);
+}
+
+function rollupDaily(hourly, options = {}) {
+  const {
+    lat,
+    lon,
+    utcOffsetSeconds = 0,
+    sunriseOffset = DEFAULT_SUNRISE_OFFSET,
+    sunsetOffset = DEFAULT_SUNSET_OFFSET
+  } = options;
+
+  const byDate = new Map();
+  for (const h of hourly || []) {
+    const date = String(h.time || '').slice(0, 10);
+    if (!date) continue;
+    if (!byDate.has(date)) byDate.set(date, []);
+    byDate.get(date).push(h);
+  }
+
+  const days = [];
+  for (const [date, hours] of byDate) {
+    let scoringHours = hours;
+    if (lat != null && lon != null) {
+      const sun = calcSunriseSunset(lat, lon, date, utcOffsetSeconds);
+      const dayHours = daytimeHours(hours, sun.sunrise, sun.sunset, sunriseOffset, sunsetOffset);
+      if (dayHours.length > 0) scoringHours = dayHours;
+    }
+
+    const status = majorityDayStatus(scoringHours);
+    const worstStatus = worstCaseStatus(scoringHours);
+    const bestGo = findBestWindow(scoringHours, 'favorable');
+    const bestCaution = findBestWindow(scoringHours, 'caution');
+    const bestWindow = bestGo || bestCaution;
+
+    const goHours = scoringHours
+      .filter(h => hourStatus(h) === 'favorable')
+      .map(h => ({ time: h.time, label: formatHourShort(h.time) }));
+
+    const reasons = [];
+    const seen = new Set();
+    for (const h of scoringHours) {
+      for (const reason of hourReasons(h)) {
+        if (!seen.has(reason)) {
+          seen.add(reason);
+          reasons.push(reason);
+        }
+      }
+    }
+
+    const temps = finiteNums(hours.map(h => h.temp ?? h.temp_f));
+    const winds = finiteNums(hours.map(h => h.wind ?? h.wind_mph));
+    const gusts = finiteNums(hours.map(h => h.gust ?? h.gust_mph));
+    const rhs = finiteNums(hours.map(h => h.rh));
+    const precips = finiteNums(hours.map(h => h.precip ?? h.precip_pct));
+
+    days.push({
+      date,
+      status,
+      worstStatus,
+      bestWindow,
+      goHours,
+      goCount: goHours.length,
+      hourCount: scoringHours.length,
+      reasons,
+      temp: temps.length ? Math.round(temps.reduce((a, b) => a + b, 0) / temps.length) : null,
+      tempMin: temps.length ? Math.min(...temps) : null,
+      tempMax: temps.length ? Math.max(...temps) : null,
+      wind: winds.length ? Math.max(...winds) : null,
+      gust: gusts.length ? Math.max(...gusts) : null,
+      rh: rhs.length ? Math.round(rhs.reduce((a, b) => a + b, 0) / rhs.length) : null,
+      precip: precips.length ? Math.max(...precips) : null
+    });
+  }
+
+  return days;
+}
 
 function getCacheKey(lat, lon, radius, product) {
   // Round lat/lon to ~0.05 degrees (approx 3.5 miles) to increase cache hits
@@ -98,33 +318,8 @@ async function handler(req, res) {
     const lats = points.map(p => p.lat).join(',');
     const lons = points.map(p => p.lon).join(',');
 
-    const hourlyVars = [
-      'temperature_2m','apparent_temperature','dew_point_2m',
-      'relative_humidity_2m','precipitation_probability','precipitation',
-      'cloud_cover','weather_code','wind_speed_10m','wind_gusts_10m',
-      'wind_direction_10m','soil_temperature_0cm'
-    ].join(',');
-
-    const dailyVars = [
-      'temperature_2m_max','temperature_2m_min',
-      'apparent_temperature_max','apparent_temperature_min',
-      'precipitation_sum','precipitation_probability_max',
-      'weather_code','wind_speed_10m_max','wind_gusts_10m_max',
-      'wind_direction_10m_dominant','sunrise','sunset'
-    ].join(',');
-
-    // Fetch 2 days of forecast to cover up to 48 hours
-    const url = [
-      `https://api.open-meteo.com/v1/forecast`,
-      `?latitude=${lats}&longitude=${lons}`,
-      `&hourly=${hourlyVars}`,
-      `&daily=${dailyVars}`,
-      `&forecast_days=2`,
-      `&temperature_unit=fahrenheit`,
-      `&wind_speed_unit=mph`,
-      `&precipitation_unit=inch`,
-      `&timezone=auto`
-    ].join('');
+    // One batched Open-Meteo call for the whole 7x7 grid (7-day / 168h hourly).
+    const url = buildForecastUrl(lats, lons);
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -142,7 +337,7 @@ async function handler(req, res) {
 
     const scoredPoints = points.map((p, index) => {
       const rawLocationData = resultsArray[index];
-      const norm = normalizeOpenMeteo(rawLocationData);
+      const norm = normalizeOpenMeteo(rawLocationData, HOURLY_LIMIT);
 
       // Open-Meteo returns time strings in local time when timezone=auto.
       // To accurately filter past hours, we compare them against the current local time.
@@ -150,12 +345,11 @@ async function handler(req, res) {
       // Create an ISO-like string YYYY-MM-DDTHH:00 to match Open-Meteo's format
       const localIso = currentLocalTime.toISOString().slice(0, 14) + "00";
 
-      // We only care about the next ~48 hours starting from the current local hour
-      const futureHours = norm.hourly.filter(h => h.time >= localIso).slice(0, 48);
+      // Next 7 days (up to 168 hours) starting from the current local hour
+      const futureHours = norm.hourly.filter(h => h.time >= localIso).slice(0, HOURLY_LIMIT);
 
-      // Score the hours
-      // The third argument is the nozzle type, we can default to 'medium' if not provided
-      const scoredHourly = scoreHourly(futureHours, product, 'medium');
+      // Score with Hero spray rules (Clarity method + product label thresholds).
+      const scoredHourly = scoreHourly(futureHours, product, 'clarity');
 
       // Map down to what the frontend needs to save bandwidth
       const simplifiedHourly = scoredHourly.map(h => ({
@@ -171,7 +365,12 @@ async function handler(req, res) {
 
       return {
         ...p,
-        hourly: simplifiedHourly
+        hourly: simplifiedHourly,
+        daily: rollupDaily(simplifiedHourly, {
+          lat: p.lat,
+          lon: p.lon,
+          utcOffsetSeconds: norm.utcOffsetSeconds
+        })
       };
     });
 
@@ -179,6 +378,8 @@ async function handler(req, res) {
       center: { lat, lon },
       radius,
       product,
+      forecastDays: FORECAST_DAYS,
+      forecastHours: HOURLY_LIMIT,
       points: scoredPoints
     };
 
@@ -194,3 +395,14 @@ async function handler(req, res) {
 
 module.exports = handler;
 module.exports.generateGrid = generateGrid;
+module.exports.buildForecastUrl = buildForecastUrl;
+module.exports.FORECAST_DAYS = FORECAST_DAYS;
+module.exports.HOURLY_LIMIT = HOURLY_LIMIT;
+module.exports.CACHE_TTL_MS = CACHE_TTL_MS;
+module.exports.getCacheKey = getCacheKey;
+module.exports.majorityDayStatus = majorityDayStatus;
+module.exports.worstCaseStatus = worstCaseStatus;
+module.exports.findBestWindow = findBestWindow;
+module.exports.daytimeHours = daytimeHours;
+module.exports.rollupDaily = rollupDaily;
+module.exports.formatHourShort = formatHourShort;

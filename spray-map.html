@@ -20,6 +20,7 @@
       --text:         #ffffff;
       --text-dim:     rgba(255,255,255,0.7);
       --text-muted:   rgba(255,255,255,0.4);
+      --radius-pill:  50px;
     }
 
     html, body {
@@ -67,7 +68,7 @@
     #map {
       position: absolute;
       top: 60px;
-      bottom: 200px;
+      bottom: 270px;
       left: 0;
       right: 0;
       z-index: 1;
@@ -76,7 +77,7 @@
     /* Loading overlay */
     #loading {
       position: absolute;
-      top: 60px; bottom: 200px; left: 0; right: 0;
+      top: 60px; bottom: 270px; left: 0; right: 0;
       z-index: 1001;
       background: rgba(8, 15, 30, 0.7);
       display: flex;
@@ -98,17 +99,18 @@
     /* Controls Panel */
     .controls-panel {
       position: absolute;
-      bottom: 80px; left: 0; right: 0;
-      height: 120px;
+      bottom: 0; left: 0; right: 0;
+      height: auto;
+      min-height: 220px;
       z-index: 1000;
       background: var(--glass-bg);
       backdrop-filter: var(--blur);
       -webkit-backdrop-filter: var(--blur);
       border-top: 1px solid var(--glass-border);
-      padding: 12px 16px;
+      padding: 10px 12px max(12px, env(safe-area-inset-bottom));
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .controls-row {
@@ -132,7 +134,8 @@
     .timeline-container {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      min-width: 0;
     }
 
     .play-btn {
@@ -220,7 +223,7 @@
 
 
     /* ── SPRAY WINDOW ─────────────────────────────────────── */
-    .spray-window { padding: 0 10px; margin-bottom: 0px; width: 100%; overflow: hidden; }
+    .spray-window { padding: 0; margin-bottom: 0; flex: 1; min-width: 0; overflow: hidden; }
     .sw-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .sw-title  { font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
     .sw-subtitle { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
@@ -232,9 +235,20 @@
     }
     .sw-tab.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: var(--text); }
 
+    .selection-details {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.35;
+      min-height: 30px;
+      max-height: 58px;
+      overflow-y: auto;
+      padding: 0 2px;
+    }
+    .selection-details strong { color: var(--text); }
+
     .spray-gradient-bar { height: 6px; border-radius: 3px; margin: 4px 0 12px; }
 
-    .spray-bar-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 6px; padding-bottom: 4px; }
+    .spray-bar-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 2px; padding-bottom: 4px; scroll-snap-type: x proximity; }
     .spray-bar-track { display: flex; gap: 3px; min-width: max-content; }
     .spray-segment { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; width: 36px; }
     .spray-block {
@@ -276,7 +290,15 @@
       display: flex;
       align-items: center;
       flex-shrink: 0;
+      scroll-snap-align: start;
     }
+
+    .spray-segment.daily-segment {
+      width: 72px;
+      scroll-snap-align: start;
+    }
+    .spray-segment.daily-segment .spray-block { height: 44px; }
+    .spray-segment.daily-segment .spray-time { font-size: 11px; }
 
     /* Search Here button inside popups */
     .search-here-btn {
@@ -332,11 +354,16 @@
         <option value="Dicamba">Dicamba</option>
         <option value="Roundup">Roundup (Glyphosate)</option>
       </select>
+      <div class="sw-tabs" id="view-tabs" role="tablist" aria-label="Timeline view">
+        <button type="button" class="sw-tab active" data-view="hourly">Hourly</button>
+        <button type="button" class="sw-tab" data-view="daily">Daily</button>
+      </div>
     </div>
+    <div class="sw-subtitle" id="view-legend">Hourly: each block is 1 hour across 7 days. Scroll sideways — play and 2x still work.</div>
 
     <div class="timeline-container">
       <button id="play-pause" class="play-btn">▶</button>
-      <select id="playback-speed" class="selector" style="margin-left: 10px; width: auto; font-size: 12px; padding: 4px;">
+      <select id="playback-speed" class="selector" style="width: auto; font-size: 12px; padding: 4px;">
         <option value="2000">0.5x</option>
         <option value="1000" selected>1x</option>
         <option value="667">1.5x</option>
@@ -351,6 +378,7 @@
         </div>
       </div>
     </div>
+    <div id="selection-details" class="selection-details"></div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -399,10 +427,20 @@
 
     let gridData = null;
     let currentHourIndex = 0;
+    let currentDayIndex = 0;
+    let viewMode = 'hourly';
     let rectangles = [];
 
     const productSelect = document.getElementById('product-select');
     const loadingEl = document.getElementById('loading');
+    const viewTabs = document.getElementById('view-tabs');
+    const viewLegend = document.getElementById('view-legend');
+    const selectionDetails = document.getElementById('selection-details');
+
+    const VIEW_LEGENDS = {
+      hourly: 'Hourly: each block is 1 hour across 7 days. Scroll sideways — play and 2x still work.',
+      daily: 'Daily: color is the majority of daytime hours (sunrise to 2h after sunset) — same rule as the main forecast. Tap a day for Go hours, the best window, and the worst hour.'
+    };
 
 
 
@@ -504,10 +542,10 @@
         gridData = await res.json();
 
         if (gridData && gridData.points && gridData.points.length > 0) {
-          // Initialize slider bounds
-          const firstPoint = gridData.points[0];
           rectangles.forEach(rect => map.removeLayer(rect)); rectangles = [];
-          renderSprayWindow();
+          currentHourIndex = 0;
+          currentDayIndex = 0;
+          renderSprayWindow({ reset: true });
         }
       } catch (err) {
         console.error("Failed to fetch grid data:", err);
@@ -535,76 +573,155 @@
     const sprayBarTrack = document.getElementById('spray-bar-track');
     const sprayBarWrap = document.getElementById('spray-bar-wrap');
 
-    function renderSprayWindow() {
-      if (!gridData || !gridData.points || gridData.points.length === 0) return;
+    const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      // Calculate the index of the center point in the grid.
-      // We assume a square grid. The total points is gridData.points.length.
-      // So gridSize is Math.sqrt(totalPoints).
-      // The center point is at row = Math.floor(gridSize/2), col = Math.floor(gridSize/2).
+    function centerPointIndex() {
+      if (!gridData || !gridData.points) return 0;
       const totalPoints = gridData.points.length;
       const gridSize = Math.round(Math.sqrt(totalPoints));
-      let centerIndex = 0; // Default fallback
       if (gridSize * gridSize === totalPoints) {
-          const centerRow = Math.floor(gridSize / 2);
-          const centerCol = Math.floor(gridSize / 2);
-          centerIndex = centerRow * gridSize + centerCol;
+        const centerRow = Math.floor(gridSize / 2);
+        const centerCol = Math.floor(gridSize / 2);
+        return centerRow * gridSize + centerCol;
       }
+      return 0;
+    }
 
-      const hours = gridData.points[centerIndex].hourly; // Center point's hours
+    function getCenterPoint() {
+      if (!gridData || !gridData.points || !gridData.points.length) return null;
+      return gridData.points[centerPointIndex()];
+    }
 
+    function parseLocalDate(timeStr) {
+      return new Date(String(timeStr || '').replace('T', ' '));
+    }
+
+    function formatDayLabel(timeOrDate) {
+      const dt = parseLocalDate(timeOrDate.length === 10 ? `${timeOrDate}T12:00` : timeOrDate);
+      return `${DAYS_OF_WEEK[dt.getDay()]} ${MONTHS[dt.getMonth()]} ${dt.getDate()}`;
+    }
+
+    function statusLabel(status) {
+      if (status === 'favorable') return 'Go';
+      if (status === 'caution') return 'Caution';
+      return 'No-Go';
+    }
+
+    function renderSprayWindow(opts) {
+      if (!gridData || !gridData.points || gridData.points.length === 0) return;
+
+      const center = getCenterPoint();
+      if (!center) return;
+
+      const hours = center.hourly || [];
+      const days = center.daily || [];
       let htmlOutput = '';
-      let currentDayString = '';
 
-      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      if (viewMode === 'daily') {
+        days.forEach((day, i) => {
+          const dt = parseLocalDate(`${day.date}T12:00`);
+          const dow = DAYS_OF_WEEK[dt.getDay()];
+          const dateLabel = `${MONTHS[dt.getMonth()]} ${dt.getDate()}`;
+          htmlOutput += `<div class="spray-segment daily-segment" data-index="${i}">
+            <div class="spray-block ${day.status}" title="${(day.reasons || []).join(', ')}"></div>
+            <div class="spray-time bold">${dow}</div>
+            <div class="spray-time">${dateLabel}</div>
+          </div>`;
+        });
+      } else {
+        let currentDayString = '';
+        hours.forEach((h, i) => {
+          const dt = parseLocalDate(h.time);
+          const hr = dt.getHours();
+          const hr12 = hr % 12 || 12;
+          const ampm = hr < 12 ? 'a' : 'p';
+          const bold = hr === 0 || hr === 6 || hr === 12 || hr === 18;
+          const dayStr = formatDayLabel(h.time);
 
-      hours.forEach((h, i) => {
-        const dt = new Date(h.time.replace('T', ' '));
-        const hr    = dt.getHours();
-        const hr12  = hr % 12 || 12;
-        const ampm  = hr < 12 ? 'a' : 'p';
-        const bold  = hr === 0 || hr === 6 || hr === 12 || hr === 18;
-
-        const dayStr = `${daysOfWeek[dt.getDay()]} ${months[dt.getMonth()]} ${dt.getDate()}`;
-
-        if (i === 0 || (currentDayString !== '' && currentDayString !== dayStr)) {
-            if (i !== 0) {
-                htmlOutput += `<div class="midnight-divider"></div>`;
-            }
+          if (i === 0 || (currentDayString !== '' && currentDayString !== dayStr)) {
+            if (i !== 0) htmlOutput += `<div class="midnight-divider"></div>`;
             htmlOutput += `<div class="day-label">${dayStr}</div>`;
             currentDayString = dayStr;
-        }
+          }
 
-        htmlOutput += `<div class="spray-segment" data-index="${i}">
-          <div class="spray-block ${h.status}" title="${h.reasons.join(', ')}"></div>
-          <div class="spray-time ${bold ? 'bold' : ''}">${hr12}${ampm}</div>
-        </div>`;
-      });
+          htmlOutput += `<div class="spray-segment" data-index="${i}">
+            <div class="spray-block ${h.status}" title="${(h.reasons || []).join(', ')}"></div>
+            <div class="spray-time ${bold ? 'bold' : ''}">${hr12}${ampm}</div>
+          </div>`;
+        });
+      }
 
       sprayBarTrack.innerHTML = htmlOutput;
 
-      // Bind click events
       sprayBarTrack.querySelectorAll('.spray-segment').forEach(seg => {
-        seg.addEventListener('click', (e) => {
+        seg.addEventListener('click', () => {
           const idx = parseInt(seg.getAttribute('data-index'), 10);
           syncToIndex(idx);
         });
       });
 
-      syncToIndex(0); // Initial selection
+      const maxIdx = viewMode === 'daily' ? Math.max(0, days.length - 1) : Math.max(0, hours.length - 1);
+      const startIdx = opts && opts.reset ? 0 : (viewMode === 'daily' ? currentDayIndex : currentHourIndex);
+      syncToIndex(Math.min(Math.max(0, startIdx), maxIdx));
+    }
+
+    function updateSelectionDetails() {
+      if (!selectionDetails) return;
+      const center = getCenterPoint();
+      if (!center) {
+        selectionDetails.innerHTML = '';
+        return;
+      }
+
+      if (viewMode === 'daily') {
+        const day = (center.daily || [])[currentDayIndex];
+        if (!day) {
+          selectionDetails.innerHTML = '';
+          return;
+        }
+        const goList = (day.goHours || []).map(h => h.label).join(', ') || 'none';
+        const windowText = day.bestWindow
+          ? `${day.bestWindow.startLabel}–${day.bestWindow.endLabel} (${day.bestWindow.hours}h ${statusLabel(day.bestWindow.status)})`
+          : 'none';
+        const reasonText = (day.reasons && day.reasons.length)
+          ? day.reasons.slice(0, 2).join(' · ')
+          : 'All daytime params within label limits';
+        selectionDetails.innerHTML =
+          `<strong>${formatDayLabel(day.date)}</strong> · ${statusLabel(day.status)}` +
+          ` · Best window: ${windowText}` +
+          ` · Worst: ${statusLabel(day.worstStatus)}` +
+          ` · Go hours: ${goList}` +
+          `<br>${reasonText}`;
+        return;
+      }
+
+      const hour = (center.hourly || [])[currentHourIndex];
+      if (!hour) {
+        selectionDetails.innerHTML = '';
+        return;
+      }
+      const dt = parseLocalDate(hour.time);
+      const hr12 = dt.getHours() % 12 || 12;
+      const ampm = dt.getHours() < 12 ? 'a' : 'p';
+      const reasonText = (hour.reasons && hour.reasons.length)
+        ? hour.reasons.slice(0, 2).join(' · ')
+        : 'All parameters within label limits';
+      selectionDetails.innerHTML =
+        `<strong>${formatDayLabel(hour.time)} ${hr12}${ampm}</strong> · ${statusLabel(hour.status)}` +
+        ` · ${hour.temp}°F · ${hour.wind} mph` +
+        `<br>${reasonText}`;
     }
 
     function syncToIndex(idx) {
       if (!gridData || !gridData.points) return;
-      currentHourIndex = idx;
+      if (viewMode === 'daily') currentDayIndex = idx;
+      else currentHourIndex = idx;
 
-      // Highlight segment
       sprayBarTrack.querySelectorAll('.spray-segment').forEach((el, i) => {
         el.classList.toggle('active-segment', i === idx);
       });
 
-      // Scroll into view gently
       const activeEl = sprayBarTrack.querySelectorAll('.spray-segment')[idx];
       if (activeEl && sprayBarWrap) {
         const wrapCenter = sprayBarWrap.clientWidth / 2;
@@ -612,14 +729,11 @@
         sprayBarWrap.scrollTo({ left: elCenter - wrapCenter, behavior: 'smooth' });
       }
 
+      updateSelectionDetails();
       updateGridOverlay();
     }
 
-
-    function generatePopupContent(point, hourData) {
-      const statusLabel = hourData.status === 'favorable' ? 'Go'
-                        : hourData.status === 'caution' ? 'Caution'
-                        : 'No-Go';
+    function generateHourlyPopupContent(point, hourData) {
       const reasons = hourData.reasons && hourData.reasons.length > 0
                     ? `<div style="margin-top:6px;font-size:11px;color:#ffaaaa;">${hourData.reasons.join('<br>')}</div>`
                     : `<div style="margin-top:6px;font-size:11px;color:#aaffaa;">All parameters within label limits</div>`;
@@ -628,7 +742,7 @@
         <div class="popup-content">
           <div class="popup-title">Location: ${point.lat}, ${point.lon}</div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <div class="popup-status status-${hourData.status}" style="margin: 0;">Status: ${statusLabel}</div>
+            <div class="popup-status status-${hourData.status}" style="margin: 0;">Status: ${statusLabel(hourData.status)}</div>
             <button class="search-here-btn" onclick="searchAtLocation(${point.lat}, ${point.lon})">Search Here</button>
           </div>
           <div style="margin-top: 5px;">🌡️ Temp: ${hourData.temp}°F</div>
@@ -640,6 +754,46 @@
       `;
     }
 
+    function generateDailyPopupContent(point, day) {
+      const goList = (day.goHours || []).map(h => h.label).join(', ') || 'none';
+      const windowText = day.bestWindow
+        ? `${day.bestWindow.startLabel}–${day.bestWindow.endLabel} (${day.bestWindow.hours}h ${statusLabel(day.bestWindow.status)})`
+        : 'none';
+      const reasons = day.reasons && day.reasons.length > 0
+                    ? `<div style="margin-top:6px;font-size:11px;color:#ffaaaa;">${day.reasons.join('<br>')}</div>`
+                    : `<div style="margin-top:6px;font-size:11px;color:#aaffaa;">All daytime params within label limits</div>`;
+      const tempLine = (day.tempMin != null && day.tempMax != null)
+        ? `${day.tempMin}–${day.tempMax}°F`
+        : (day.temp != null ? `${day.temp}°F` : '—');
+
+      return `
+        <div class="popup-content">
+          <div class="popup-title">${formatDayLabel(day.date)} · ${point.lat}, ${point.lon}</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="popup-status status-${day.status}" style="margin: 0;">Day: ${statusLabel(day.status)}</div>
+            <button class="search-here-btn" onclick="searchAtLocation(${point.lat}, ${point.lon})">Search Here</button>
+          </div>
+          <div style="margin-top: 5px;">Worst hour: ${statusLabel(day.worstStatus)}</div>
+          <div>Best window: ${windowText}</div>
+          <div>Go hours: ${goList}</div>
+          <div>🌡️ Temp: ${tempLine}</div>
+          <div>💨 Wind: ${day.wind != null ? day.wind : '—'} mph (Gust: ${day.gust != null ? day.gust : '—'})</div>
+          <div>💧 RH: ${day.rh != null ? day.rh : '—'}%</div>
+          <div>🌧️ Precip: ${day.precip != null ? day.precip : '—'}%</div>
+          ${reasons}
+        </div>
+      `;
+    }
+
+    function selectedSlot(point) {
+      if (viewMode === 'daily') return (point.daily || [])[currentDayIndex];
+      return (point.hourly || [])[currentHourIndex];
+    }
+
+    function generatePopupContent(point, slot) {
+      if (viewMode === 'daily') return generateDailyPopupContent(point, slot);
+      return generateHourlyPopupContent(point, slot);
+    }
 
     function updateGridOverlay() {
       if (!gridData || !gridData.points) return;
@@ -647,10 +801,10 @@
       const isFirstRender = rectangles.length === 0;
 
       gridData.points.forEach((point, idx) => {
-        const hourData = point.hourly[currentHourIndex];
-        if (!hourData) return;
+        const slot = selectedSlot(point);
+        if (!slot) return;
 
-        const status = hourData.status;
+        const status = slot.status;
         const color = getColorForStatus(status);
         const borderColor = getBorderColorForStatus(status);
 
@@ -662,13 +816,47 @@
             fillOpacity: 1
           }).addTo(map);
 
-          rect.bindPopup(() => generatePopupContent(point, point.hourly[currentHourIndex]));
+          rect.bindPopup(() => generatePopupContent(point, selectedSlot(point)));
           rectangles.push(rect);
         } else {
           const rect = rectangles[idx];
           rect.setStyle({ fillColor: color, color: borderColor });
-          rect.getPopup().setContent(generatePopupContent(point, hourData));
+          rect.getPopup().setContent(generatePopupContent(point, slot));
         }
+      });
+    }
+
+    function setViewMode(nextView) {
+      if (nextView !== 'hourly' && nextView !== 'daily') return;
+      const center = getCenterPoint();
+      if (nextView !== viewMode && center) {
+        if (nextView === 'daily') {
+          const hour = (center.hourly || [])[currentHourIndex];
+          const date = hour && hour.time ? hour.time.slice(0, 10) : null;
+          const idx = (center.daily || []).findIndex(d => d.date === date);
+          currentDayIndex = idx >= 0 ? idx : 0;
+        } else {
+          const day = (center.daily || [])[currentDayIndex];
+          const date = day && day.date;
+          const idx = (center.hourly || []).findIndex(h => String(h.time).startsWith(date));
+          currentHourIndex = idx >= 0 ? idx : 0;
+        }
+      }
+      viewMode = nextView;
+      if (viewTabs) {
+        viewTabs.querySelectorAll('.sw-tab').forEach(tab => {
+          tab.classList.toggle('active', tab.getAttribute('data-view') === viewMode);
+        });
+      }
+      if (viewLegend) viewLegend.textContent = VIEW_LEGENDS[viewMode];
+      renderSprayWindow();
+    }
+
+    if (viewTabs) {
+      viewTabs.addEventListener('click', (e) => {
+        const tab = e.target.closest('.sw-tab');
+        if (!tab) return;
+        setViewMode(tab.getAttribute('data-view'));
       });
     }
 
@@ -679,13 +867,21 @@
 
     const playbackSpeedSelect = document.getElementById('playback-speed');
 
+    function currentMaxIndex() {
+      const center = getCenterPoint() || (gridData && gridData.points && gridData.points[0]);
+      if (!center) return 0;
+      if (viewMode === 'daily') return Math.max(0, (center.daily || []).length - 1);
+      return Math.max(0, (center.hourly || []).length - 1);
+    }
+
     function startPlayback() {
       if (playInterval) clearInterval(playInterval);
       const intervalMs = parseInt(playbackSpeedSelect.value, 10) || 1000;
       playInterval = setInterval(() => {
         if (!gridData || !gridData.points) return;
-        const maxIdx = gridData.points[0].hourly.length - 1;
-        let nextIdx = currentHourIndex + 1;
+        const maxIdx = currentMaxIndex();
+        const current = viewMode === 'daily' ? currentDayIndex : currentHourIndex;
+        let nextIdx = current + 1;
         if (nextIdx > maxIdx) {
           nextIdx = 0; // loop back to start
         }
