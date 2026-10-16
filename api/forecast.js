@@ -17,12 +17,15 @@ const {
   normalizeOpenMeteo,
   normalizeNWS,
   normalizeCondition,
-  parseLatLon
+  parseLatLon,
+  futureHoursFromNow,
+  hourOfDayFromTime
 } = require('../lib/spray-logic');
 const {
   parseLimitsParam,
   recommendedSetting
 } = require('../lib/spray-settings');
+const SunTimes = require('../lib/sun-times');
 
 async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -80,7 +83,9 @@ async function handler(req, res) {
       if (!locationStr) locationStr = '68508';
       geoResult = await geocode(locationStr);
     }
-    let raw, tzOffset;
+    let raw;
+    let tzOffset = 0;
+    let timezone = 'America/Chicago';
 
     // Fetch from selected weather source
     switch (source) {
@@ -89,14 +94,16 @@ async function handler(req, res) {
         const nwsNorm = normalizeNWS(nwsRaw);
         var hourly = nwsNorm.hourly;
         var daily = nwsNorm.daily;
-        var timezone = nwsNorm.timezone;
+        timezone = nwsNorm.timezone;
+        tzOffset = nwsNorm.utcOffsetSeconds || 0;
         break;
       default:
         raw = await fetchWeather(geoResult.lat, geoResult.lon);
         const norm = normalizeOpenMeteo(raw);
         var hourly = norm.hourly;
         var daily = norm.daily;
-        var timezone = norm.timezone;
+        timezone = norm.timezone;
+        tzOffset = norm.utcOffsetSeconds || 0;
         break;
     }
 
@@ -110,10 +117,12 @@ async function handler(req, res) {
       hour.spray = scoreSprayConditions(hour, herbicide, method, limitsForScore);
     }
 
-    // Time alignment: return only the next 96 hours starting from now
-    const now = new Date();
-    const futureHourly = hourly.filter(h => new Date(h.time) >= now);
-    const hourlyFinal = futureHourly.slice(0, 96);
+    // Time alignment: next 96 hours starting at the current hour in the
+    // selected spot's timezone (Open-Meteo hourly.time is naive local).
+    const hourlyFinal = futureHoursFromNow(hourly, new Date(), {
+      timezone,
+      utcOffsetSeconds: tzOffset
+    });
 
     // ── Hours until rain ─────────────────────────────────
     const rainIn = hoursUntilRain(hourlyFinal, 30);
@@ -152,9 +161,11 @@ async function handler(req, res) {
       const endSprayH = (rawSunsetH + sunsetOffset + 24) % 24;
 
       return dayHours.filter(h => {
-        // h.time is stored as an ISO UTC string from both NWS and Open-Meteo.
-        const d = new Date(h.time);
-        const hour = d.getHours() + d.getMinutes() / 60;
+        // Open-Meteo times are naive local; read the hour from the string.
+        const hm = String(h.time || '').match(/T(\d{2}):(\d{2})/);
+        const hour = hm
+          ? parseInt(hm[1], 10) + parseInt(hm[2], 10) / 60
+          : (typeof h.hour_of_day === 'number' ? h.hour_of_day : hourOfDayFromTime(h.time));
         if (startSprayH < endSprayH) {
           return hour >= startSprayH && hour <= endSprayH;
         } else {
@@ -232,7 +243,12 @@ async function handler(req, res) {
       const maxF = finiteMax(dayHours.map(h => h.temp_f));
       const minF = finiteMin(dayHours.map(h => h.temp_f));
       const avgRH = Math.round(dayHours.reduce((s, h) => s + (h.rh || 0), 0) / dayHours.length);
-      const sunTimes = calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset || -21600);
+      const srcDay = sourceByDate.get(dateStr) || {};
+      const omRise = SunTimes.formatSunTime(srcDay.sunrise);
+      const omSet = SunTimes.formatSunTime(srcDay.sunset);
+      const sunTimes = (omRise && omSet)
+        ? { sunrise: omRise, sunset: omSet }
+        : calcSunriseSunset(geoResult.lat, geoResult.lon, dateStr, tzOffset);
 
       // Filter to daytime sprayable window
       const daySprayHours = daytimeHours(dayHours, sunTimes.sunrise, sunTimes.sunset, sunriseOffset, sunsetOffset);
@@ -306,8 +322,8 @@ async function handler(req, res) {
         wind_dir: src.wind_dir ?? scored.wind_dir ?? null,
         weather_code: src.weather_code ?? scored.weather_code,
         condition: (src.condition && src.condition.desc) ? src.condition : (scored.condition || { desc: null, icon: null }),
-        sunrise: (src.sunrise && src.sunrise !== 'N/A') ? src.sunrise : scored.sunrise,
-        sunset: (src.sunset && src.sunset !== 'N/A') ? src.sunset : scored.sunset,
+        sunrise: SunTimes.formatSunTime(src.sunrise) || scored.sunrise,
+        sunset: SunTimes.formatSunTime(src.sunset) || scored.sunset,
         soil_temp_f: src.soil_temp_f ?? scored.soil_temp_f ?? null,
         spray: scored.spray || {
           status: 'favorable',
@@ -337,6 +353,8 @@ async function handler(req, res) {
         lon: geoResult.lon,
         display: geoResult.display
       },
+      timezone,
+      utcOffsetSeconds: tzOffset,
       product: product.name,
       spraySetting: { id: spraySetting.id, name: spraySetting.name },
       inversion: inversionAlert,

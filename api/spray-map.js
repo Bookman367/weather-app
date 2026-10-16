@@ -3,7 +3,8 @@ const {
   normalizeOpenMeteo,
   calcSunriseSunset,
   classifyDeltaT,
-  PRODUCTS
+  PRODUCTS,
+  futureHoursFromNow
 } = require('../lib/spray-logic');
 const SunTimes = require('../lib/sun-times');
 const WindDisplay = require('../lib/wind-display');
@@ -303,12 +304,32 @@ function applyViewWindows(scoredHours, rollupOptions = {}) {
   return { hourly, daily };
 }
 
-function getCacheKey(lat, lon, radius, product) {
+function getCacheKey(lat, lon, radius, product, timezone) {
   // Round lat/lon to ~0.05 degrees (approx 3.5 miles) to increase cache hits
-  // when users pan slightly.
+  // when users pan slightly. Do not splice UTC dates/hours into the key —
+  // Open-Meteo timestamps are spot-local, and a UTC day boundary would split
+  // the same field across two keys. Optional timezone distinguishes a
+  // TZ-border collision on the same rounded cell.
   const rLat = Math.round(lat * 20) / 20;
   const rLon = Math.round(lon * 20) / 20;
-  return `${rLat}_${rLon}_${radius}_${product}`;
+  const key = `${rLat}_${rLon}_${radius}_${product}`;
+  if (timezone) return `${key}_${timezone}`;
+  return key;
+}
+
+function slicePointHoursToNow(data, now = new Date()) {
+  if (!data || !Array.isArray(data.points)) return data;
+  return {
+    ...data,
+    points: data.points.map(p => ({
+      ...p,
+      hourly: futureHoursFromNow(p.hourly || [], now, {
+        timezone: p.timezone || data.timezone,
+        utcOffsetSeconds: p.utcOffsetSeconds,
+        limit: HOURLY_LIMIT
+      })
+    }))
+  };
 }
 
 function generateGrid(centerLat, centerLon, radiusMiles, gridSize = 7) {
@@ -380,9 +401,9 @@ async function handler(req, res) {
 
   const cacheKey = getCacheKey(lat, lon, radius, product);
   const cached = cache.get(cacheKey);
-  const now = Date.now();
-  if (cached && (now - cached.timestamp < CACHE_TTL_MS)) {
-    return res.status(200).json(cached.data);
+  const nowMs = Date.now();
+  if (cached && (nowMs - cached.timestamp < CACHE_TTL_MS)) {
+    return res.status(200).json(slicePointHoursToNow(cached.data, new Date(nowMs)));
   }
 
   try {
@@ -413,14 +434,13 @@ async function handler(req, res) {
       const rawLocationData = resultsArray[index];
       const norm = normalizeOpenMeteo(rawLocationData, FETCH_HOURS);
 
-      // Open-Meteo returns time strings in local time when timezone=auto.
-      // To accurately filter past hours, we compare them against the current local time.
-      const currentLocalTime = new Date(Date.now() + norm.utcOffsetSeconds * 1000);
-      // Create an ISO-like string YYYY-MM-DDTHH:00 to match Open-Meteo's format
-      const localIso = currentLocalTime.toISOString().slice(0, 14) + "00";
-
-      // Score the full 16-day hourly set (needed for Daily), then cap Hourly at 168h.
-      const futureHours = norm.hourly.filter(h => h.time >= localIso).slice(0, FETCH_HOURS);
+      // Open-Meteo hourly.time is naive local (timezone=auto). Filter past
+      // hours with the same spot-local "now" used by /api/forecast and Ops.
+      const futureHours = futureHoursFromNow(norm.hourly, new Date(), {
+        timezone: norm.timezone,
+        utcOffsetSeconds: norm.utcOffsetSeconds,
+        limit: FETCH_HOURS
+      });
 
       // Score with Hero spray rules (Clarity method + product label thresholds).
       const scoredHourly = scoreHourly(futureHours, product, 'clarity');
@@ -465,6 +485,7 @@ async function handler(req, res) {
       return {
         ...p,
         timezone: norm.timezone,
+        utcOffsetSeconds: norm.utcOffsetSeconds,
         hourly: windows.hourly,
         daily: windows.daily
       };
@@ -479,6 +500,7 @@ async function handler(req, res) {
       forecastHours: HOURLY_LIMIT,
       confidentDays: CONFIDENT_DAYS,
       timezone: scoredPoints[0] && scoredPoints[0].timezone,
+      utcOffsetSeconds: scoredPoints[0] && scoredPoints[0].utcOffsetSeconds,
       points: scoredPoints
     };
 
@@ -504,6 +526,7 @@ module.exports.CACHE_TTL_MS = CACHE_TTL_MS;
 module.exports.markLowerConfidence = markLowerConfidence;
 module.exports.applyViewWindows = applyViewWindows;
 module.exports.getCacheKey = getCacheKey;
+module.exports.slicePointHoursToNow = slicePointHoursToNow;
 module.exports.majorityDayStatus = majorityDayStatus;
 module.exports.worstCaseStatus = worstCaseStatus;
 module.exports.findBestWindow = findBestWindow;

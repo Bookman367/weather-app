@@ -143,6 +143,10 @@ async function runTests() {
     const d = getCacheKey(42.35, -97.79, 30, 'Dicamba');
     assert.notStrictEqual(a, d, 'Different product must not share a cache key');
     assert.strictEqual(a.split('_').length, 4, 'Cache key shape is lat_lon_radius_product');
+    assert.ok(!a.includes('T') && !a.includes('Z'), 'Cache key must not mix UTC timestamps with local hours');
+    const chicago = getCacheKey(41.0, -102.05, 30, 'general', 'America/Chicago');
+    const denver = getCacheKey(41.0, -102.05, 30, 'general', 'America/Denver');
+    assert.notStrictEqual(chicago, denver, 'Optional timezone must distinguish a TZ-border cell');
   });
 
   check('majority-rule daily status matches Hero forecast.js', () => {
