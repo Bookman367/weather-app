@@ -877,12 +877,20 @@
     }
 
     function parseLocalDate(timeStr) {
-      return new Date(String(timeStr || '').replace('T', ' '));
+      const s = String(timeStr || '');
+      const iso = s.length === 10 ? `${s}T12:00` : s;
+      const parts = (typeof SunTimes !== 'undefined') ? SunTimes.parseOpenMeteoLocal(iso) : null;
+      if (parts) {
+        // Encode the spot's wall clock as UTC components so getUTCHours()
+        // returns the field hour, not the phone's hour.
+        return new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second || 0));
+      }
+      return new Date(s.replace('T', ' '));
     }
 
     function formatDayLabel(timeOrDate) {
-      const dt = parseLocalDate(timeOrDate.length === 10 ? `${timeOrDate}T12:00` : timeOrDate);
-      return `${DAYS_OF_WEEK[dt.getDay()]} ${MONTHS[dt.getMonth()]} ${dt.getDate()}`;
+      const dt = parseLocalDate(timeOrDate);
+      return `${DAYS_OF_WEEK[dt.getUTCDay()]} ${MONTHS[dt.getUTCMonth()]} ${dt.getUTCDate()}`;
     }
 
     function statusLabel(status) {
@@ -1030,8 +1038,8 @@
       if (viewMode === 'daily') {
         days.forEach((day, i) => {
           const dt = parseLocalDate(`${day.date}T12:00`);
-          const dow = DAYS_OF_WEEK[dt.getDay()];
-          const dateLabel = `${MONTHS[dt.getMonth()]} ${dt.getDate()}`;
+          const dow = DAYS_OF_WEEK[dt.getUTCDay()];
+          const dateLabel = `${MONTHS[dt.getUTCMonth()]} ${dt.getUTCDate()}`;
           const low = !!day.lowerConfidence;
           if (low && (i === 0 || !days[i - 1].lowerConfidence)) {
             htmlOutput += `<div class="confidence-break">Trend<br>only</div>`;
@@ -1049,7 +1057,7 @@
         let currentDayString = '';
         hours.forEach((h, i) => {
           const dt = parseLocalDate(h.time);
-          const hr = dt.getHours();
+          const hr = dt.getUTCHours();
           const hr12 = hr % 12 || 12;
           const ampm = hr < 12 ? 'a' : 'p';
           const bold = hr === 0 || hr === 6 || hr === 12 || hr === 18;
@@ -1125,8 +1133,8 @@
         return;
       }
       const dt = parseLocalDate(hour.time);
-      const hr12 = dt.getHours() % 12 || 12;
-      const ampm = dt.getHours() < 12 ? 'a' : 'p';
+      const hr12 = dt.getUTCHours() % 12 || 12;
+      const ampm = dt.getUTCHours() < 12 ? 'a' : 'p';
       const reasonText = (hour.reasons && hour.reasons.length)
         ? hour.reasons.slice(0, 2).join(' · ')
         : 'All parameters within label limits';

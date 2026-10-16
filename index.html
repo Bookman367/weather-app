@@ -770,6 +770,20 @@ function fmtNum(val, digits) {
   return digits == null ? String(Math.round(n)) : n.toFixed(digits);
 }
 
+// Open-Meteo hourly.time is naive local for the selected spot. Do not run
+// it through Date() — that uses the phone zone, not the field.
+function openMeteoParts(timeStr) {
+  const m = String(timeStr || '').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (!m) return null;
+  return { y: +m[1], mo: +m[2], d: +m[3], h: +m[4], mi: +m[5] };
+}
+function hourFromOpenMeteo(timeStr) {
+  const p = openMeteoParts(timeStr);
+  if (p) return p.h;
+  const m = String(timeStr || '').match(/T(\d{2})/);
+  return m ? parseInt(m[1], 10) : 0;
+}
+
 // ════════════════════════════════════════════
 //  NAMED SPRAY SETTINGS (localStorage)
 // ════════════════════════════════════════════
@@ -1384,8 +1398,7 @@ function renderCurrentConditionsStrip(now) {
 // ── Spray Window ──────────────────────────────
 function renderSprayWindow(hours) {
   const segments = hours.map((h, i) => {
-    const dt    = new Date(h.time);
-    const hr    = dt.getHours();
+    const hr    = hourFromOpenMeteo(h.time);
     const hr12  = hr % 12 || 12;
     const ampm  = hr < 12 ? 'a' : 'p';
     const bold  = hr === 0 || hr === 6 || hr === 12 || hr === 18;
@@ -1750,9 +1763,13 @@ function renderHourlyModal() {
   let rows = '';
 
   hours.forEach(h => {
-    const dt     = new Date(h.time);
-    const dayStr = dt.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-    const timeStr= dt.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+    const p = openMeteoParts(h.time);
+    const dt = p
+      ? new Date(Date.UTC(p.y, p.mo - 1, p.d, 12, 0, 0))
+      : new Date(h.time);
+    const dayStr = dt.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', timeZone: 'UTC' });
+    const hr = p ? p.h : hourFromOpenMeteo(h.time);
+    const timeStr = `${(hr % 12) || 12} ${hr < 12 ? 'AM' : 'PM'}`;
 
     // Day divider row
     if (dayStr !== lastDay) {

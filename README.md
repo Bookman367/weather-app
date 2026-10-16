@@ -36,6 +36,10 @@ Common ag-spray **display** bands (°C):
 
 Those labels are shown on the spray map hourly view and the point popup. They do **not** add a second go / caution / no-go pass. Map cells still use the existing Clarity (and product-label) rules, which already read Delta T. Product `min_delta_t` / `max_delta_t` stay on named settings for later use.
 
+## Spot-local “now”
+
+Open-Meteo `timezone=auto` returns hourly (and daily sun) timestamps as **naive local** strings for the selected field (`2026-10-16T13:00`), plus `timezone` and `utc_offset_seconds`. Comparing those strings to a UTC `Date` on the server drops the current hour by the field’s UTC offset (about five hours in Central Daylight). `futureHoursFromNow` in `lib/spray-logic.js` computes “now” in the spot zone and is shared by `/api/forecast`, `/api/spray-window`, and `/api/spray-map`. The spray-map cache key stays `lat_lon_radius_product` (optional timezone suffix for a TZ-border cell) and does **not** include a UTC date.
+
 ## Sunrise and sunset
 
 Daily Open-Meteo fields (`sunrise`, `sunset`) are already on the cached forecast (`timezone=auto`, local to the selected spot). The spray map shows those times in Daily view and as day/night shading plus ☀ / ☾ markers on the Hourly strip.
