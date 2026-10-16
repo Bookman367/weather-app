@@ -520,6 +520,7 @@
   <script src="/lib/saved-fields.js"></script>
   <script src="/lib/sun-times.js"></script>
   <script src="/lib/wind-display.js"></script>
+  <script src="/lib/url-location.js"></script>
 
   <script>
     // Initialize map
@@ -638,7 +639,18 @@
       if (opts && opts.fetch !== false) fetchGridData();
     }
 
-    function startFromSavedOrGeo() {
+    function startFromUrlOrSavedOrGeo() {
+      const fromUrl = typeof UrlLocation !== 'undefined' ? UrlLocation.fromSearch(window.location.search) : null;
+      if (fromUrl) {
+        currentLat = fromUrl.lat;
+        currentLon = fromUrl.lon;
+        map.setView([currentLat, currentLon], 9);
+        centerMarker.setLatLng([currentLat, currentLon]);
+        const searchInput = document.getElementById('location-search-input');
+        if (fromUrl.name && searchInput) searchInput.value = fromUrl.name;
+        fetchGridData();
+        return;
+      }
       const active = fieldsReady() ? SavedFields.resolveActive(loadFieldsDoc()) : null;
       if (active) {
         applyField(active, { fetch: true });
@@ -664,7 +676,7 @@
     }
 
     refreshFieldsUi();
-    startFromSavedOrGeo();
+    startFromUrlOrSavedOrGeo();
 
     if (fieldsToggle && fieldsPanel) {
       fieldsToggle.addEventListener('click', () => {

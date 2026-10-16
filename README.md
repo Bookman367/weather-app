@@ -70,6 +70,19 @@ Named locations (name, lat/lon, optional acres) live in browser `localStorage` o
 
 On the spray map, **Fields** opens a panel to pick a saved field (centers the 7×7 map and loads its forecast), save the current map location, rename, or delete.
 
+## Ops location links
+
+Ops can open Hero at a field with query params on `/` or `/spray-map.html`:
+
+```
+?lat=42.38756&lon=-97.77837
+?lat=42.38756&lon=-97.77837&name=North%2080
+```
+
+- Module: `lib/url-location.js`
+- Lat must be −90…90, lon −180…180. Missing, non-numeric, or out-of-range values are ignored and the page starts the usual way (saved field, then GPS, then default).
+- A valid pair wins over GPS and the last saved field. Optional `name` is shown only (search box / location label). The spot is **not** saved as a field unless the farmer saves it.
+
 ## Tests
 
 ```bash
