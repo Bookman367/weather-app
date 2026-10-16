@@ -1,7 +1,8 @@
 const {
   scoreHourly,
   normalizeOpenMeteo,
-  calcSunriseSunset
+  calcSunriseSunset,
+  classifyDeltaT
 } = require('../lib/spray-logic');
 
 // Open-Meteo forecast_days max is 16. Daily uses the full 16-day set.
@@ -210,6 +211,11 @@ function rollupDaily(hourly, options = {}) {
     const gusts = finiteNums(hours.map(h => h.gust ?? h.gust_mph));
     const rhs = finiteNums(hours.map(h => h.rh));
     const precips = finiteNums(hours.map(h => h.precip ?? h.precip_pct));
+    const deltaTs = finiteNums(hours.map(h => h.deltaT ?? h.delta_t));
+    const deltaT = deltaTs.length
+      ? Math.round((deltaTs.reduce((a, b) => a + b, 0) / deltaTs.length) * 10) / 10
+      : null;
+    const deltaTClass = classifyDeltaT(deltaT);
 
     days.push({
       date,
@@ -226,7 +232,11 @@ function rollupDaily(hourly, options = {}) {
       wind: winds.length ? Math.max(...winds) : null,
       gust: gusts.length ? Math.max(...gusts) : null,
       rh: rhs.length ? Math.round(rhs.reduce((a, b) => a + b, 0) / rhs.length) : null,
-      precip: precips.length ? Math.max(...precips) : null
+      precip: precips.length ? Math.max(...precips) : null,
+      deltaT,
+      deltaTMax: deltaTs.length ? Math.round(Math.max(...deltaTs) * 10) / 10 : null,
+      deltaTBand: deltaTClass.band,
+      deltaTLabel: deltaTClass.label
     });
   }
 
@@ -371,16 +381,22 @@ async function handler(req, res) {
       const scoredHourly = scoreHourly(futureHours, product, 'clarity');
 
       // Map down to what the frontend needs to save bandwidth
-      const simplifiedAll = scoredHourly.map(h => ({
-        time: h.time,
-        status: h.spray.status,
-        reasons: h.spray.reasons,
-        temp: h.temp_f,
-        wind: h.wind_mph,
-        gust: h.gust_mph,
-        rh: h.rh,
-        precip: h.precip_pct
-      }));
+      const simplifiedAll = scoredHourly.map(h => {
+        const dtClass = classifyDeltaT(h.delta_t);
+        return {
+          time: h.time,
+          status: h.spray.status,
+          reasons: h.spray.reasons,
+          temp: h.temp_f,
+          wind: h.wind_mph,
+          gust: h.gust_mph,
+          rh: h.rh,
+          precip: h.precip_pct,
+          deltaT: h.delta_t,
+          deltaTBand: dtClass.band,
+          deltaTLabel: dtClass.label
+        };
+      });
 
       const windows = applyViewWindows(simplifiedAll, {
         lat: p.lat,

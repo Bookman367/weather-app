@@ -202,6 +202,50 @@
     .status-caution { color: var(--yellow); }
     .status-no-good { color: var(--red); }
 
+    .dt-optimal { color: var(--green); }
+    .dt-caution { color: var(--yellow); }
+    .dt-bad { color: var(--red); }
+    .dt-unknown { color: var(--text-muted); }
+    .dt-line { font-weight: 600; }
+
+    .fields-panel {
+      position: absolute;
+      top: 68px;
+      right: 10px;
+      left: 10px;
+      max-width: 360px;
+      margin-left: auto;
+      z-index: 1100;
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .fields-panel[hidden] { display: none; }
+    .fields-panel-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .fields-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+    .fields-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .fields-actions .btn,
+    .fields-panel .btn { font-size: 13px; }
+    .fields-panel .selector { width: 100%; }
+
     /* Legend */
     .legend {
       position: absolute;
@@ -360,8 +404,24 @@
   <header>
     <a href="/index.html" class="btn">← Back</a>
     <div class="header-title">Spray Conditions Map</div>
-    <div style="width: 70px;"></div> <!-- spacer -->
+    <button type="button" id="fields-toggle" class="btn">Fields</button>
   </header>
+
+  <div id="fields-panel" class="fields-panel" hidden>
+    <div class="fields-panel-title">Saved fields</div>
+    <div class="fields-hint">Stored on this phone only. Pick one to center the map and load its forecast.</div>
+    <select id="field-select" class="selector" aria-label="Saved fields">
+      <option value="">No saved field</option>
+    </select>
+    <div class="fields-actions">
+      <button type="button" id="field-rename-btn" class="btn">Rename</button>
+      <button type="button" id="field-delete-btn" class="btn">Delete</button>
+    </div>
+    <div class="fields-panel-title">Save this map location</div>
+    <input id="field-name-input" class="selector" type="text" placeholder="Field name" maxlength="60" autocomplete="off">
+    <input id="field-acres-input" class="selector" type="number" inputmode="decimal" min="0" step="0.1" placeholder="Acres (optional)">
+    <button type="button" id="field-save-btn" class="btn">Save field</button>
+  </div>
 
   <div id="map"></div>
   <div id="loading">
@@ -415,6 +475,7 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="/lib/saved-fields.js"></script>
 
   <script>
     // Initialize map
@@ -477,24 +538,157 @@
 
 
 
-    // Try to get user location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          currentLat = pos.coords.latitude;
-          currentLon = pos.coords.longitude;
-          centerMarker.setLatLng([currentLat, currentLon]);
+    function fieldsReady() {
+      return typeof SavedFields !== 'undefined';
+    }
 
-          fetchGridData();
-        },
-        (err) => {
-          console.log("Geolocation error or denied, using default location.");
-          fetchGridData();
-        },
-        { timeout: 5000 }
-      );
-    } else {
-      fetchGridData();
+    function fieldsStorage() {
+      try { return window.localStorage; } catch (e) {
+        return fieldsReady() ? SavedFields.memoryStorage() : { getItem(){ return null; }, setItem(){}, removeItem(){} };
+      }
+    }
+
+    function loadFieldsDoc() {
+      return fieldsReady() ? SavedFields.loadStore(fieldsStorage()) : { fields: [], activeId: null };
+    }
+
+    const fieldsToggle = document.getElementById('fields-toggle');
+    const fieldsPanel = document.getElementById('fields-panel');
+    const fieldSelect = document.getElementById('field-select');
+    const fieldNameInput = document.getElementById('field-name-input');
+    const fieldAcresInput = document.getElementById('field-acres-input');
+    const fieldSaveBtn = document.getElementById('field-save-btn');
+    const fieldRenameBtn = document.getElementById('field-rename-btn');
+    const fieldDeleteBtn = document.getElementById('field-delete-btn');
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value).replace(/[&<>"']/g, (ch) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
+    }
+
+    function fieldButtonLabel(field) {
+      if (!field) return 'Fields';
+      return field.name.length > 14 ? field.name.slice(0, 13) + '…' : field.name;
+    }
+
+    function refreshFieldsUi() {
+      if (!fieldSelect || !fieldsReady()) return;
+      const doc = loadFieldsDoc();
+      const fields = SavedFields.listFields(doc);
+      const activeId = doc.activeId || '';
+      fieldSelect.innerHTML = '<option value="">No saved field</option>' + fields.map(f => {
+        const acres = f.acres != null ? ` · ${f.acres} ac` : '';
+        return `<option value="${escapeHtml(f.id)}">${escapeHtml(f.name)}${escapeHtml(acres)}</option>`;
+      }).join('');
+      fieldSelect.value = fields.some(f => f.id === activeId) ? activeId : '';
+      if (fieldsToggle) fieldsToggle.textContent = fieldButtonLabel(SavedFields.resolveActive(doc));
+    }
+
+    function applyField(field, opts) {
+      if (!field) return;
+      currentLat = field.lat;
+      currentLon = field.lon;
+      map.setView([currentLat, currentLon], 9);
+      centerMarker.setLatLng([currentLat, currentLon]);
+      if (opts && opts.fetch !== false) fetchGridData();
+    }
+
+    function startFromSavedOrGeo() {
+      const active = fieldsReady() ? SavedFields.resolveActive(loadFieldsDoc()) : null;
+      if (active) {
+        applyField(active, { fetch: true });
+        return;
+      }
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            currentLat = pos.coords.latitude;
+            currentLon = pos.coords.longitude;
+            centerMarker.setLatLng([currentLat, currentLon]);
+            fetchGridData();
+          },
+          () => {
+            console.log("Geolocation error or denied, using default location.");
+            fetchGridData();
+          },
+          { timeout: 5000 }
+        );
+      } else {
+        fetchGridData();
+      }
+    }
+
+    refreshFieldsUi();
+    startFromSavedOrGeo();
+
+    if (fieldsToggle && fieldsPanel) {
+      fieldsToggle.addEventListener('click', () => {
+        fieldsPanel.hidden = !fieldsPanel.hidden;
+      });
+    }
+
+    if (fieldSelect) {
+      fieldSelect.addEventListener('change', () => {
+        const id = fieldSelect.value;
+        if (!fieldsReady()) return;
+        SavedFields.setActive(fieldsStorage(), id || null);
+        refreshFieldsUi();
+        const active = SavedFields.resolveActive(loadFieldsDoc());
+        if (active) applyField(active, { fetch: true });
+      });
+    }
+
+    if (fieldSaveBtn) {
+      fieldSaveBtn.addEventListener('click', () => {
+        if (!fieldsReady()) return;
+        try {
+          SavedFields.upsertField(fieldsStorage(), {
+            name: fieldNameInput ? fieldNameInput.value : '',
+            lat: currentLat,
+            lon: currentLon,
+            acres: fieldAcresInput ? fieldAcresInput.value : null
+          });
+          if (fieldNameInput) fieldNameInput.value = '';
+          if (fieldAcresInput) fieldAcresInput.value = '';
+          refreshFieldsUi();
+        } catch (err) {
+          alert(err.message || 'Could not save field.');
+        }
+      });
+    }
+
+    if (fieldRenameBtn) {
+      fieldRenameBtn.addEventListener('click', () => {
+        if (!fieldsReady()) return;
+        const active = SavedFields.resolveActive(loadFieldsDoc());
+        if (!active) {
+          alert('Pick a saved field first.');
+          return;
+        }
+        const next = window.prompt('Rename field', active.name);
+        if (next == null) return;
+        try {
+          SavedFields.renameField(fieldsStorage(), active.id, next);
+          refreshFieldsUi();
+        } catch (err) {
+          alert(err.message || 'Could not rename field.');
+        }
+      });
+    }
+
+    if (fieldDeleteBtn) {
+      fieldDeleteBtn.addEventListener('click', () => {
+        if (!fieldsReady()) return;
+        const active = SavedFields.resolveActive(loadFieldsDoc());
+        if (!active) {
+          alert('Pick a saved field first.');
+          return;
+        }
+        if (!window.confirm(`Delete ${active.name}?`)) return;
+        SavedFields.deleteField(fieldsStorage(), active.id);
+        refreshFieldsUi();
+      });
     }
 
     window.searchAtLocation = function(lat, lon) {
@@ -641,6 +835,43 @@
       return 'No-Go';
     }
 
+    function classifyDeltaTClient(dtC) {
+      if (dtC == null || !Number.isFinite(Number(dtC))) {
+        return { band: 'unknown', label: '—', className: 'dt-unknown' };
+      }
+      const dt = Number(dtC);
+      if (dt < 2) return { band: 'too-low', label: 'Too low', className: 'dt-bad' };
+      if (dt <= 8) return { band: 'ideal', label: 'Ideal', className: 'dt-optimal' };
+      if (dt <= 10) return { band: 'marginal', label: 'Marginal', className: 'dt-caution' };
+      return { band: 'too-dry', label: 'Too dry', className: 'dt-bad' };
+    }
+
+    function deltaTInfo(slot) {
+      if (!slot) return classifyDeltaTClient(null);
+      if (slot.deltaTLabel && slot.deltaTBand) {
+        const fromBand = slot.deltaTBand === 'too-low' || slot.deltaTBand === 'too-dry'
+          ? 'dt-bad'
+          : slot.deltaTBand === 'marginal'
+            ? 'dt-caution'
+            : slot.deltaTBand === 'ideal'
+              ? 'dt-optimal'
+              : 'dt-unknown';
+        return { band: slot.deltaTBand, label: slot.deltaTLabel, className: fromBand, value: slot.deltaT };
+      }
+      const info = classifyDeltaTClient(slot.deltaT);
+      info.value = slot.deltaT;
+      return info;
+    }
+
+    function formatDeltaTLine(slot) {
+      const info = deltaTInfo(slot);
+      if (info.value == null || !Number.isFinite(Number(info.value))) {
+        return `<span class="dt-line dt-unknown">ΔT —</span>`;
+      }
+      const value = Number(info.value).toFixed(1);
+      return `<span class="dt-line ${info.className}">ΔT ${value}°C · ${info.label}</span>`;
+    }
+
     function renderSprayWindow(opts) {
       if (!gridData || !gridData.points || gridData.points.length === 0) return;
 
@@ -733,6 +964,7 @@
           ` · Best window: ${windowText}` +
           ` · Worst: ${statusLabel(day.worstStatus)}` +
           ` · Go hours: ${goList}` +
+          ` · ${formatDeltaTLine(day)}` +
           `${confidenceNote}` +
           `<br>${reasonText}`;
         return;
@@ -752,6 +984,7 @@
       selectionDetails.innerHTML =
         `<strong>${formatDayLabel(hour.time)} ${hr12}${ampm}</strong> · ${statusLabel(hour.status)}` +
         ` · ${hour.temp}°F · ${hour.wind} mph` +
+        ` · ${formatDeltaTLine(hour)}` +
         `<br>${reasonText}`;
     }
 
@@ -791,6 +1024,7 @@
           <div>💨 Wind: ${hourData.wind} mph (Gust: ${hourData.gust})</div>
           <div>💧 RH: ${hourData.rh}%</div>
           <div>🌧️ Precip: ${hourData.precip}%</div>
+          <div>${formatDeltaTLine(hourData)}</div>
           ${reasons}
         </div>
       `;
@@ -823,6 +1057,7 @@
           <div>💨 Wind: ${day.wind != null ? day.wind : '—'} mph (Gust: ${day.gust != null ? day.gust : '—'})</div>
           <div>💧 RH: ${day.rh != null ? day.rh : '—'}%</div>
           <div>🌧️ Precip: ${day.precip != null ? day.precip : '—'}%</div>
+          <div>${formatDeltaTLine(day)}</div>
           ${reasons}
         </div>
       `;
