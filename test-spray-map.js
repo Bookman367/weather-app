@@ -256,6 +256,20 @@ async function runTests() {
     assert.strictEqual(day2.gust, 22);
   });
 
+  check('daily rollup includes average Delta T from hourly values', () => {
+    const hours = [
+      hour('2023-10-01T08:00', 'favorable', { deltaT: 4.0, temp: 70 }),
+      hour('2023-10-01T09:00', 'favorable', { deltaT: 6.0, temp: 72 }),
+      hour('2023-10-01T10:00', 'caution', { deltaT: 11.0, temp: 80 })
+    ];
+    const days = rollupDaily(hours);
+    assert.strictEqual(days.length, 1);
+    assert.strictEqual(days[0].deltaT, 7);
+    assert.strictEqual(days[0].deltaTMax, 11);
+    assert.strictEqual(days[0].deltaTBand, 'ideal');
+    assert.strictEqual(days[0].deltaTLabel, 'Ideal');
+  });
+
   check('16-day daily rollup; Hourly view still tops out at 168 hours', () => {
     const hours = [];
     for (let d = 1; d <= 16; d++) {
