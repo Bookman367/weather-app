@@ -737,6 +737,7 @@
 </div>
 
 <script src="/lib/spray-settings.js"></script>
+<script src="/lib/url-location.js"></script>
 <script>
 // ════════════════════════════════════════════
 //  STATE
@@ -936,7 +937,10 @@ window.exportSpraySettings = exportSpraySettings;
 // ════════════════════════════════════════════
 //  SEARCH & FETCH
 // ════════════════════════════════════════════
+let linkedCoords = null;
+
 async function doSearch() {
+  linkedCoords = null;
   const loc  = document.getElementById('loc-input').value.trim();
   const herb = document.getElementById('herb-select').value;
   const meth = document.getElementById('method-select').value;
@@ -960,6 +964,10 @@ async function fetchAndRender(loc, herb, meth, src, sunriseOffset = 0, sunsetOff
       q: loc, herbicide: herb, method: meth, source: src,
       sunriseOffset, sunsetOffset
     });
+    if (linkedCoords) {
+      params.set('lat', String(linkedCoords.lat));
+      params.set('lon', String(linkedCoords.lon));
+    }
     applyLimitsToForecastParams(params);
     const resp = await fetch(`/api/forecast?${params}`);
     if (!resp.ok) {
@@ -1982,11 +1990,17 @@ window.addEventListener('DOMContentLoaded', () => {
   const src  = sessionStorage.getItem('lastSource') || 'nws';
   const sunriseOffset = sessionStorage.getItem('lastSunriseOffset') || savedSunriseOffset || '0';
   const sunsetOffset  = sessionStorage.getItem('lastSunsetOffset') || savedSunsetOffset || '2';
-  if (loc) {
+  if (herb) document.getElementById('herb-select').value = herb;
+  if (meth) document.getElementById('method-select').value = meth;
+  if (src)  document.getElementById('source-select').value = src;
+  const fromUrl = typeof UrlLocation !== 'undefined' ? UrlLocation.fromSearch(window.location.search) : null;
+  if (fromUrl) {
+    linkedCoords = { lat: fromUrl.lat, lon: fromUrl.lon };
+    const label = fromUrl.name || `${fromUrl.lat},${fromUrl.lon}`;
+    document.getElementById('loc-input').value = label;
+    fetchAndRender(label, herb, meth, src, sunriseOffset, sunsetOffset);
+  } else if (loc) {
     document.getElementById('loc-input').value = loc;
-    if (herb) document.getElementById('herb-select').value = herb;
-    if (meth) document.getElementById('method-select').value = meth;
-    if (src)  document.getElementById('source-select').value = src;
     fetchAndRender(loc, herb, meth, src, sunriseOffset, sunsetOffset);
   } else {
     initSprayBarSync();

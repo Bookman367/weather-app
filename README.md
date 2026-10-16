@@ -36,6 +36,29 @@ Common ag-spray **display** bands (°C):
 
 Those labels are shown on the spray map hourly view and the point popup. They do **not** add a second go / caution / no-go pass. Map cells still use the existing Clarity (and product-label) rules, which already read Delta T. Product `min_delta_t` / `max_delta_t` stay on named settings for later use.
 
+## Sunrise and sunset
+
+Daily Open-Meteo fields (`sunrise`, `sunset`) are already on the cached forecast (`timezone=auto`, local to the selected spot). The spray map shows those times in Daily view and as day/night shading plus ☀ / ☾ markers on the Hourly strip.
+
+- Module: `lib/sun-times.js`
+- Parse the timezone-less Open-Meteo string (`2024-06-21T05:16`) as wall-clock time. Do **not** run it through `Date()` — that would use the phone or server zone, and it breaks across US DST spring-forward.
+- Display only. Daytime scoring still uses `calcSunriseSunset` in `lib/spray-logic.js`. Go / caution / no-go does not change.
+
+## Wind and drift
+
+Hourly detail and the map popup show wind speed, gusts, and direction as an arrow plus compass text (NW, SSW, …). A plain drift-risk sentence uses the **same** product wind / gust caps already in `scoreSprayConditions`:
+
+| Wind vs spray limit | Note |
+| --- | --- |
+| at or under 80% of `max_wind_mph`, gusts at or under `max_gust_mph` | Drift risk within the spray wind limits |
+| above 80% of `max_wind_mph`, still at or under the cap | Watch drift — wind approaching the spray limit |
+| wind over `max_wind_mph` or gusts over `max_gust_mph` | High drift risk — wind or gusts over the spray limit |
+
+- Module: `lib/wind-display.js`
+- Arrow rotation matches the main forecast: meteorological degrees **from** which the wind blows.
+- Display only. This is not a second score and does not change map colors.
+- Wind toward a sensitive field edge is out of scope.
+
 ## Saved fields
 
 Named locations (name, lat/lon, optional acres) live in browser `localStorage` only. No accounts.
@@ -46,6 +69,19 @@ Named locations (name, lat/lon, optional acres) live in browser `localStorage` o
 - Field: `{ id, name, lat, lon, acres, createdAt, updatedAt }`
 
 On the spray map, **Fields** opens a panel to pick a saved field (centers the 7×7 map and loads its forecast), save the current map location, rename, or delete.
+
+## Ops location links
+
+Ops can open Hero at a field with query params on `/` or `/spray-map.html`:
+
+```
+?lat=42.38756&lon=-97.77837
+?lat=42.38756&lon=-97.77837&name=North%2080
+```
+
+- Module: `lib/url-location.js`
+- Lat must be −90…90, lon −180…180. Missing, non-numeric, or out-of-range values are ignored and the page starts the usual way (saved field, then GPS, then default).
+- A valid pair wins over GPS and the last saved field. Optional `name` is shown only (search box / location label). The spot is **not** saved as a field unless the farmer saves it.
 
 ## Tests
 

@@ -208,6 +208,48 @@
     .dt-unknown { color: var(--text-muted); }
     .dt-line { font-weight: 600; }
 
+    .wind-dir-arrow {
+      display: inline-block;
+      font-size: 13px;
+      line-height: 1;
+      transform-origin: center;
+    }
+    .wind-line { font-weight: 600; }
+    .drift-over { color: var(--red); }
+    .drift-watch { color: var(--yellow); }
+    .drift-ok { color: var(--text-dim); }
+    .drift-unknown { color: var(--text-muted); }
+    .sun-line { color: var(--text-dim); }
+
+    .spray-segment.night .spray-block::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 15, 30, 0.42);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+    .spray-block .sun-mark {
+      position: absolute;
+      bottom: 1px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 9px;
+      line-height: 1;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .spray-segment.sunrise-hour .sun-mark { color: #ffd54a; }
+    .spray-segment.sunset-hour .sun-mark { color: #c5cae9; }
+    .daily-sun {
+      font-size: 9px;
+      line-height: 1.15;
+      color: var(--text-muted);
+      text-align: center;
+      white-space: nowrap;
+    }
+
     .fields-panel {
       position: absolute;
       top: 68px;
@@ -284,7 +326,7 @@
       color: var(--text-dim);
       line-height: 1.35;
       min-height: 30px;
-      max-height: 58px;
+      max-height: 72px;
       overflow-y: auto;
       padding: 0 2px;
     }
@@ -476,6 +518,9 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="/lib/saved-fields.js"></script>
+  <script src="/lib/sun-times.js"></script>
+  <script src="/lib/wind-display.js"></script>
+  <script src="/lib/url-location.js"></script>
 
   <script>
     // Initialize map
@@ -532,8 +577,8 @@
     const selectionDetails = document.getElementById('selection-details');
 
     const VIEW_LEGENDS = {
-      hourly: 'Hourly: each block is 1 hour across 7 days. Scroll sideways — play and 2x still work.',
-      daily: 'Daily: 16 days. First 7 use the usual majority-of-daytime-hours rule. Hatched days after that are trend guidance, not reliable go/no-go.'
+      hourly: 'Hourly: each block is 1 hour across 7 days. Night hours are shaded; ☀/☾ mark sunrise and sunset at this spot.',
+      daily: 'Daily: 16 days. Sunrise/sunset are local to the selected spot. First 7 use the usual majority-of-daytime-hours rule. Hatched days after that are trend guidance, not a reliable go/no-go.'
     };
 
 
@@ -594,7 +639,18 @@
       if (opts && opts.fetch !== false) fetchGridData();
     }
 
-    function startFromSavedOrGeo() {
+    function startFromUrlOrSavedOrGeo() {
+      const fromUrl = typeof UrlLocation !== 'undefined' ? UrlLocation.fromSearch(window.location.search) : null;
+      if (fromUrl) {
+        currentLat = fromUrl.lat;
+        currentLon = fromUrl.lon;
+        map.setView([currentLat, currentLon], 9);
+        centerMarker.setLatLng([currentLat, currentLon]);
+        const searchInput = document.getElementById('location-search-input');
+        if (fromUrl.name && searchInput) searchInput.value = fromUrl.name;
+        fetchGridData();
+        return;
+      }
       const active = fieldsReady() ? SavedFields.resolveActive(loadFieldsDoc()) : null;
       if (active) {
         applyField(active, { fetch: true });
@@ -620,7 +676,7 @@
     }
 
     refreshFieldsUi();
-    startFromSavedOrGeo();
+    startFromUrlOrSavedOrGeo();
 
     if (fieldsToggle && fieldsPanel) {
       fieldsToggle.addEventListener('click', () => {
@@ -872,6 +928,95 @@
       return `<span class="dt-line ${info.className}">ΔT ${value}°C · ${info.label}</span>`;
     }
 
+    function windLimitsFromGrid() {
+      if (gridData && gridData.windLimits) return gridData.windLimits;
+      return null;
+    }
+
+    function describedWind(slot) {
+      if (!slot) {
+        return { windDir: 'N/A', arrowDeg: null, driftBand: 'unknown', driftNote: 'Wind data unavailable', wind: null, gust: null };
+      }
+      if (typeof WindDisplay !== 'undefined') {
+        const shown = WindDisplay.describeWind(slot.wind, slot.gust, slot.windDirDeg, windLimitsFromGrid());
+        if (slot.windDir && shown.windDir === 'N/A') shown.windDir = slot.windDir;
+        if (slot.driftNote) {
+          shown.driftBand = slot.driftBand || shown.driftBand;
+          shown.driftNote = slot.driftNote;
+        }
+        return shown;
+      }
+      return {
+        wind: slot.wind,
+        gust: slot.gust,
+        windDir: slot.windDir || 'N/A',
+        arrowDeg: Number.isFinite(Number(slot.windDirDeg)) ? Number(slot.windDirDeg) : null,
+        driftBand: slot.driftBand || 'unknown',
+        driftNote: slot.driftNote || ''
+      };
+    }
+
+    function driftClass(band) {
+      if (band === 'over-limit') return 'drift-over';
+      if (band === 'approaching') return 'drift-watch';
+      if (band === 'within') return 'drift-ok';
+      return 'drift-unknown';
+    }
+
+    function formatWindArrow(deg) {
+      if (!Number.isFinite(Number(deg))) return '';
+      return `<span class="wind-dir-arrow" style="transform:rotate(${Number(deg)}deg)">↑</span>`;
+    }
+
+    function formatWindLine(slot) {
+      const w = describedWind(slot);
+      const wind = w.wind == null ? '—' : w.wind;
+      const gust = w.gust == null ? '—' : w.gust;
+      const compass = w.windDir && w.windDir !== 'N/A' ? w.windDir : '—';
+      return `<span class="wind-line">💨 ${wind} mph ${formatWindArrow(w.arrowDeg)} ${compass} · Gust ${gust}</span>`;
+    }
+
+    function formatDriftLine(slot) {
+      const w = describedWind(slot);
+      if (!w.driftNote) return '';
+      return `<span class="${driftClass(w.driftBand)}">${escapeHtml(w.driftNote)}</span>`;
+    }
+
+    function formatSunLine(slot) {
+      if (!slot) return '';
+      const rise = slot.sunriseLabel || (typeof SunTimes !== 'undefined' ? SunTimes.formatSunTime(slot.sunrise) : null);
+      const set = slot.sunsetLabel || (typeof SunTimes !== 'undefined' ? SunTimes.formatSunTime(slot.sunset) : null);
+      if (!rise && !set) return '<span class="sun-line">Sunrise/sunset —</span>';
+      return `<span class="sun-line">🌅 ${escapeHtml(rise || '—')} · 🌇 ${escapeHtml(set || '—')}</span>`;
+    }
+
+    function formatSunShort(slot) {
+      if (!slot) return '';
+      const rise = (typeof SunTimes !== 'undefined' && slot.sunrise)
+        ? SunTimes.formatSunTimeShort(slot.sunrise)
+        : (slot.sunriseLabel || null);
+      const set = (typeof SunTimes !== 'undefined' && slot.sunset)
+        ? SunTimes.formatSunTimeShort(slot.sunset)
+        : (slot.sunsetLabel || null);
+      if (!rise && !set) return '';
+      return `${rise || '—'} · ${set || '—'}`;
+    }
+
+    function sunEventMark(slot) {
+      if (!slot || !slot.sunEvent) return '';
+      if (slot.sunEvent === 'sunrise') return '<span class="sun-mark">☀</span>';
+      if (slot.sunEvent === 'sunset') return '<span class="sun-mark">☾</span>';
+      return '';
+    }
+
+    function hourlySegmentClass(slot) {
+      const classes = [];
+      if (slot && slot.daylight === false) classes.push('night');
+      if (slot && slot.sunEvent === 'sunrise') classes.push('sunrise-hour');
+      if (slot && slot.sunEvent === 'sunset') classes.push('sunset-hour');
+      return classes.length ? ' ' + classes.join(' ') : '';
+    }
+
     function renderSprayWindow(opts) {
       if (!gridData || !gridData.points || gridData.points.length === 0) return;
 
@@ -891,10 +1036,12 @@
           if (low && (i === 0 || !days[i - 1].lowerConfidence)) {
             htmlOutput += `<div class="confidence-break">Trend<br>only</div>`;
           }
+          const sunShort = formatSunShort(day);
           htmlOutput += `<div class="spray-segment daily-segment${low ? ' lower-confidence' : ''}" data-index="${i}">
             <div class="spray-block ${day.status}" title="${(day.reasons || []).join(', ')}"></div>
             <div class="spray-time bold">${dow}</div>
             <div class="spray-time">${dateLabel}</div>
+            ${sunShort ? `<div class="daily-sun">${escapeHtml(sunShort)}</div>` : ''}
             ${low ? '<div class="trend-mark">trend</div>' : ''}
           </div>`;
         });
@@ -914,8 +1061,8 @@
             currentDayString = dayStr;
           }
 
-          htmlOutput += `<div class="spray-segment" data-index="${i}">
-            <div class="spray-block ${h.status}" title="${(h.reasons || []).join(', ')}"></div>
+          htmlOutput += `<div class="spray-segment${hourlySegmentClass(h)}" data-index="${i}">
+            <div class="spray-block ${h.status}" title="${(h.reasons || []).join(', ')}">${sunEventMark(h)}</div>
             <div class="spray-time ${bold ? 'bold' : ''}">${hr12}${ampm}</div>
           </div>`;
         });
@@ -964,8 +1111,10 @@
           ` · Best window: ${windowText}` +
           ` · Worst: ${statusLabel(day.worstStatus)}` +
           ` · Go hours: ${goList}` +
+          ` · ${formatSunLine(day)}` +
           ` · ${formatDeltaTLine(day)}` +
           `${confidenceNote}` +
+          `<br>${formatWindLine(day)} · ${formatDriftLine(day)}` +
           `<br>${reasonText}`;
         return;
       }
@@ -983,8 +1132,9 @@
         : 'All parameters within label limits';
       selectionDetails.innerHTML =
         `<strong>${formatDayLabel(hour.time)} ${hr12}${ampm}</strong> · ${statusLabel(hour.status)}` +
-        ` · ${hour.temp}°F · ${hour.wind} mph` +
+        ` · ${hour.temp}°F · ${formatWindLine(hour)}` +
         ` · ${formatDeltaTLine(hour)}` +
+        `<br>${formatDriftLine(hour)}` +
         `<br>${reasonText}`;
     }
 
@@ -1021,7 +1171,8 @@
             <button class="search-here-btn" onclick="searchAtLocation(${point.lat}, ${point.lon})">Search Here</button>
           </div>
           <div style="margin-top: 5px;">🌡️ Temp: ${hourData.temp}°F</div>
-          <div>💨 Wind: ${hourData.wind} mph (Gust: ${hourData.gust})</div>
+          <div>${formatWindLine(hourData)}</div>
+          <div>${formatDriftLine(hourData)}</div>
           <div>💧 RH: ${hourData.rh}%</div>
           <div>🌧️ Precip: ${hourData.precip}%</div>
           <div>${formatDeltaTLine(hourData)}</div>
@@ -1054,7 +1205,9 @@
           <div>Best window: ${windowText}</div>
           <div>Go hours: ${goList}</div>
           <div>🌡️ Temp: ${tempLine}</div>
-          <div>💨 Wind: ${day.wind != null ? day.wind : '—'} mph (Gust: ${day.gust != null ? day.gust : '—'})</div>
+          <div>${formatSunLine(day)}</div>
+          <div>${formatWindLine(day)}</div>
+          <div>${formatDriftLine(day)}</div>
           <div>💧 RH: ${day.rh != null ? day.rh : '—'}%</div>
           <div>🌧️ Precip: ${day.precip != null ? day.precip : '—'}%</div>
           <div>${formatDeltaTLine(day)}</div>
