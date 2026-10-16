@@ -2,8 +2,11 @@ const {
   scoreHourly,
   normalizeOpenMeteo,
   calcSunriseSunset,
-  classifyDeltaT
+  classifyDeltaT,
+  PRODUCTS
 } = require('../lib/spray-logic');
+const SunTimes = require('../lib/sun-times');
+const WindDisplay = require('../lib/wind-display');
 
 // Open-Meteo forecast_days max is 16. Daily uses the full 16-day set.
 // Hourly view stays at 7 days (168h) so the client payload stays small.
@@ -159,13 +162,40 @@ function finiteNums(values) {
   return values.filter(v => v != null && Number.isFinite(Number(v))).map(Number);
 }
 
+function productWindLimits(product) {
+  const p = PRODUCTS[product] || PRODUCTS.general;
+  return { max_wind_mph: p.max_wind_mph, max_gust_mph: p.max_gust_mph };
+}
+
+function pickHourWindDir(hours) {
+  let best = null;
+  let bestWind = -1;
+  for (const h of hours || []) {
+    const wind = Number(h.wind ?? h.wind_mph);
+    const deg = h.windDirDeg ?? h.wind_dir_deg;
+    if (!Number.isFinite(wind) || deg == null) continue;
+    if (wind >= bestWind) {
+      bestWind = wind;
+      best = h;
+    }
+  }
+  if (!best) return { windDir: null, windDirDeg: null };
+  const deg = best.windDirDeg ?? best.wind_dir_deg;
+  return {
+    windDir: best.windDir || best.wind_dir || WindDisplay.degToCompass(deg),
+    windDirDeg: deg
+  };
+}
+
 function rollupDaily(hourly, options = {}) {
   const {
     lat,
     lon,
     utcOffsetSeconds = 0,
     sunriseOffset = DEFAULT_SUNRISE_OFFSET,
-    sunsetOffset = DEFAULT_SUNSET_OFFSET
+    sunsetOffset = DEFAULT_SUNSET_OFFSET,
+    sunByDate = null,
+    windLimits = null
   } = options;
 
   const byDate = new Map();
@@ -216,6 +246,13 @@ function rollupDaily(hourly, options = {}) {
       ? Math.round((deltaTs.reduce((a, b) => a + b, 0) / deltaTs.length) * 10) / 10
       : null;
     const deltaTClass = classifyDeltaT(deltaT);
+    const sun = SunTimes.sunForDate(sunByDate, date) || {};
+    const peakWind = winds.length ? Math.max(...winds) : null;
+    const peakGust = gusts.length ? Math.max(...gusts) : null;
+    const drift = WindDisplay.driftRiskFromLimits(peakWind, peakGust, windLimits);
+    const fromHours = pickHourWindDir(hours);
+    const windDirDeg = sun.windDirDeg != null ? sun.windDirDeg : fromHours.windDirDeg;
+    const windDir = sun.windDir || fromHours.windDir || WindDisplay.degToCompass(windDirDeg);
 
     days.push({
       date,
@@ -229,14 +266,22 @@ function rollupDaily(hourly, options = {}) {
       temp: temps.length ? Math.round(temps.reduce((a, b) => a + b, 0) / temps.length) : null,
       tempMin: temps.length ? Math.min(...temps) : null,
       tempMax: temps.length ? Math.max(...temps) : null,
-      wind: winds.length ? Math.max(...winds) : null,
-      gust: gusts.length ? Math.max(...gusts) : null,
+      wind: peakWind,
+      gust: peakGust,
+      windDir,
+      windDirDeg,
       rh: rhs.length ? Math.round(rhs.reduce((a, b) => a + b, 0) / rhs.length) : null,
       precip: precips.length ? Math.max(...precips) : null,
       deltaT,
       deltaTMax: deltaTs.length ? Math.round(Math.max(...deltaTs) * 10) / 10 : null,
       deltaTBand: deltaTClass.band,
-      deltaTLabel: deltaTClass.label
+      deltaTLabel: deltaTClass.label,
+      sunrise: sun.sunrise || null,
+      sunset: sun.sunset || null,
+      sunriseLabel: SunTimes.formatSunTime(sun.sunrise),
+      sunsetLabel: SunTimes.formatSunTime(sun.sunset),
+      driftBand: drift.band,
+      driftNote: drift.note
     });
   }
 
@@ -379,10 +424,15 @@ async function handler(req, res) {
 
       // Score with Hero spray rules (Clarity method + product label thresholds).
       const scoredHourly = scoreHourly(futureHours, product, 'clarity');
+      const sunByDate = SunTimes.indexDailySun(norm.daily);
+      const windLimits = productWindLimits(product);
 
       // Map down to what the frontend needs to save bandwidth
       const simplifiedAll = scoredHourly.map(h => {
         const dtClass = classifyDeltaT(h.delta_t);
+        const sun = SunTimes.sunForDate(sunByDate, h.time) || {};
+        const sunInfo = SunTimes.classifyHourSun(h.time, sun.sunrise, sun.sunset);
+        const drift = WindDisplay.driftRiskFromLimits(h.wind_mph, h.gust_mph, windLimits);
         return {
           time: h.time,
           status: h.spray.status,
@@ -390,22 +440,31 @@ async function handler(req, res) {
           temp: h.temp_f,
           wind: h.wind_mph,
           gust: h.gust_mph,
+          windDir: h.wind_dir,
+          windDirDeg: h.wind_dir_deg,
           rh: h.rh,
           precip: h.precip_pct,
           deltaT: h.delta_t,
           deltaTBand: dtClass.band,
-          deltaTLabel: dtClass.label
+          deltaTLabel: dtClass.label,
+          daylight: sunInfo.daylight,
+          sunEvent: sunInfo.sunEvent,
+          driftBand: drift.band,
+          driftNote: drift.note
         };
       });
 
       const windows = applyViewWindows(simplifiedAll, {
         lat: p.lat,
         lon: p.lon,
-        utcOffsetSeconds: norm.utcOffsetSeconds
+        utcOffsetSeconds: norm.utcOffsetSeconds,
+        sunByDate,
+        windLimits
       });
 
       return {
         ...p,
+        timezone: norm.timezone,
         hourly: windows.hourly,
         daily: windows.daily
       };
@@ -415,9 +474,11 @@ async function handler(req, res) {
       center: { lat, lon },
       radius,
       product,
+      windLimits: productWindLimits(product),
       forecastDays: FORECAST_DAYS,
       forecastHours: HOURLY_LIMIT,
       confidentDays: CONFIDENT_DAYS,
+      timezone: scoredPoints[0] && scoredPoints[0].timezone,
       points: scoredPoints
     };
 
@@ -449,3 +510,4 @@ module.exports.findBestWindow = findBestWindow;
 module.exports.daytimeHours = daytimeHours;
 module.exports.rollupDaily = rollupDaily;
 module.exports.formatHourShort = formatHourShort;
+module.exports.productWindLimits = productWindLimits;

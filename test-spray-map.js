@@ -256,6 +256,45 @@ async function runTests() {
     assert.strictEqual(day2.gust, 22);
   });
 
+  check('daily rollup attaches Open-Meteo sunrise/sunset and drift note without changing status', () => {
+    const hours = [
+      hour('2023-10-01T08:00', 'favorable', { temp: 70, wind: 8, gust: 12, windDirDeg: 180, windDir: 'S' }),
+      hour('2023-10-01T09:00', 'favorable', { temp: 70, wind: 8, gust: 12, windDirDeg: 180, windDir: 'S' })
+    ];
+    const without = rollupDaily(hours);
+    const withSun = rollupDaily(hours, {
+      sunByDate: {
+        '2023-10-01': {
+          sunrise: '2023-10-01T07:12',
+          sunset: '2023-10-01T18:48',
+          windDir: 'S',
+          windDirDeg: 180
+        }
+      },
+      windLimits: { max_wind_mph: 15, max_gust_mph: 20 }
+    });
+    assert.strictEqual(withSun[0].status, without[0].status);
+    assert.strictEqual(withSun[0].worstStatus, without[0].worstStatus);
+    assert.strictEqual(withSun[0].sunrise, '2023-10-01T07:12');
+    assert.strictEqual(withSun[0].sunset, '2023-10-01T18:48');
+    assert.strictEqual(withSun[0].sunriseLabel, '7:12 AM');
+    assert.strictEqual(withSun[0].sunsetLabel, '6:48 PM');
+    assert.strictEqual(withSun[0].windDir, 'S');
+    assert.strictEqual(withSun[0].windDirDeg, 180);
+    assert.strictEqual(withSun[0].driftBand, 'within');
+    assert.ok(/within the spray wind limits/.test(withSun[0].driftNote));
+  });
+
+  check('Open-Meteo daily request already includes sunrise and sunset', () => {
+    const url = buildForecastUrl('42.35', '-97.79');
+    assert(url.includes('sunrise'), 'Daily vars must include sunrise');
+    assert(url.includes('sunset'), 'Daily vars must include sunset');
+    assert(url.includes('wind_direction_10m'), 'Hourly wind direction stays on the cached fetch');
+    assert(url.includes('wind_gusts_10m'), 'Gusts stay on the cached fetch');
+    assert(!url.includes('api.weatherapi'), 'No paid WeatherAPI');
+    assert(!url.includes('visualcrossing'), 'No paid Visual Crossing');
+  });
+
   check('daily rollup includes average Delta T from hourly values', () => {
     const hours = [
       hour('2023-10-01T08:00', 'favorable', { deltaT: 4.0, temp: 70 }),
