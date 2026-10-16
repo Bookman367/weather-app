@@ -78,6 +78,12 @@
     [data-theme="light"] .inv-body { color: rgba(50,0,0,0.85); }
     [data-theme="light"] .inv-title { color: #cc2222; }
     [data-theme="light"] .inversion-alert { background: rgba(255,77,77,0.08); border-color: rgba(255,77,77,0.3); }
+    [data-theme="light"] .heads-up-strip { background: rgba(255,255,255,0.82); }
+    [data-theme="light"] .hu-go { color: #1a8a50; }
+    [data-theme="light"] .hu-alert.hu-sev-minor { color: #b07800; }
+    [data-theme="light"] .radar-map { background: rgba(0,0,0,0.06); }
+    [data-theme="light"] .radar-tool { background: rgba(0,0,0,0.06); color: #1a2035; border-color: rgba(0,0,0,0.1); }
+    [data-theme="light"] .radar-tool.active { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.2); color: #1a2035; }
     [data-theme="light"] .error-card { color: #cc2222; background: rgba(255,77,77,0.08); border-color: rgba(255,77,77,0.25); }
     [data-theme="light"] .spinner { border-color: rgba(0,0,0,0.15); border-top-color: rgba(0,0,0,0.6); }
     [data-theme="light"] .ext-btn:active, [data-theme="light"] .geo-btn:active { transform: scale(0.97); }
@@ -329,6 +335,22 @@
     .inv-title { font-size: 13px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
     .inv-body  { font-size: 12px; color: rgba(255,200,200,0.85); line-height: 1.5; }
 
+    /* ── HEADS UP (NWS alerts + GO soon) ─────────────────── */
+    .heads-up-strip { padding: 12px 14px; margin-bottom: 14px; }
+    .hu-title { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .hu-alert { font-size: 12px; line-height: 1.4; margin-bottom: 6px; }
+    .hu-alert:last-child { margin-bottom: 0; }
+    .hu-event { font-weight: 700; }
+    .hu-head  {
+      color: var(--text-dim);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .hu-alert.hu-sev-extreme .hu-event, .hu-alert.hu-sev-severe .hu-event { color: var(--red); }
+    .hu-alert.hu-sev-moderate .hu-event { color: var(--orange); }
+    .hu-alert.hu-sev-minor .hu-event { color: var(--yellow); }
+    .hu-go { font-size: 12px; color: var(--green); font-weight: 600; margin-top: 6px; line-height: 1.4; }
+
     /* ── COMMAND CENTER ───────────────────────────────────── */
     .command-center {
       padding: 20px 20px 22px; margin-bottom: 14px;
@@ -468,6 +490,33 @@
     .bc-value { font-size: 30px; font-weight: 700; line-height: 1; }
     .bc-unit  { font-size: 14px; color: var(--text-dim); }
     .bc-sub   { font-size: 11px; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
+
+    /* ── RADAR CARD (lazy Leaflet) ───────────────────────── */
+    .radar-card { padding: 14px; margin-bottom: 14px; }
+    .radar-toolbar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 4px 0 8px; }
+    .radar-tool {
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-pill); color: var(--text-dim);
+      cursor: pointer; font-size: 11px; font-weight: 600; padding: 5px 12px;
+    }
+    .radar-tool.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: var(--text); }
+    .radar-time { font-size: 11px; color: var(--text-dim); margin-left: auto; }
+    .radar-map {
+      height: 200px; border-radius: var(--radius-sm); overflow: hidden;
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .radar-map .leaflet-container { background: #0b1528; height: 100%; width: 100%; }
+    .radar-map .leaflet-control-attribution { font-size: 9px; }
+    .radar-map .leaflet-control-zoom a {
+      background: rgba(15,25,45,0.88); color: #fff;
+      border: 1px solid rgba(255,255,255,0.18);
+      width: 28px; height: 28px; line-height: 28px;
+    }
+    .radar-map .leaflet-control-zoom a:hover { background: rgba(15,25,45,0.96); }
+    [data-theme="light"] .radar-map .leaflet-control-zoom a {
+      background: rgba(255,255,255,0.92); color: #1a2035; border-color: rgba(0,0,0,0.12);
+    }
+
     .precip-bar-bg   { background: rgba(255,255,255,0.1); border-radius: 4px; height: 6px; margin-top: 8px; overflow: hidden; }
     .precip-bar-fill { border-radius: 4px; height: 100%; transition: width 0.8s ease; }
     .humidity-arc    { margin: 4px 0 0; }
@@ -738,11 +787,15 @@
 
 <script src="/lib/spray-settings.js"></script>
 <script src="/lib/url-location.js"></script>
+<script src="/lib/heads-up.js"></script>
+<script src="/lib/radar-map.js"></script>
 <script>
 // ════════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════════
 let state = { data: null };
+let radarSession = null;
+let leafletPromise = null;
 
 const EMPTY = '—';
 
@@ -991,6 +1044,8 @@ async function fetchAndRender(loc, herb, meth, src, sunriseOffset = 0, sunsetOff
     state.data = await resp.json();
     renderAll();
     initSprayBarSync();
+    loadHeadsUp(state.data);
+    scheduleRadar(state.data);
   } catch(e) { showError(e.message); }
 }
 
@@ -1088,7 +1143,15 @@ function showError(msg) {
 // ════════════════════════════════════════════
 //  MAIN RENDER
 // ════════════════════════════════════════════
+function teardownRadar() {
+  if (radarSession && typeof radarSession.destroy === 'function') {
+    try { radarSession.destroy(); } catch (err) { /* ignore */ }
+  }
+  radarSession = null;
+}
+
 function renderAll() {
+  teardownRadar();
   const d      = state.data;
   if (!d || !Array.isArray(d.hourly) || d.hourly.length === 0) {
     showError('Weather data unavailable. Please try again.');
@@ -1112,8 +1175,10 @@ function renderAll() {
   document.getElementById('app-content').innerHTML = `
     ${renderHeroSprayStatus(d, now, d.summary)}
     ${d.inversion_alert?.active ? renderInversionAlert(d.inversion_alert) : ''}
+    ${renderHeadsUpShell()}
     ${renderCurrentConditionsStrip(now)}
     ${renderSprayWindow(first24)}
+    ${renderRadarShell()}
     ${renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc)}
     ${renderExtButtons()}
     ${renderBottomCards(now)}
@@ -1220,6 +1285,161 @@ function renderInversionAlert(alert) {
       <div class="inv-body">${esc(alert.message)}</div>
     </div>
   </div>`;
+}
+
+function renderHeadsUpShell() {
+  return `<div class="heads-up-strip glass" id="heads-up-strip" hidden></div>`;
+}
+
+function renderRadarShell() {
+  return `<div class="radar-card glass" id="radar-card">
+    <div class="bc-title">Radar</div>
+    <div class="radar-toolbar">
+      <button type="button" class="radar-tool active" id="radar-base-sat">Satellite</button>
+      <button type="button" class="radar-tool" id="radar-base-street">Street</button>
+      <button type="button" class="radar-tool" id="radar-play" title="Play / pause">▶</button>
+      <span class="radar-time" id="radar-time">Loading…</span>
+    </div>
+    <div class="radar-map" id="radar-map"></div>
+  </div>`;
+}
+
+function severityClass(severity) {
+  const s = String(severity || '').toLowerCase();
+  if (s === 'extreme') return 'hu-sev-extreme';
+  if (s === 'severe') return 'hu-sev-severe';
+  if (s === 'moderate') return 'hu-sev-moderate';
+  if (s === 'minor') return 'hu-sev-minor';
+  return '';
+}
+
+function renderHeadsUpBody(view) {
+  const alerts = (view.alerts || []).map(a => {
+    const head = a.headline && a.headline !== a.event ? ` <span class="hu-head">— ${esc(a.headline)}</span>` : '';
+    return `<div class="hu-alert ${severityClass(a.severity)}"><span class="hu-event">${esc(a.event)}</span>${head}</div>`;
+  }).join('');
+  const go = view.goNote ? `<div class="hu-go">${esc(view.goNote)}</div>` : '';
+  return `<div class="hu-title">Heads up</div>${alerts}${go}`;
+}
+
+async function loadHeadsUp(data) {
+  const el = document.getElementById('heads-up-strip');
+  if (!el || typeof HeadsUp === 'undefined') return;
+  try {
+    const loc = data && data.location;
+    let alerts = [];
+    const url = loc ? HeadsUp.proxyUrl(loc.lat, loc.lon) : null;
+    if (url) {
+      const resp = await fetch(url);
+      if (resp.ok) {
+        const json = await resp.json();
+        alerts = Array.isArray(json.alerts) ? json.alerts : HeadsUp.summarizeAlerts(json);
+      }
+    }
+    const nowLocal = HeadsUp.nowLocalFromHourly(data.hourly)
+      || HeadsUp.nowLocalFromInstant(new Date(), { utcOffsetSeconds: data.utcOffsetSeconds });
+    const view = HeadsUp.buildHeadsUp({ alerts, hourly: data.hourly, nowLocal });
+    if (!view.visible) {
+      el.hidden = true;
+      el.innerHTML = '';
+      return;
+    }
+    el.hidden = false;
+    el.innerHTML = renderHeadsUpBody(view);
+  } catch (err) {
+    console.error(err);
+    el.hidden = true;
+    el.innerHTML = '';
+  }
+}
+
+function ensureLeaflet() {
+  if (window.L) return Promise.resolve(window.L);
+  if (leafletPromise) return leafletPromise;
+  if (typeof RadarMap === 'undefined') return Promise.reject(new Error('RadarMap missing'));
+  const assets = RadarMap.leafletAssets();
+  leafletPromise = new Promise((resolve, reject) => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = assets.css;
+    link.crossOrigin = '';
+    document.head.appendChild(link);
+    const script = document.createElement('script');
+    script.src = assets.js;
+    script.crossOrigin = '';
+    script.onload = () => {
+      if (window.L) resolve(window.L);
+      else {
+        leafletPromise = null;
+        reject(new Error('Leaflet missing after load'));
+      }
+    };
+    script.onerror = () => {
+      leafletPromise = null;
+      reject(new Error('Leaflet failed to load'));
+    };
+    document.head.appendChild(script);
+  });
+  return leafletPromise;
+}
+
+async function hydrateRadar(data) {
+  const mapEl = document.getElementById('radar-map');
+  const timeEl = document.getElementById('radar-time');
+  if (!mapEl || typeof RadarMap === 'undefined') return;
+  const loc = data && data.location;
+  if (!loc || loc.lat == null || loc.lon == null) {
+    if (timeEl) timeEl.textContent = 'Radar unavailable';
+    return;
+  }
+  const L = await ensureLeaflet();
+  const catalogRes = await fetch(RadarMap.RAINVIEWER_API);
+  if (!catalogRes.ok) throw new Error('RainViewer catalog');
+  const parsed = RadarMap.parseCatalog(await catalogRes.json());
+  if (!parsed.frames.length) throw new Error('No radar frames');
+  teardownRadar();
+  if (document.getElementById('radar-map') !== mapEl) return;
+  radarSession = RadarMap.mountMap({
+    L,
+    mapEl,
+    lat: loc.lat,
+    lon: loc.lon,
+    parsed,
+    utcOffsetSeconds: data.utcOffsetSeconds,
+    playBtn: document.getElementById('radar-play'),
+    timeEl,
+    streetBtn: document.getElementById('radar-base-street'),
+    satBtn: document.getElementById('radar-base-sat')
+  });
+}
+
+function scheduleRadar(data) {
+  const card = document.getElementById('radar-card');
+  if (!card || typeof RadarMap === 'undefined') return;
+  let started = false;
+  const run = () => {
+    if (started) return;
+    started = true;
+    hydrateRadar(data).catch(err => {
+      console.error(err);
+      const timeEl = document.getElementById('radar-time');
+      if (timeEl) timeEl.textContent = 'Radar unavailable';
+    });
+  };
+  if (typeof IntersectionObserver === 'function') {
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) {
+        io.disconnect();
+        run();
+      }
+    }, { rootMargin: '160px' });
+    io.observe(card);
+  }
+  if (typeof requestIdleCallback === 'function') {
+    requestIdleCallback(run, { timeout: 2500 });
+  } else {
+    setTimeout(run, 1);
+  }
 }
 
 // ── Command Center ────────────────────────────

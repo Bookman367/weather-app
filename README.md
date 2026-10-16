@@ -87,6 +87,24 @@ Ops can open Hero at a field with query params on `/` or `/spray-map.html`:
 - Lat must be −90…90, lon −180…180. Missing, non-numeric, or out-of-range values are ignored and the page starts the usual way (saved field, then GPS, then default).
 - A valid pair wins over GPS and the last saved field. Optional `name` is shown only (search box / location label). The spot is **not** saved as a field unless the farmer saves it.
 
+## Radar
+
+A small RainViewer card on the main forecast for the selected field. Free Weather Maps tiles (no key): latest radar frames over a satellite or street base, with play/pause.
+
+- Module: `lib/radar-map.js`
+- Leaflet 1.9.4 CSS/JS load **after** first paint (idle / when the card is near the viewport). They are not in the initial HTML.
+- Catalog: `https://api.rainviewer.com/public/weather-maps.json`. Tiles: `{host}{path}/256/{z}/{x}/{y}/2/1_1.png` (Universal Blue, smoothed + snow).
+- Display only. Fail quietly (“Radar unavailable”) if RainViewer or Leaflet is down.
+
+## Heads up
+
+A strip above current conditions with NWS active alerts for the point, plus a plain-language line if today’s Spray Window has a **GO** period starting or ending within two hours.
+
+- Module: `lib/heads-up.js`
+- Alerts: `api.weather.gov/alerts/active?point=lat,lon` via `/api/nws-alerts` so the required User-Agent is sent. CORS on NWS is `*`; the proxy exists for the User-Agent rule.
+- GO means the green Spray Window blocks (`spray.status === 'favorable'`). Caution / no-good are not GO. “Now” is `hourly[0]` (the same local hour the bar shows).
+- Display only. If NWS is down or there is nothing to say, the strip stays hidden.
+
 ## Tests
 
 ```bash
