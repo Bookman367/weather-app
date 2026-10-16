@@ -1,0 +1,4489 @@
+{
+  "rollup": [
+    {
+      "date": "2026-10-16",
+      "status": "favorable",
+      "worstStatus": "no-good",
+      "bestWindow": {
+        "start": "2026-10-16T08:00",
+        "end": "2026-10-16T13:00",
+        "startLabel": "8a",
+        "endLabel": "1p",
+        "hours": 6,
+        "status": "favorable"
+      },
+      "goHours": [
+        {
+          "time": "2026-10-16T08:00",
+          "label": "8a"
+        },
+        {
+          "time": "2026-10-16T09:00",
+          "label": "9a"
+        },
+        {
+          "time": "2026-10-16T10:00",
+          "label": "10a"
+        },
+        {
+          "time": "2026-10-16T11:00",
+          "label": "11a"
+        },
+        {
+          "time": "2026-10-16T12:00",
+          "label": "12p"
+        },
+        {
+          "time": "2026-10-16T13:00",
+          "label": "1p"
+        },
+        {
+          "time": "2026-10-16T15:00",
+          "label": "3p"
+        },
+        {
+          "time": "2026-10-16T16:00",
+          "label": "4p"
+        },
+        {
+          "time": "2026-10-16T17:00",
+          "label": "5p"
+        },
+        {
+          "time": "2026-10-16T18:00",
+          "label": "6p"
+        }
+      ],
+      "goCount": 10,
+      "hourCount": 13,
+      "reasons": [
+        "Wind 14 mph approaching limit (15 mph)",
+        "Temp IS 47°F — below minimum 50°F",
+        "Clarity Delta-T 4.9°F <5°F",
+        "Temp IS 43°F — below minimum 50°F"
+      ],
+      "temp": 52,
+      "tempMin": 34,
+      "tempMax": 70,
+      "wind": 14.3,
+      "gust": 18,
+      "windDir": "S",
+      "windDirDeg": 180,
+      "rh": 62,
+      "precip": 8,
+      "deltaT": 4.2,
+      "deltaTMax": 7.3,
+      "deltaTBand": "ideal",
+      "deltaTLabel": "Ideal",
+      "sunrise": "2026-10-16T07:28",
+      "sunset": "2026-10-16T18:42",
+      "sunriseLabel": "7:28 AM",
+      "sunsetLabel": "6:42 PM",
+      "driftBand": "approaching",
+      "driftNote": "Watch drift — wind approaching the spray limit (15 mph)"
+    },
+    {
+      "date": "2026-10-17",
+      "status": "favorable",
+      "worstStatus": "no-good",
+      "bestWindow": {
+        "start": "2026-10-17T15:00",
+        "end": "2026-10-17T18:00",
+        "startLabel": "3p",
+        "endLabel": "6p",
+        "hours": 4,
+        "status": "favorable"
+      },
+      "goHours": [
+        {
+          "time": "2026-10-17T08:00",
+          "label": "8a"
+        },
+        {
+          "time": "2026-10-17T09:00",
+          "label": "9a"
+        },
+        {
+          "time": "2026-10-17T15:00",
+          "label": "3p"
+        },
+        {
+          "time": "2026-10-17T16:00",
+          "label": "4p"
+        },
+        {
+          "time": "2026-10-17T17:00",
+          "label": "5p"
+        },
+        {
+          "time": "2026-10-17T18:00",
+          "label": "6p"
+        }
+      ],
+      "goCount": 6,
+      "hourCount": 13,
+      "reasons": [
+        "Wind 13 mph approaching limit (15 mph)",
+        "Wind 14 mph approaching limit (15 mph)",
+        "Wind 17 mph exceeds limit (15 mph)",
+        "Temp IS 50°F — below minimum 50°F",
+        "Clarity Delta-T 4.3°F <5°F",
+        "Temp IS 46°F — below minimum 50°F"
+      ],
+      "temp": 55,
+      "tempMin": 36.5,
+      "tempMax": 72.5,
+      "wind": 16.8,
+      "gust": 20.5,
+      "windDir": "SSW",
+      "windDirDeg": 200,
+      "rh": 66,
+      "precip": 8,
+      "deltaT": 3.9,
+      "deltaTMax": 6.9,
+      "deltaTBand": "ideal",
+      "deltaTLabel": "Ideal",
+      "sunrise": "2026-10-17T07:29",
+      "sunset": "2026-10-17T18:41",
+      "sunriseLabel": "7:29 AM",
+      "sunsetLabel": "6:41 PM",
+      "driftBand": "over-limit",
+      "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+    },
+    {
+      "date": "2026-10-18",
+      "status": "no-good",
+      "worstStatus": "no-good",
+      "bestWindow": {
+        "start": "2026-10-18T18:00",
+        "end": "2026-10-18T18:00",
+        "startLabel": "6p",
+        "endLabel": "6p",
+        "hours": 1,
+        "status": "favorable"
+      },
+      "goHours": [
+        {
+          "time": "2026-10-18T18:00",
+          "label": "6p"
+        }
+      ],
+      "goCount": 1,
+      "hourCount": 13,
+      "reasons": [
+        "Wind 14 mph approaching limit (15 mph)",
+        "Wind 15 mph approaching limit (15 mph)",
+        "Wind 15 mph exceeds limit (15 mph)",
+        "Gusts 22 mph exceed limit (20 mph)",
+        "Wind 16 mph exceeds limit (15 mph)",
+        "Wind 19 mph exceeds limit (15 mph)",
+        "Wind 12 mph approaching limit (15 mph)",
+        "Clarity Delta-T 4.7°F <5°F",
+        "Clarity Delta-T 3.8°F <5°F",
+        "Temp IS 48°F — below minimum 50°F",
+        "Gusts 21 mph exceed limit (20 mph)"
+      ],
+      "temp": 57,
+      "tempMin": 39,
+      "tempMax": 75,
+      "wind": 19.3,
+      "gust": 23,
+      "windDir": "SW",
+      "windDirDeg": 220,
+      "rh": 70,
+      "precip": 8,
+      "deltaT": 3.6,
+      "deltaTMax": 6.5,
+      "deltaTBand": "ideal",
+      "deltaTLabel": "Ideal",
+      "sunrise": "2026-10-18T07:30",
+      "sunset": "2026-10-18T18:40",
+      "sunriseLabel": "7:30 AM",
+      "sunsetLabel": "6:40 PM",
+      "driftBand": "over-limit",
+      "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+    },
+    {
+      "date": "2026-10-19",
+      "status": "no-good",
+      "worstStatus": "no-good",
+      "bestWindow": null,
+      "goHours": [],
+      "goCount": 0,
+      "hourCount": 13,
+      "reasons": [
+        "Wind 16 mph exceeds limit (15 mph)",
+        "Wind 17 mph exceeds limit (15 mph)",
+        "Wind 18 mph exceeds limit (15 mph)",
+        "Gusts 25 mph exceed limit (20 mph)",
+        "Gusts 21 mph exceed limit (20 mph)",
+        "Wind 19 mph exceeds limit (15 mph)",
+        "Gusts 22 mph exceed limit (20 mph)",
+        "Wind 22 mph exceeds limit (15 mph)",
+        "Precipitation 45% exceeds threshold (30%)",
+        "Gusts 24 mph exceed limit (20 mph)",
+        "Wind 15 mph approaching limit (15 mph)",
+        "Wind 14 mph approaching limit (15 mph)",
+        "Gusts 23 mph exceed limit (20 mph)"
+      ],
+      "temp": 60,
+      "tempMin": 41.5,
+      "tempMax": 77.5,
+      "wind": 21.8,
+      "gust": 25.5,
+      "windDir": "WSW",
+      "windDirDeg": 240,
+      "rh": 62,
+      "precip": 45,
+      "deltaT": 4.6,
+      "deltaTMax": 8,
+      "deltaTBand": "ideal",
+      "deltaTLabel": "Ideal",
+      "sunrise": "2026-10-19T07:31",
+      "sunset": "2026-10-19T18:39",
+      "sunriseLabel": "7:31 AM",
+      "sunsetLabel": "6:39 PM",
+      "driftBand": "over-limit",
+      "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+    },
+    {
+      "date": "2026-10-20",
+      "status": "favorable",
+      "worstStatus": "caution",
+      "bestWindow": {
+        "start": "2026-10-20T08:00",
+        "end": "2026-10-20T13:00",
+        "startLabel": "8a",
+        "endLabel": "1p",
+        "hours": 6,
+        "status": "favorable"
+      },
+      "goHours": [
+        {
+          "time": "2026-10-20T08:00",
+          "label": "8a"
+        },
+        {
+          "time": "2026-10-20T09:00",
+          "label": "9a"
+        },
+        {
+          "time": "2026-10-20T10:00",
+          "label": "10a"
+        },
+        {
+          "time": "2026-10-20T11:00",
+          "label": "11a"
+        },
+        {
+          "time": "2026-10-20T12:00",
+          "label": "12p"
+        },
+        {
+          "time": "2026-10-20T13:00",
+          "label": "1p"
+        },
+        {
+          "time": "2026-10-20T15:00",
+          "label": "3p"
+        },
+        {
+          "time": "2026-10-20T16:00",
+          "label": "4p"
+        },
+        {
+          "time": "2026-10-20T17:00",
+          "label": "5p"
+        },
+        {
+          "time": "2026-10-20T18:00",
+          "label": "6p"
+        },
+        {
+          "time": "2026-10-20T19:00",
+          "label": "7p"
+        }
+      ],
+      "goCount": 11,
+      "hourCount": 13,
+      "reasons": [
+        "Wind 14 mph approaching limit (15 mph)",
+        "Clarity Delta-T 4.7°F <5°F"
+      ],
+      "temp": 62,
+      "tempMin": 44,
+      "tempMax": 80,
+      "wind": 14.3,
+      "gust": 18,
+      "windDir": "W",
+      "windDirDeg": 260,
+      "rh": 66,
+      "precip": 8,
+      "deltaT": 4.3,
+      "deltaTMax": 7.6,
+      "deltaTBand": "ideal",
+      "deltaTLabel": "Ideal",
+      "sunrise": "2026-10-20T07:32",
+      "sunset": "2026-10-20T18:38",
+      "sunriseLabel": "7:32 AM",
+      "sunsetLabel": "6:38 PM",
+      "driftBand": "approaching",
+      "driftNote": "Watch drift — wind approaching the spray limit (15 mph)"
+    },
+    {
+      "date": "2026-10-21",
+      "status": "no-good",
+      "worstStatus": "no-good",
+      "bestWindow": {
+        "start": "2026-10-21T08:00",
+        "end": "2026-10-21T09:00",
+        "startLabel": "8a",
+        "endLabel": "9a",
+        "hours": 2,
+        "status": "favorable"
+      },
+      "goHours": [
+        {
+          "time": "2026-10-21T08:00",
+          "label": "8a"
+        },
+        {
+          "time": "2026-10-21T09:00",
+          "label": "9a"
+        },
+        {
+          "time": "2026-10-21T15:00",
+          "label": "3p"
+        }
+      ],
+      "goCount": 3,
+      "hourCount": 13,
+      "reasons": [
+        "Wind 13 mph approaching limit (15 mph)",
+        "Wind 14 mph approaching limit (15 mph)",
+        "Wind 17 mph exceeds limit (15 mph)",
+        "Precipitation 35% exceeds threshold (30%)",
+        "Clarity Delta-T 4.1°F <5°F"
+      ],
+      "temp": 65,
+      "tempMin": 46.5,
+      "tempMax": 82.5,
+      "wind": 16.8,
+      "gust": 20.5,
+      "windDir": "W",
+      "windDirDeg": 280,
+      "rh": 70,
+      "precip": 35,
+      "deltaT": 3.9,
+      "deltaTMax": 7.1,
+      "deltaTBand": "ideal",
+      "deltaTLabel": "Ideal",
+      "sunrise": "2026-10-21T07:33",
+      "sunset": "2026-10-21T18:37",
+      "sunriseLabel": "7:33 AM",
+      "sunsetLabel": "6:37 PM",
+      "driftBand": "over-limit",
+      "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+    },
+    {
+      "date": "2026-10-22",
+      "status": "no-good",
+      "worstStatus": "no-good",
+      "bestWindow": {
+        "start": "2026-10-22T18:00",
+        "end": "2026-10-22T18:00",
+        "startLabel": "6p",
+        "endLabel": "6p",
+        "hours": 1,
+        "status": "favorable"
+      },
+      "goHours": [
+        {
+          "time": "2026-10-22T18:00",
+          "label": "6p"
+        }
+      ],
+      "goCount": 1,
+      "hourCount": 13,
+      "reasons": [
+        "Wind 14 mph approaching limit (15 mph)",
+        "Wind 15 mph approaching limit (15 mph)",
+        "Wind 15 mph exceeds limit (15 mph)",
+        "Gusts 22 mph exceed limit (20 mph)",
+        "Wind 16 mph exceeds limit (15 mph)",
+        "Wind 19 mph exceeds limit (15 mph)",
+        "Wind 12 mph approaching limit (15 mph)",
+        "Gusts 21 mph exceed limit (20 mph)"
+      ],
+      "temp": 67,
+      "tempMin": 49,
+      "tempMax": 85,
+      "wind": 19.3,
+      "gust": 23,
+      "windDir": "WNW",
+      "windDirDeg": 300,
+      "rh": 62,
+      "precip": 8,
+      "deltaT": 5,
+      "deltaTMax": 8.7,
+      "deltaTBand": "ideal",
+      "deltaTLabel": "Ideal",
+      "sunrise": "2026-10-22T07:34",
+      "sunset": "2026-10-22T18:36",
+      "sunriseLabel": "7:34 AM",
+      "sunsetLabel": "6:36 PM",
+      "driftBand": "over-limit",
+      "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+    }
+  ],
+  "applyViewWindows": {
+    "hourly": [
+      {
+        "time": "2026-10-16T00:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.1°F <5°F night",
+          "Temp IS 34°F — below minimum 50°F"
+        ],
+        "wind_mph": 11,
+        "gust_mph": 18,
+        "temp_f": 34,
+        "rh": 80,
+        "delta_t": 1.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T01:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.2°F <5°F night",
+          "Temp IS 35°F — below minimum 50°F"
+        ],
+        "wind_mph": 10.8,
+        "gust_mph": 13.8,
+        "temp_f": 34.6,
+        "rh": 79,
+        "delta_t": 1.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T02:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.4°F <5°F night",
+          "Temp IS 36°F — below minimum 50°F"
+        ],
+        "wind_mph": 10.3,
+        "gust_mph": 13.3,
+        "temp_f": 36.4,
+        "rh": 78,
+        "delta_t": 1.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T03:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.0°F <5°F night",
+          "Temp IS 39°F — below minimum 50°F"
+        ],
+        "wind_mph": 9.5,
+        "gust_mph": 12.5,
+        "temp_f": 39.3,
+        "rh": 75,
+        "delta_t": 2.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T04:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.9°F <5°F night",
+          "Temp IS 43°F — below minimum 50°F"
+        ],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 43,
+        "rh": 71,
+        "delta_t": 2.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T05:00",
+        "status": "no-good",
+        "reasons": [
+          "Temp IS 47°F — below minimum 50°F"
+        ],
+        "wind_mph": 7.3,
+        "gust_mph": 14.3,
+        "temp_f": 47.3,
+        "rh": 67,
+        "delta_t": 3.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T06:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 6,
+        "gust_mph": 9,
+        "temp_f": 52,
+        "rh": 62,
+        "delta_t": 3.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T07:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 7.3,
+        "gust_mph": 10.3,
+        "temp_f": 56.7,
+        "rh": 57,
+        "delta_t": 4.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T08:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 61,
+        "rh": 53,
+        "delta_t": 5.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T09:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 9.5,
+        "gust_mph": 12.5,
+        "temp_f": 64.7,
+        "rh": 49,
+        "delta_t": 6.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T10:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 10.3,
+        "gust_mph": 17.3,
+        "temp_f": 67.6,
+        "rh": 46,
+        "delta_t": 6.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T11:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 10.8,
+        "gust_mph": 13.8,
+        "temp_f": 69.4,
+        "rh": 45,
+        "delta_t": 7.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T12:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 70,
+        "rh": 44,
+        "delta_t": 7.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T13:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 10.8,
+        "gust_mph": 13.8,
+        "temp_f": 69.4,
+        "rh": 45,
+        "delta_t": 7.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T14:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 14.3,
+        "gust_mph": 17.3,
+        "temp_f": 67.6,
+        "rh": 46,
+        "delta_t": 6.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T15:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 9.5,
+        "gust_mph": 16.5,
+        "temp_f": 64.7,
+        "rh": 49,
+        "delta_t": 6.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T16:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 61,
+        "rh": 53,
+        "delta_t": 5.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T17:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 7.3,
+        "gust_mph": 10.3,
+        "temp_f": 56.7,
+        "rh": 57,
+        "delta_t": 4.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T18:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 6,
+        "gust_mph": 9,
+        "temp_f": 52,
+        "rh": 62,
+        "delta_t": 3.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T19:00",
+        "status": "no-good",
+        "reasons": [
+          "Temp IS 47°F — below minimum 50°F"
+        ],
+        "wind_mph": 7.3,
+        "gust_mph": 10.3,
+        "temp_f": 47.3,
+        "rh": 67,
+        "delta_t": 3.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T20:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.9°F <5°F",
+          "Temp IS 43°F — below minimum 50°F"
+        ],
+        "wind_mph": 8.5,
+        "gust_mph": 15.5,
+        "temp_f": 43,
+        "rh": 71,
+        "delta_t": 2.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T21:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.0°F <5°F",
+          "Temp IS 39°F — below minimum 50°F"
+        ],
+        "wind_mph": 9.5,
+        "gust_mph": 12.5,
+        "temp_f": 39.3,
+        "rh": 75,
+        "delta_t": 2.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T22:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.4°F <5°F",
+          "Temp IS 36°F — below minimum 50°F"
+        ],
+        "wind_mph": 10.3,
+        "gust_mph": 13.3,
+        "temp_f": 36.4,
+        "rh": 78,
+        "delta_t": 1.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-16T23:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.2°F <5°F",
+          "Temp IS 35°F — below minimum 50°F"
+        ],
+        "wind_mph": 10.8,
+        "gust_mph": 13.8,
+        "temp_f": 34.6,
+        "rh": 79,
+        "delta_t": 1.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T00:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.7°F <5°F night",
+          "Temp IS 37°F — below minimum 50°F",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 20.5,
+        "temp_f": 36.5,
+        "rh": 84,
+        "delta_t": 1.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T01:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.7°F <5°F night",
+          "Temp IS 37°F — below minimum 50°F"
+        ],
+        "wind_mph": 13.3,
+        "gust_mph": 16.3,
+        "temp_f": 37.1,
+        "rh": 83,
+        "delta_t": 1.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T02:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.1°F <5°F night",
+          "Temp IS 39°F — below minimum 50°F"
+        ],
+        "wind_mph": 12.8,
+        "gust_mph": 15.8,
+        "temp_f": 38.9,
+        "rh": 82,
+        "delta_t": 1.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T03:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.6°F <5°F night",
+          "Temp IS 42°F — below minimum 50°F"
+        ],
+        "wind_mph": 12,
+        "gust_mph": 15,
+        "temp_f": 41.8,
+        "rh": 79,
+        "delta_t": 2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T04:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.3°F <5°F night",
+          "Temp IS 46°F — below minimum 50°F"
+        ],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 45.5,
+        "rh": 75,
+        "delta_t": 2.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T05:00",
+        "status": "no-good",
+        "reasons": [
+          "Temp IS 50°F — below minimum 50°F"
+        ],
+        "wind_mph": 9.8,
+        "gust_mph": 16.8,
+        "temp_f": 49.8,
+        "rh": 71,
+        "delta_t": 2.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T06:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 54.5,
+        "rh": 66,
+        "delta_t": 3.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T07:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 9.8,
+        "gust_mph": 12.8,
+        "temp_f": 59.2,
+        "rh": 61,
+        "delta_t": 4.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T08:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 63.5,
+        "rh": 57,
+        "delta_t": 5.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T09:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 12,
+        "gust_mph": 15,
+        "temp_f": 67.2,
+        "rh": 53,
+        "delta_t": 5.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T10:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 13 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.8,
+        "gust_mph": 19.8,
+        "temp_f": 70.1,
+        "rh": 50,
+        "delta_t": 6.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T11:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 13 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.3,
+        "gust_mph": 16.3,
+        "temp_f": 71.9,
+        "rh": 49,
+        "delta_t": 6.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T12:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 72.5,
+        "rh": 48,
+        "delta_t": 6.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T13:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 13 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.3,
+        "gust_mph": 16.3,
+        "temp_f": 71.9,
+        "rh": 49,
+        "delta_t": 6.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T14:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 17 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 16.8,
+        "gust_mph": 19.8,
+        "temp_f": 70.1,
+        "rh": 50,
+        "delta_t": 6.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T15:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 12,
+        "gust_mph": 19,
+        "temp_f": 67.2,
+        "rh": 53,
+        "delta_t": 5.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T16:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 63.5,
+        "rh": 57,
+        "delta_t": 5.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T17:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 9.8,
+        "gust_mph": 12.8,
+        "temp_f": 59.2,
+        "rh": 61,
+        "delta_t": 4.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T18:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 54.5,
+        "rh": 66,
+        "delta_t": 3.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T19:00",
+        "status": "no-good",
+        "reasons": [
+          "Temp IS 50°F — below minimum 50°F"
+        ],
+        "wind_mph": 9.8,
+        "gust_mph": 12.8,
+        "temp_f": 49.8,
+        "rh": 71,
+        "delta_t": 2.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T20:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.3°F <5°F",
+          "Temp IS 46°F — below minimum 50°F"
+        ],
+        "wind_mph": 11,
+        "gust_mph": 18,
+        "temp_f": 45.5,
+        "rh": 75,
+        "delta_t": 2.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T21:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.6°F <5°F",
+          "Temp IS 42°F — below minimum 50°F"
+        ],
+        "wind_mph": 12,
+        "gust_mph": 15,
+        "temp_f": 41.8,
+        "rh": 79,
+        "delta_t": 2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T22:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.1°F <5°F",
+          "Temp IS 39°F — below minimum 50°F"
+        ],
+        "wind_mph": 12.8,
+        "gust_mph": 15.8,
+        "temp_f": 38.9,
+        "rh": 82,
+        "delta_t": 1.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-17T23:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.7°F <5°F",
+          "Temp IS 37°F — below minimum 50°F"
+        ],
+        "wind_mph": 13.3,
+        "gust_mph": 16.3,
+        "temp_f": 37.1,
+        "rh": 83,
+        "delta_t": 1.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T00:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.2°F <5°F night",
+          "Temp IS 39°F — below minimum 50°F",
+          "Wind 16 mph exceeds limit (15 mph)",
+          "Gusts 23 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 16,
+        "gust_mph": 23,
+        "temp_f": 39,
+        "rh": 88,
+        "delta_t": 1.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T01:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.3°F <5°F night",
+          "Temp IS 40°F — below minimum 50°F",
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.8,
+        "gust_mph": 18.8,
+        "temp_f": 39.6,
+        "rh": 87,
+        "delta_t": 1.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T02:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.5°F <5°F night",
+          "Temp IS 41°F — below minimum 50°F",
+          "Wind 15 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.3,
+        "gust_mph": 18.3,
+        "temp_f": 41.4,
+        "rh": 86,
+        "delta_t": 1.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T03:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.1°F <5°F night",
+          "Temp IS 44°F — below minimum 50°F"
+        ],
+        "wind_mph": 14.5,
+        "gust_mph": 17.5,
+        "temp_f": 44.3,
+        "rh": 83,
+        "delta_t": 1.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T04:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.8°F <5°F night",
+          "Temp IS 48°F — below minimum 50°F"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 48,
+        "rh": 79,
+        "delta_t": 2.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T05:00",
+        "status": "caution",
+        "reasons": [
+          "Clarity Delta-T 4.7°F <5°F",
+          "Wind 12 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.3,
+        "gust_mph": 19.3,
+        "temp_f": 52.3,
+        "rh": 75,
+        "delta_t": 2.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T06:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 57,
+        "rh": 70,
+        "delta_t": 3.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T07:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 12 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.3,
+        "gust_mph": 15.3,
+        "temp_f": 61.7,
+        "rh": 65,
+        "delta_t": 4.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T08:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 66,
+        "rh": 61,
+        "delta_t": 4.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T09:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 15 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 14.5,
+        "gust_mph": 17.5,
+        "temp_f": 69.7,
+        "rh": 57,
+        "delta_t": 5.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T10:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 15 mph exceeds limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 15.3,
+        "gust_mph": 22.3,
+        "temp_f": 72.6,
+        "rh": 54,
+        "delta_t": 6.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T11:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.8,
+        "gust_mph": 18.8,
+        "temp_f": 74.4,
+        "rh": 53,
+        "delta_t": 6.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T12:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 16,
+        "gust_mph": 19,
+        "temp_f": 75,
+        "rh": 52,
+        "delta_t": 6.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T13:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.8,
+        "gust_mph": 18.8,
+        "temp_f": 74.4,
+        "rh": 53,
+        "delta_t": 6.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T14:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 19 mph exceeds limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 19.3,
+        "gust_mph": 22.3,
+        "temp_f": 72.6,
+        "rh": 54,
+        "delta_t": 6.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T15:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 15 mph approaching limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 14.5,
+        "gust_mph": 21.5,
+        "temp_f": 69.7,
+        "rh": 57,
+        "delta_t": 5.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T16:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 66,
+        "rh": 61,
+        "delta_t": 4.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T17:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 12 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.3,
+        "gust_mph": 15.3,
+        "temp_f": 61.7,
+        "rh": 65,
+        "delta_t": 4.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T18:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 57,
+        "rh": 70,
+        "delta_t": 3.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T19:00",
+        "status": "caution",
+        "reasons": [
+          "Clarity Delta-T 4.7°F <5°F",
+          "Wind 12 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.3,
+        "gust_mph": 15.3,
+        "temp_f": 52.3,
+        "rh": 75,
+        "delta_t": 2.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T20:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.8°F <5°F",
+          "Temp IS 48°F — below minimum 50°F",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 20.5,
+        "temp_f": 48,
+        "rh": 79,
+        "delta_t": 2.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T21:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.1°F <5°F",
+          "Temp IS 44°F — below minimum 50°F"
+        ],
+        "wind_mph": 14.5,
+        "gust_mph": 17.5,
+        "temp_f": 44.3,
+        "rh": 83,
+        "delta_t": 1.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T22:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.5°F <5°F",
+          "Temp IS 41°F — below minimum 50°F",
+          "Wind 15 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.3,
+        "gust_mph": 18.3,
+        "temp_f": 41.4,
+        "rh": 86,
+        "delta_t": 1.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-18T23:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.3°F <5°F",
+          "Temp IS 40°F — below minimum 50°F",
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.8,
+        "gust_mph": 18.8,
+        "temp_f": 39.6,
+        "rh": 87,
+        "delta_t": 1.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-19T00:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.4°F <5°F night",
+          "Temp IS 42°F — below minimum 50°F",
+          "Wind 19 mph exceeds limit (15 mph)",
+          "Gusts 26 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 18.5,
+        "gust_mph": 25.5,
+        "temp_f": 41.5,
+        "rh": 80,
+        "delta_t": 1.9,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T01:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.6°F <5°F night",
+          "Temp IS 42°F — below minimum 50°F",
+          "Wind 18 mph exceeds limit (15 mph)",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 18.3,
+        "gust_mph": 21.3,
+        "temp_f": 42.1,
+        "rh": 79,
+        "delta_t": 2,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T02:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.8°F <5°F night",
+          "Temp IS 44°F — below minimum 50°F",
+          "Wind 18 mph exceeds limit (15 mph)",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 17.8,
+        "gust_mph": 20.8,
+        "temp_f": 43.9,
+        "rh": 78,
+        "delta_t": 2.1,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T03:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.5°F <5°F night",
+          "Temp IS 47°F — below minimum 50°F",
+          "Wind 17 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 17,
+        "gust_mph": 20,
+        "temp_f": 46.8,
+        "rh": 75,
+        "delta_t": 2.5,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T04:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 16,
+        "gust_mph": 19,
+        "temp_f": 50.5,
+        "rh": 71,
+        "delta_t": 3,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T05:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 15 mph approaching limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 14.8,
+        "gust_mph": 21.8,
+        "temp_f": 54.8,
+        "rh": 67,
+        "delta_t": 3.5,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T06:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 59.5,
+        "rh": 62,
+        "delta_t": 4.3,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T07:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 15 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 14.8,
+        "gust_mph": 17.8,
+        "temp_f": 64.2,
+        "rh": 57,
+        "delta_t": 5.1,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T08:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 16,
+        "gust_mph": 19,
+        "temp_f": 68.5,
+        "rh": 53,
+        "delta_t": 5.9,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T09:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 17 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 17,
+        "gust_mph": 20,
+        "temp_f": 72.2,
+        "rh": 49,
+        "delta_t": 6.8,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T10:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 18 mph exceeds limit (15 mph)",
+          "Gusts 25 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 17.8,
+        "gust_mph": 24.8,
+        "temp_f": 75.1,
+        "rh": 46,
+        "delta_t": 7.5,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T11:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 18 mph exceeds limit (15 mph)",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 18.3,
+        "gust_mph": 21.3,
+        "temp_f": 76.9,
+        "rh": 45,
+        "delta_t": 7.8,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T12:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 19 mph exceeds limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 18.5,
+        "gust_mph": 21.5,
+        "temp_f": 77.5,
+        "rh": 44,
+        "delta_t": 8,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T13:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 18 mph exceeds limit (15 mph)",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 18.3,
+        "gust_mph": 21.3,
+        "temp_f": 76.9,
+        "rh": 45,
+        "delta_t": 7.8,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T14:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 22 mph exceeds limit (15 mph)",
+          "Gusts 25 mph exceed limit (20 mph)",
+          "Precipitation 45% exceeds threshold (30%)"
+        ],
+        "wind_mph": 21.8,
+        "gust_mph": 24.8,
+        "temp_f": 75.1,
+        "rh": 46,
+        "delta_t": 7.5,
+        "precip_pct": 45
+      },
+      {
+        "time": "2026-10-19T15:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 17 mph exceeds limit (15 mph)",
+          "Gusts 24 mph exceed limit (20 mph)",
+          "Precipitation 45% exceeds threshold (30%)"
+        ],
+        "wind_mph": 17,
+        "gust_mph": 24,
+        "temp_f": 72.2,
+        "rh": 49,
+        "delta_t": 6.8,
+        "precip_pct": 45
+      },
+      {
+        "time": "2026-10-19T16:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)",
+          "Precipitation 45% exceeds threshold (30%)"
+        ],
+        "wind_mph": 16,
+        "gust_mph": 19,
+        "temp_f": 68.5,
+        "rh": 53,
+        "delta_t": 5.9,
+        "precip_pct": 45
+      },
+      {
+        "time": "2026-10-19T17:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 15 mph approaching limit (15 mph)",
+          "Precipitation 45% exceeds threshold (30%)"
+        ],
+        "wind_mph": 14.8,
+        "gust_mph": 17.8,
+        "temp_f": 64.2,
+        "rh": 57,
+        "delta_t": 5.1,
+        "precip_pct": 45
+      },
+      {
+        "time": "2026-10-19T18:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)",
+          "Precipitation 45% exceeds threshold (30%)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 59.5,
+        "rh": 62,
+        "delta_t": 4.3,
+        "precip_pct": 45
+      },
+      {
+        "time": "2026-10-19T19:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 15 mph approaching limit (15 mph)",
+          "Precipitation 45% exceeds threshold (30%)"
+        ],
+        "wind_mph": 14.8,
+        "gust_mph": 17.8,
+        "temp_f": 54.8,
+        "rh": 67,
+        "delta_t": 3.5,
+        "precip_pct": 45
+      },
+      {
+        "time": "2026-10-19T20:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)",
+          "Gusts 23 mph exceed limit (20 mph)",
+          "Precipitation 45% exceeds threshold (30%)"
+        ],
+        "wind_mph": 16,
+        "gust_mph": 23,
+        "temp_f": 50.5,
+        "rh": 71,
+        "delta_t": 3,
+        "precip_pct": 45
+      },
+      {
+        "time": "2026-10-19T21:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.5°F <5°F",
+          "Temp IS 47°F — below minimum 50°F",
+          "Wind 17 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 17,
+        "gust_mph": 20,
+        "temp_f": 46.8,
+        "rh": 75,
+        "delta_t": 2.5,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T22:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.8°F <5°F",
+          "Temp IS 44°F — below minimum 50°F",
+          "Wind 18 mph exceeds limit (15 mph)",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 17.8,
+        "gust_mph": 20.8,
+        "temp_f": 43.9,
+        "rh": 78,
+        "delta_t": 2.1,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-19T23:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.6°F <5°F",
+          "Temp IS 42°F — below minimum 50°F",
+          "Wind 18 mph exceeds limit (15 mph)",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 18.3,
+        "gust_mph": 21.3,
+        "temp_f": 42.1,
+        "rh": 79,
+        "delta_t": 2,
+        "precip_pct": 15
+      },
+      {
+        "time": "2026-10-20T00:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.9°F <5°F night",
+          "Temp IS 44°F — below minimum 50°F"
+        ],
+        "wind_mph": 11,
+        "gust_mph": 18,
+        "temp_f": 44,
+        "rh": 84,
+        "delta_t": 1.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T01:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.1°F <5°F night",
+          "Temp IS 45°F — below minimum 50°F"
+        ],
+        "wind_mph": 10.8,
+        "gust_mph": 13.8,
+        "temp_f": 44.6,
+        "rh": 83,
+        "delta_t": 1.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T02:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.2°F <5°F night",
+          "Temp IS 46°F — below minimum 50°F"
+        ],
+        "wind_mph": 10.3,
+        "gust_mph": 13.3,
+        "temp_f": 46.4,
+        "rh": 82,
+        "delta_t": 1.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T03:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.0°F <5°F night",
+          "Temp IS 49°F — below minimum 50°F"
+        ],
+        "wind_mph": 9.5,
+        "gust_mph": 12.5,
+        "temp_f": 49.3,
+        "rh": 79,
+        "delta_t": 2.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T04:00",
+        "status": "caution",
+        "reasons": [
+          "Clarity Delta-T 4.7°F <5°F night"
+        ],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 53,
+        "rh": 75,
+        "delta_t": 2.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T05:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 7.3,
+        "gust_mph": 14.3,
+        "temp_f": 57.3,
+        "rh": 71,
+        "delta_t": 3.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T06:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 6,
+        "gust_mph": 9,
+        "temp_f": 62,
+        "rh": 66,
+        "delta_t": 4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T07:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 7.3,
+        "gust_mph": 10.3,
+        "temp_f": 66.7,
+        "rh": 61,
+        "delta_t": 4.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T08:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 71,
+        "rh": 57,
+        "delta_t": 5.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T09:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 9.5,
+        "gust_mph": 12.5,
+        "temp_f": 74.7,
+        "rh": 53,
+        "delta_t": 6.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T10:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 10.3,
+        "gust_mph": 17.3,
+        "temp_f": 77.6,
+        "rh": 50,
+        "delta_t": 7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T11:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 10.8,
+        "gust_mph": 13.8,
+        "temp_f": 79.4,
+        "rh": 49,
+        "delta_t": 7.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T12:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 80,
+        "rh": 48,
+        "delta_t": 7.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T13:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 10.8,
+        "gust_mph": 13.8,
+        "temp_f": 79.4,
+        "rh": 49,
+        "delta_t": 7.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T14:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 14.3,
+        "gust_mph": 17.3,
+        "temp_f": 77.6,
+        "rh": 50,
+        "delta_t": 7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T15:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 9.5,
+        "gust_mph": 16.5,
+        "temp_f": 74.7,
+        "rh": 53,
+        "delta_t": 6.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T16:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 71,
+        "rh": 57,
+        "delta_t": 5.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T17:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 7.3,
+        "gust_mph": 10.3,
+        "temp_f": 66.7,
+        "rh": 61,
+        "delta_t": 4.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T18:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 6,
+        "gust_mph": 9,
+        "temp_f": 62,
+        "rh": 66,
+        "delta_t": 4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T19:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 7.3,
+        "gust_mph": 10.3,
+        "temp_f": 57.3,
+        "rh": 71,
+        "delta_t": 3.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T20:00",
+        "status": "caution",
+        "reasons": [
+          "Clarity Delta-T 4.7°F <5°F"
+        ],
+        "wind_mph": 8.5,
+        "gust_mph": 15.5,
+        "temp_f": 53,
+        "rh": 75,
+        "delta_t": 2.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T21:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.0°F <5°F",
+          "Temp IS 49°F — below minimum 50°F"
+        ],
+        "wind_mph": 9.5,
+        "gust_mph": 12.5,
+        "temp_f": 49.3,
+        "rh": 79,
+        "delta_t": 2.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T22:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.2°F <5°F",
+          "Temp IS 46°F — below minimum 50°F"
+        ],
+        "wind_mph": 10.3,
+        "gust_mph": 13.3,
+        "temp_f": 46.4,
+        "rh": 82,
+        "delta_t": 1.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-20T23:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.1°F <5°F",
+          "Temp IS 45°F — below minimum 50°F"
+        ],
+        "wind_mph": 10.8,
+        "gust_mph": 13.8,
+        "temp_f": 44.6,
+        "rh": 83,
+        "delta_t": 1.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T00:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.2°F <5°F night",
+          "Temp IS 47°F — below minimum 50°F",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 20.5,
+        "temp_f": 46.5,
+        "rh": 88,
+        "delta_t": 1.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T01:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.3°F <5°F night",
+          "Temp IS 47°F — below minimum 50°F"
+        ],
+        "wind_mph": 13.3,
+        "gust_mph": 16.3,
+        "temp_f": 47.1,
+        "rh": 87,
+        "delta_t": 1.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T02:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.7°F <5°F night",
+          "Temp IS 49°F — below minimum 50°F"
+        ],
+        "wind_mph": 12.8,
+        "gust_mph": 15.8,
+        "temp_f": 48.9,
+        "rh": 86,
+        "delta_t": 1.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T03:00",
+        "status": "caution",
+        "reasons": [
+          "Clarity Delta-T 3.2°F <5°F night"
+        ],
+        "wind_mph": 12,
+        "gust_mph": 15,
+        "temp_f": 51.8,
+        "rh": 83,
+        "delta_t": 1.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T04:00",
+        "status": "caution",
+        "reasons": [
+          "Clarity Delta-T 4.1°F <5°F night"
+        ],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 55.5,
+        "rh": 79,
+        "delta_t": 2.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T05:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 9.8,
+        "gust_mph": 16.8,
+        "temp_f": 59.8,
+        "rh": 75,
+        "delta_t": 2.8,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T06:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 64.5,
+        "rh": 70,
+        "delta_t": 3.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T07:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 9.8,
+        "gust_mph": 12.8,
+        "temp_f": 69.2,
+        "rh": 65,
+        "delta_t": 4.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T08:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 73.5,
+        "rh": 61,
+        "delta_t": 5.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T09:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 12,
+        "gust_mph": 15,
+        "temp_f": 77.2,
+        "rh": 57,
+        "delta_t": 6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T10:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 13 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.8,
+        "gust_mph": 19.8,
+        "temp_f": 80.1,
+        "rh": 54,
+        "delta_t": 6.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T11:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 13 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.3,
+        "gust_mph": 16.3,
+        "temp_f": 81.9,
+        "rh": 53,
+        "delta_t": 6.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T12:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 82.5,
+        "rh": 52,
+        "delta_t": 7.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T13:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 13 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.3,
+        "gust_mph": 16.3,
+        "temp_f": 81.9,
+        "rh": 53,
+        "delta_t": 6.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T14:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 17 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 16.8,
+        "gust_mph": 19.8,
+        "temp_f": 80.1,
+        "rh": 54,
+        "delta_t": 6.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T15:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 12,
+        "gust_mph": 19,
+        "temp_f": 77.2,
+        "rh": 57,
+        "delta_t": 6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-21T16:00",
+        "status": "no-good",
+        "reasons": [
+          "Precipitation 35% exceeds threshold (30%)"
+        ],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 73.5,
+        "rh": 61,
+        "delta_t": 5.2,
+        "precip_pct": 35
+      },
+      {
+        "time": "2026-10-21T17:00",
+        "status": "no-good",
+        "reasons": [
+          "Precipitation 35% exceeds threshold (30%)"
+        ],
+        "wind_mph": 9.8,
+        "gust_mph": 12.8,
+        "temp_f": 69.2,
+        "rh": 65,
+        "delta_t": 4.4,
+        "precip_pct": 35
+      },
+      {
+        "time": "2026-10-21T18:00",
+        "status": "no-good",
+        "reasons": [
+          "Precipitation 35% exceeds threshold (30%)"
+        ],
+        "wind_mph": 8.5,
+        "gust_mph": 11.5,
+        "temp_f": 64.5,
+        "rh": 70,
+        "delta_t": 3.6,
+        "precip_pct": 35
+      },
+      {
+        "time": "2026-10-21T19:00",
+        "status": "no-good",
+        "reasons": [
+          "Precipitation 35% exceeds threshold (30%)"
+        ],
+        "wind_mph": 9.8,
+        "gust_mph": 12.8,
+        "temp_f": 59.8,
+        "rh": 75,
+        "delta_t": 2.8,
+        "precip_pct": 35
+      },
+      {
+        "time": "2026-10-21T20:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.1°F <5°F",
+          "Precipitation 35% exceeds threshold (30%)"
+        ],
+        "wind_mph": 11,
+        "gust_mph": 18,
+        "temp_f": 55.5,
+        "rh": 79,
+        "delta_t": 2.3,
+        "precip_pct": 35
+      },
+      {
+        "time": "2026-10-21T21:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.2°F <5°F",
+          "Precipitation 35% exceeds threshold (30%)"
+        ],
+        "wind_mph": 12,
+        "gust_mph": 15,
+        "temp_f": 51.8,
+        "rh": 83,
+        "delta_t": 1.8,
+        "precip_pct": 35
+      },
+      {
+        "time": "2026-10-21T22:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.7°F <5°F",
+          "Temp IS 49°F — below minimum 50°F",
+          "Precipitation 35% exceeds threshold (30%)"
+        ],
+        "wind_mph": 12.8,
+        "gust_mph": 15.8,
+        "temp_f": 48.9,
+        "rh": 86,
+        "delta_t": 1.5,
+        "precip_pct": 35
+      },
+      {
+        "time": "2026-10-21T23:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 2.3°F <5°F",
+          "Temp IS 47°F — below minimum 50°F",
+          "Precipitation 35% exceeds threshold (30%)"
+        ],
+        "wind_mph": 13.3,
+        "gust_mph": 16.3,
+        "temp_f": 47.1,
+        "rh": 87,
+        "delta_t": 1.3,
+        "precip_pct": 35
+      },
+      {
+        "time": "2026-10-22T00:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 3.6°F <5°F night",
+          "Temp IS 49°F — below minimum 50°F",
+          "Wind 16 mph exceeds limit (15 mph)",
+          "Gusts 23 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 16,
+        "gust_mph": 23,
+        "temp_f": 49,
+        "rh": 80,
+        "delta_t": 2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T01:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.0°F <5°F night",
+          "Temp IS 50°F — below minimum 50°F",
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.8,
+        "gust_mph": 18.8,
+        "temp_f": 49.6,
+        "rh": 79,
+        "delta_t": 2.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T02:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.1°F <5°F night",
+          "Wind 15 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.3,
+        "gust_mph": 18.3,
+        "temp_f": 51.4,
+        "rh": 78,
+        "delta_t": 2.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T03:00",
+        "status": "caution",
+        "reasons": [
+          "Clarity Delta-T 4.9°F <5°F night",
+          "Wind 15 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 14.5,
+        "gust_mph": 17.5,
+        "temp_f": 54.3,
+        "rh": 75,
+        "delta_t": 2.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T04:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 58,
+        "rh": 71,
+        "delta_t": 3.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T05:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 12 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.3,
+        "gust_mph": 19.3,
+        "temp_f": 62.3,
+        "rh": 67,
+        "delta_t": 3.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T06:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 67,
+        "rh": 62,
+        "delta_t": 4.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T07:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 12 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.3,
+        "gust_mph": 15.3,
+        "temp_f": 71.7,
+        "rh": 57,
+        "delta_t": 5.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T08:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 76,
+        "rh": 53,
+        "delta_t": 6.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T09:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 15 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 14.5,
+        "gust_mph": 17.5,
+        "temp_f": 79.7,
+        "rh": 49,
+        "delta_t": 7.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T10:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 15 mph exceeds limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 15.3,
+        "gust_mph": 22.3,
+        "temp_f": 82.6,
+        "rh": 46,
+        "delta_t": 8.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T11:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.8,
+        "gust_mph": 18.8,
+        "temp_f": 84.4,
+        "rh": 45,
+        "delta_t": 8.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T12:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 16,
+        "gust_mph": 19,
+        "temp_f": 85,
+        "rh": 44,
+        "delta_t": 8.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T13:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.8,
+        "gust_mph": 18.8,
+        "temp_f": 84.4,
+        "rh": 45,
+        "delta_t": 8.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T14:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 19 mph exceeds limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 19.3,
+        "gust_mph": 22.3,
+        "temp_f": 82.6,
+        "rh": 46,
+        "delta_t": 8.1,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T15:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 15 mph approaching limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 14.5,
+        "gust_mph": 21.5,
+        "temp_f": 79.7,
+        "rh": 49,
+        "delta_t": 7.4,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T16:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 16.5,
+        "temp_f": 76,
+        "rh": 53,
+        "delta_t": 6.5,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T17:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 12 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.3,
+        "gust_mph": 15.3,
+        "temp_f": 71.7,
+        "rh": 57,
+        "delta_t": 5.6,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T18:00",
+        "status": "favorable",
+        "reasons": [],
+        "wind_mph": 11,
+        "gust_mph": 14,
+        "temp_f": 67,
+        "rh": 62,
+        "delta_t": 4.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T19:00",
+        "status": "caution",
+        "reasons": [
+          "Wind 12 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 12.3,
+        "gust_mph": 15.3,
+        "temp_f": 62.3,
+        "rh": 67,
+        "delta_t": 3.9,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T20:00",
+        "status": "no-good",
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "wind_mph": 13.5,
+        "gust_mph": 20.5,
+        "temp_f": 58,
+        "rh": 71,
+        "delta_t": 3.2,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T21:00",
+        "status": "caution",
+        "reasons": [
+          "Clarity Delta-T 4.9°F <5°F",
+          "Wind 15 mph approaching limit (15 mph)"
+        ],
+        "wind_mph": 14.5,
+        "gust_mph": 17.5,
+        "temp_f": 54.3,
+        "rh": 75,
+        "delta_t": 2.7,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T22:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.1°F <5°F",
+          "Wind 15 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.3,
+        "gust_mph": 18.3,
+        "temp_f": 51.4,
+        "rh": 78,
+        "delta_t": 2.3,
+        "precip_pct": 8
+      },
+      {
+        "time": "2026-10-22T23:00",
+        "status": "no-good",
+        "reasons": [
+          "Clarity Delta-T 4.0°F <5°F",
+          "Temp IS 50°F — below minimum 50°F",
+          "Wind 16 mph exceeds limit (15 mph)"
+        ],
+        "wind_mph": 15.8,
+        "gust_mph": 18.8,
+        "temp_f": 49.6,
+        "rh": 79,
+        "delta_t": 2.2,
+        "precip_pct": 8
+      }
+    ],
+    "daily": [
+      {
+        "date": "2026-10-16",
+        "status": "favorable",
+        "worstStatus": "no-good",
+        "bestWindow": {
+          "start": "2026-10-16T08:00",
+          "end": "2026-10-16T13:00",
+          "startLabel": "8a",
+          "endLabel": "1p",
+          "hours": 6,
+          "status": "favorable"
+        },
+        "goHours": [
+          {
+            "time": "2026-10-16T08:00",
+            "label": "8a"
+          },
+          {
+            "time": "2026-10-16T09:00",
+            "label": "9a"
+          },
+          {
+            "time": "2026-10-16T10:00",
+            "label": "10a"
+          },
+          {
+            "time": "2026-10-16T11:00",
+            "label": "11a"
+          },
+          {
+            "time": "2026-10-16T12:00",
+            "label": "12p"
+          },
+          {
+            "time": "2026-10-16T13:00",
+            "label": "1p"
+          },
+          {
+            "time": "2026-10-16T15:00",
+            "label": "3p"
+          },
+          {
+            "time": "2026-10-16T16:00",
+            "label": "4p"
+          },
+          {
+            "time": "2026-10-16T17:00",
+            "label": "5p"
+          },
+          {
+            "time": "2026-10-16T18:00",
+            "label": "6p"
+          }
+        ],
+        "goCount": 10,
+        "hourCount": 13,
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)",
+          "Temp IS 47°F — below minimum 50°F",
+          "Clarity Delta-T 4.9°F <5°F",
+          "Temp IS 43°F — below minimum 50°F"
+        ],
+        "temp": 52,
+        "tempMin": 34,
+        "tempMax": 70,
+        "wind": 14.3,
+        "gust": 18,
+        "windDir": "S",
+        "windDirDeg": 180,
+        "rh": 62,
+        "precip": 8,
+        "deltaT": 4.2,
+        "deltaTMax": 7.3,
+        "deltaTBand": "ideal",
+        "deltaTLabel": "Ideal",
+        "sunrise": "2026-10-16T07:28",
+        "sunset": "2026-10-16T18:42",
+        "sunriseLabel": "7:28 AM",
+        "sunsetLabel": "6:42 PM",
+        "driftBand": "approaching",
+        "driftNote": "Watch drift — wind approaching the spray limit (15 mph)",
+        "lowerConfidence": false
+      },
+      {
+        "date": "2026-10-17",
+        "status": "favorable",
+        "worstStatus": "no-good",
+        "bestWindow": {
+          "start": "2026-10-17T15:00",
+          "end": "2026-10-17T18:00",
+          "startLabel": "3p",
+          "endLabel": "6p",
+          "hours": 4,
+          "status": "favorable"
+        },
+        "goHours": [
+          {
+            "time": "2026-10-17T08:00",
+            "label": "8a"
+          },
+          {
+            "time": "2026-10-17T09:00",
+            "label": "9a"
+          },
+          {
+            "time": "2026-10-17T15:00",
+            "label": "3p"
+          },
+          {
+            "time": "2026-10-17T16:00",
+            "label": "4p"
+          },
+          {
+            "time": "2026-10-17T17:00",
+            "label": "5p"
+          },
+          {
+            "time": "2026-10-17T18:00",
+            "label": "6p"
+          }
+        ],
+        "goCount": 6,
+        "hourCount": 13,
+        "reasons": [
+          "Wind 13 mph approaching limit (15 mph)",
+          "Wind 14 mph approaching limit (15 mph)",
+          "Wind 17 mph exceeds limit (15 mph)",
+          "Temp IS 50°F — below minimum 50°F",
+          "Clarity Delta-T 4.3°F <5°F",
+          "Temp IS 46°F — below minimum 50°F"
+        ],
+        "temp": 55,
+        "tempMin": 36.5,
+        "tempMax": 72.5,
+        "wind": 16.8,
+        "gust": 20.5,
+        "windDir": "SSW",
+        "windDirDeg": 200,
+        "rh": 66,
+        "precip": 8,
+        "deltaT": 3.9,
+        "deltaTMax": 6.9,
+        "deltaTBand": "ideal",
+        "deltaTLabel": "Ideal",
+        "sunrise": "2026-10-17T07:29",
+        "sunset": "2026-10-17T18:41",
+        "sunriseLabel": "7:29 AM",
+        "sunsetLabel": "6:41 PM",
+        "driftBand": "over-limit",
+        "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)",
+        "lowerConfidence": false
+      },
+      {
+        "date": "2026-10-18",
+        "status": "no-good",
+        "worstStatus": "no-good",
+        "bestWindow": {
+          "start": "2026-10-18T18:00",
+          "end": "2026-10-18T18:00",
+          "startLabel": "6p",
+          "endLabel": "6p",
+          "hours": 1,
+          "status": "favorable"
+        },
+        "goHours": [
+          {
+            "time": "2026-10-18T18:00",
+            "label": "6p"
+          }
+        ],
+        "goCount": 1,
+        "hourCount": 13,
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)",
+          "Wind 15 mph approaching limit (15 mph)",
+          "Wind 15 mph exceeds limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)",
+          "Wind 16 mph exceeds limit (15 mph)",
+          "Wind 19 mph exceeds limit (15 mph)",
+          "Wind 12 mph approaching limit (15 mph)",
+          "Clarity Delta-T 4.7°F <5°F",
+          "Clarity Delta-T 3.8°F <5°F",
+          "Temp IS 48°F — below minimum 50°F",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "temp": 57,
+        "tempMin": 39,
+        "tempMax": 75,
+        "wind": 19.3,
+        "gust": 23,
+        "windDir": "SW",
+        "windDirDeg": 220,
+        "rh": 70,
+        "precip": 8,
+        "deltaT": 3.6,
+        "deltaTMax": 6.5,
+        "deltaTBand": "ideal",
+        "deltaTLabel": "Ideal",
+        "sunrise": "2026-10-18T07:30",
+        "sunset": "2026-10-18T18:40",
+        "sunriseLabel": "7:30 AM",
+        "sunsetLabel": "6:40 PM",
+        "driftBand": "over-limit",
+        "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)",
+        "lowerConfidence": false
+      },
+      {
+        "date": "2026-10-19",
+        "status": "no-good",
+        "worstStatus": "no-good",
+        "bestWindow": null,
+        "goHours": [],
+        "goCount": 0,
+        "hourCount": 13,
+        "reasons": [
+          "Wind 16 mph exceeds limit (15 mph)",
+          "Wind 17 mph exceeds limit (15 mph)",
+          "Wind 18 mph exceeds limit (15 mph)",
+          "Gusts 25 mph exceed limit (20 mph)",
+          "Gusts 21 mph exceed limit (20 mph)",
+          "Wind 19 mph exceeds limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)",
+          "Wind 22 mph exceeds limit (15 mph)",
+          "Precipitation 45% exceeds threshold (30%)",
+          "Gusts 24 mph exceed limit (20 mph)",
+          "Wind 15 mph approaching limit (15 mph)",
+          "Wind 14 mph approaching limit (15 mph)",
+          "Gusts 23 mph exceed limit (20 mph)"
+        ],
+        "temp": 60,
+        "tempMin": 41.5,
+        "tempMax": 77.5,
+        "wind": 21.8,
+        "gust": 25.5,
+        "windDir": "WSW",
+        "windDirDeg": 240,
+        "rh": 62,
+        "precip": 45,
+        "deltaT": 4.6,
+        "deltaTMax": 8,
+        "deltaTBand": "ideal",
+        "deltaTLabel": "Ideal",
+        "sunrise": "2026-10-19T07:31",
+        "sunset": "2026-10-19T18:39",
+        "sunriseLabel": "7:31 AM",
+        "sunsetLabel": "6:39 PM",
+        "driftBand": "over-limit",
+        "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)",
+        "lowerConfidence": false
+      },
+      {
+        "date": "2026-10-20",
+        "status": "favorable",
+        "worstStatus": "caution",
+        "bestWindow": {
+          "start": "2026-10-20T08:00",
+          "end": "2026-10-20T13:00",
+          "startLabel": "8a",
+          "endLabel": "1p",
+          "hours": 6,
+          "status": "favorable"
+        },
+        "goHours": [
+          {
+            "time": "2026-10-20T08:00",
+            "label": "8a"
+          },
+          {
+            "time": "2026-10-20T09:00",
+            "label": "9a"
+          },
+          {
+            "time": "2026-10-20T10:00",
+            "label": "10a"
+          },
+          {
+            "time": "2026-10-20T11:00",
+            "label": "11a"
+          },
+          {
+            "time": "2026-10-20T12:00",
+            "label": "12p"
+          },
+          {
+            "time": "2026-10-20T13:00",
+            "label": "1p"
+          },
+          {
+            "time": "2026-10-20T15:00",
+            "label": "3p"
+          },
+          {
+            "time": "2026-10-20T16:00",
+            "label": "4p"
+          },
+          {
+            "time": "2026-10-20T17:00",
+            "label": "5p"
+          },
+          {
+            "time": "2026-10-20T18:00",
+            "label": "6p"
+          },
+          {
+            "time": "2026-10-20T19:00",
+            "label": "7p"
+          }
+        ],
+        "goCount": 11,
+        "hourCount": 13,
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)",
+          "Clarity Delta-T 4.7°F <5°F"
+        ],
+        "temp": 62,
+        "tempMin": 44,
+        "tempMax": 80,
+        "wind": 14.3,
+        "gust": 18,
+        "windDir": "W",
+        "windDirDeg": 260,
+        "rh": 66,
+        "precip": 8,
+        "deltaT": 4.3,
+        "deltaTMax": 7.6,
+        "deltaTBand": "ideal",
+        "deltaTLabel": "Ideal",
+        "sunrise": "2026-10-20T07:32",
+        "sunset": "2026-10-20T18:38",
+        "sunriseLabel": "7:32 AM",
+        "sunsetLabel": "6:38 PM",
+        "driftBand": "approaching",
+        "driftNote": "Watch drift — wind approaching the spray limit (15 mph)",
+        "lowerConfidence": false
+      },
+      {
+        "date": "2026-10-21",
+        "status": "no-good",
+        "worstStatus": "no-good",
+        "bestWindow": {
+          "start": "2026-10-21T08:00",
+          "end": "2026-10-21T09:00",
+          "startLabel": "8a",
+          "endLabel": "9a",
+          "hours": 2,
+          "status": "favorable"
+        },
+        "goHours": [
+          {
+            "time": "2026-10-21T08:00",
+            "label": "8a"
+          },
+          {
+            "time": "2026-10-21T09:00",
+            "label": "9a"
+          },
+          {
+            "time": "2026-10-21T15:00",
+            "label": "3p"
+          }
+        ],
+        "goCount": 3,
+        "hourCount": 13,
+        "reasons": [
+          "Wind 13 mph approaching limit (15 mph)",
+          "Wind 14 mph approaching limit (15 mph)",
+          "Wind 17 mph exceeds limit (15 mph)",
+          "Precipitation 35% exceeds threshold (30%)",
+          "Clarity Delta-T 4.1°F <5°F"
+        ],
+        "temp": 65,
+        "tempMin": 46.5,
+        "tempMax": 82.5,
+        "wind": 16.8,
+        "gust": 20.5,
+        "windDir": "W",
+        "windDirDeg": 280,
+        "rh": 70,
+        "precip": 35,
+        "deltaT": 3.9,
+        "deltaTMax": 7.1,
+        "deltaTBand": "ideal",
+        "deltaTLabel": "Ideal",
+        "sunrise": "2026-10-21T07:33",
+        "sunset": "2026-10-21T18:37",
+        "sunriseLabel": "7:33 AM",
+        "sunsetLabel": "6:37 PM",
+        "driftBand": "over-limit",
+        "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)",
+        "lowerConfidence": false
+      },
+      {
+        "date": "2026-10-22",
+        "status": "no-good",
+        "worstStatus": "no-good",
+        "bestWindow": {
+          "start": "2026-10-22T18:00",
+          "end": "2026-10-22T18:00",
+          "startLabel": "6p",
+          "endLabel": "6p",
+          "hours": 1,
+          "status": "favorable"
+        },
+        "goHours": [
+          {
+            "time": "2026-10-22T18:00",
+            "label": "6p"
+          }
+        ],
+        "goCount": 1,
+        "hourCount": 13,
+        "reasons": [
+          "Wind 14 mph approaching limit (15 mph)",
+          "Wind 15 mph approaching limit (15 mph)",
+          "Wind 15 mph exceeds limit (15 mph)",
+          "Gusts 22 mph exceed limit (20 mph)",
+          "Wind 16 mph exceeds limit (15 mph)",
+          "Wind 19 mph exceeds limit (15 mph)",
+          "Wind 12 mph approaching limit (15 mph)",
+          "Gusts 21 mph exceed limit (20 mph)"
+        ],
+        "temp": 67,
+        "tempMin": 49,
+        "tempMax": 85,
+        "wind": 19.3,
+        "gust": 23,
+        "windDir": "WNW",
+        "windDirDeg": 300,
+        "rh": 62,
+        "precip": 8,
+        "deltaT": 5,
+        "deltaTMax": 8.7,
+        "deltaTBand": "ideal",
+        "deltaTLabel": "Ideal",
+        "sunrise": "2026-10-22T07:34",
+        "sunset": "2026-10-22T18:36",
+        "sunriseLabel": "7:34 AM",
+        "sunsetLabel": "6:36 PM",
+        "driftBand": "over-limit",
+        "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)",
+        "lowerConfidence": false
+      }
+    ]
+  },
+  "cacheKeys": {
+    "lincoln30general": "40.8_-96.7_30_general",
+    "lincolnNearby": "40.8_-96.7_30_general",
+    "lincoln60general": "40.8_-96.7_60_general",
+    "lincoln30dicamba": "40.8_-96.7_30_Dicamba",
+    "tzChicago": "41_-102.05_30_general_America/Chicago",
+    "tzDenver": "41_-102.05_30_general_America/Denver"
+  },
+  "generateGrid": {
+    "r30": [
+      {
+        "lat": 40.37882,
+        "lon": -97.27707,
+        "bounds": [
+          [
+            40.30635,
+            -97.37282
+          ],
+          [
+            40.45128,
+            -97.18133
+          ]
+        ]
+      },
+      {
+        "lat": 40.37882,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.30635,
+            -97.18133
+          ],
+          [
+            40.45128,
+            -96.98984
+          ]
+        ]
+      },
+      {
+        "lat": 40.37882,
+        "lon": -96.89409,
+        "bounds": [
+          [
+            40.30635,
+            -96.98984
+          ],
+          [
+            40.45128,
+            -96.79835
+          ]
+        ]
+      },
+      {
+        "lat": 40.37882,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.30635,
+            -96.79835
+          ],
+          [
+            40.45128,
+            -96.60685
+          ]
+        ]
+      },
+      {
+        "lat": 40.37882,
+        "lon": -96.51111,
+        "bounds": [
+          [
+            40.30635,
+            -96.60685
+          ],
+          [
+            40.45128,
+            -96.41536
+          ]
+        ]
+      },
+      {
+        "lat": 40.37882,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.30635,
+            -96.41536
+          ],
+          [
+            40.45128,
+            -96.22387
+          ]
+        ]
+      },
+      {
+        "lat": 40.37882,
+        "lon": -96.12813,
+        "bounds": [
+          [
+            40.30635,
+            -96.22387
+          ],
+          [
+            40.45128,
+            -96.03238
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -97.27707,
+        "bounds": [
+          [
+            40.45128,
+            -97.37282
+          ],
+          [
+            40.59621,
+            -97.18133
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.45128,
+            -97.18133
+          ],
+          [
+            40.59621,
+            -96.98984
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -96.89409,
+        "bounds": [
+          [
+            40.45128,
+            -96.98984
+          ],
+          [
+            40.59621,
+            -96.79835
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.45128,
+            -96.79835
+          ],
+          [
+            40.59621,
+            -96.60685
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -96.51111,
+        "bounds": [
+          [
+            40.45128,
+            -96.60685
+          ],
+          [
+            40.59621,
+            -96.41536
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.45128,
+            -96.41536
+          ],
+          [
+            40.59621,
+            -96.22387
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -96.12813,
+        "bounds": [
+          [
+            40.45128,
+            -96.22387
+          ],
+          [
+            40.59621,
+            -96.03238
+          ]
+        ]
+      },
+      {
+        "lat": 40.66867,
+        "lon": -97.27707,
+        "bounds": [
+          [
+            40.59621,
+            -97.37282
+          ],
+          [
+            40.74114,
+            -97.18133
+          ]
+        ]
+      },
+      {
+        "lat": 40.66867,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.59621,
+            -97.18133
+          ],
+          [
+            40.74114,
+            -96.98984
+          ]
+        ]
+      },
+      {
+        "lat": 40.66867,
+        "lon": -96.89409,
+        "bounds": [
+          [
+            40.59621,
+            -96.98984
+          ],
+          [
+            40.74114,
+            -96.79835
+          ]
+        ]
+      },
+      {
+        "lat": 40.66867,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.59621,
+            -96.79835
+          ],
+          [
+            40.74114,
+            -96.60685
+          ]
+        ]
+      },
+      {
+        "lat": 40.66867,
+        "lon": -96.51111,
+        "bounds": [
+          [
+            40.59621,
+            -96.60685
+          ],
+          [
+            40.74114,
+            -96.41536
+          ]
+        ]
+      },
+      {
+        "lat": 40.66867,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.59621,
+            -96.41536
+          ],
+          [
+            40.74114,
+            -96.22387
+          ]
+        ]
+      },
+      {
+        "lat": 40.66867,
+        "lon": -96.12813,
+        "bounds": [
+          [
+            40.59621,
+            -96.22387
+          ],
+          [
+            40.74114,
+            -96.03238
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -97.27707,
+        "bounds": [
+          [
+            40.74114,
+            -97.37282
+          ],
+          [
+            40.88606,
+            -97.18133
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.74114,
+            -97.18133
+          ],
+          [
+            40.88606,
+            -96.98984
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -96.89409,
+        "bounds": [
+          [
+            40.74114,
+            -96.98984
+          ],
+          [
+            40.88606,
+            -96.79835
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.74114,
+            -96.79835
+          ],
+          [
+            40.88606,
+            -96.60685
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -96.51111,
+        "bounds": [
+          [
+            40.74114,
+            -96.60685
+          ],
+          [
+            40.88606,
+            -96.41536
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.74114,
+            -96.41536
+          ],
+          [
+            40.88606,
+            -96.22387
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -96.12813,
+        "bounds": [
+          [
+            40.74114,
+            -96.22387
+          ],
+          [
+            40.88606,
+            -96.03238
+          ]
+        ]
+      },
+      {
+        "lat": 40.95853,
+        "lon": -97.27707,
+        "bounds": [
+          [
+            40.88606,
+            -97.37282
+          ],
+          [
+            41.03099,
+            -97.18133
+          ]
+        ]
+      },
+      {
+        "lat": 40.95853,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.88606,
+            -97.18133
+          ],
+          [
+            41.03099,
+            -96.98984
+          ]
+        ]
+      },
+      {
+        "lat": 40.95853,
+        "lon": -96.89409,
+        "bounds": [
+          [
+            40.88606,
+            -96.98984
+          ],
+          [
+            41.03099,
+            -96.79835
+          ]
+        ]
+      },
+      {
+        "lat": 40.95853,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.88606,
+            -96.79835
+          ],
+          [
+            41.03099,
+            -96.60685
+          ]
+        ]
+      },
+      {
+        "lat": 40.95853,
+        "lon": -96.51111,
+        "bounds": [
+          [
+            40.88606,
+            -96.60685
+          ],
+          [
+            41.03099,
+            -96.41536
+          ]
+        ]
+      },
+      {
+        "lat": 40.95853,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.88606,
+            -96.41536
+          ],
+          [
+            41.03099,
+            -96.22387
+          ]
+        ]
+      },
+      {
+        "lat": 40.95853,
+        "lon": -96.12813,
+        "bounds": [
+          [
+            40.88606,
+            -96.22387
+          ],
+          [
+            41.03099,
+            -96.03238
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -97.27707,
+        "bounds": [
+          [
+            41.03099,
+            -97.37282
+          ],
+          [
+            41.17592,
+            -97.18133
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            41.03099,
+            -97.18133
+          ],
+          [
+            41.17592,
+            -96.98984
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -96.89409,
+        "bounds": [
+          [
+            41.03099,
+            -96.98984
+          ],
+          [
+            41.17592,
+            -96.79835
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            41.03099,
+            -96.79835
+          ],
+          [
+            41.17592,
+            -96.60685
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -96.51111,
+        "bounds": [
+          [
+            41.03099,
+            -96.60685
+          ],
+          [
+            41.17592,
+            -96.41536
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            41.03099,
+            -96.41536
+          ],
+          [
+            41.17592,
+            -96.22387
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -96.12813,
+        "bounds": [
+          [
+            41.03099,
+            -96.22387
+          ],
+          [
+            41.17592,
+            -96.03238
+          ]
+        ]
+      },
+      {
+        "lat": 41.24838,
+        "lon": -97.27707,
+        "bounds": [
+          [
+            41.17592,
+            -97.37282
+          ],
+          [
+            41.32085,
+            -97.18133
+          ]
+        ]
+      },
+      {
+        "lat": 41.24838,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            41.17592,
+            -97.18133
+          ],
+          [
+            41.32085,
+            -96.98984
+          ]
+        ]
+      },
+      {
+        "lat": 41.24838,
+        "lon": -96.89409,
+        "bounds": [
+          [
+            41.17592,
+            -96.98984
+          ],
+          [
+            41.32085,
+            -96.79835
+          ]
+        ]
+      },
+      {
+        "lat": 41.24838,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            41.17592,
+            -96.79835
+          ],
+          [
+            41.32085,
+            -96.60685
+          ]
+        ]
+      },
+      {
+        "lat": 41.24838,
+        "lon": -96.51111,
+        "bounds": [
+          [
+            41.17592,
+            -96.60685
+          ],
+          [
+            41.32085,
+            -96.41536
+          ]
+        ]
+      },
+      {
+        "lat": 41.24838,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            41.17592,
+            -96.41536
+          ],
+          [
+            41.32085,
+            -96.22387
+          ]
+        ]
+      },
+      {
+        "lat": 41.24838,
+        "lon": -96.12813,
+        "bounds": [
+          [
+            41.17592,
+            -96.22387
+          ],
+          [
+            41.32085,
+            -96.03238
+          ]
+        ]
+      }
+    ],
+    "r60": [
+      {
+        "lat": 39.94403,
+        "lon": -97.85154,
+        "bounds": [
+          [
+            39.79911,
+            -98.04303
+          ],
+          [
+            40.08896,
+            -97.66005
+          ]
+        ]
+      },
+      {
+        "lat": 39.94403,
+        "lon": -97.46856,
+        "bounds": [
+          [
+            39.79911,
+            -97.66005
+          ],
+          [
+            40.08896,
+            -97.27707
+          ]
+        ]
+      },
+      {
+        "lat": 39.94403,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            39.79911,
+            -97.27707
+          ],
+          [
+            40.08896,
+            -96.89409
+          ]
+        ]
+      },
+      {
+        "lat": 39.94403,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            39.79911,
+            -96.89409
+          ],
+          [
+            40.08896,
+            -96.51111
+          ]
+        ]
+      },
+      {
+        "lat": 39.94403,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            39.79911,
+            -96.51111
+          ],
+          [
+            40.08896,
+            -96.12813
+          ]
+        ]
+      },
+      {
+        "lat": 39.94403,
+        "lon": -95.93664,
+        "bounds": [
+          [
+            39.79911,
+            -96.12813
+          ],
+          [
+            40.08896,
+            -95.74515
+          ]
+        ]
+      },
+      {
+        "lat": 39.94403,
+        "lon": -95.55366,
+        "bounds": [
+          [
+            39.79911,
+            -95.74515
+          ],
+          [
+            40.08896,
+            -95.36217
+          ]
+        ]
+      },
+      {
+        "lat": 40.23389,
+        "lon": -97.85154,
+        "bounds": [
+          [
+            40.08896,
+            -98.04303
+          ],
+          [
+            40.37882,
+            -97.66005
+          ]
+        ]
+      },
+      {
+        "lat": 40.23389,
+        "lon": -97.46856,
+        "bounds": [
+          [
+            40.08896,
+            -97.66005
+          ],
+          [
+            40.37882,
+            -97.27707
+          ]
+        ]
+      },
+      {
+        "lat": 40.23389,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.08896,
+            -97.27707
+          ],
+          [
+            40.37882,
+            -96.89409
+          ]
+        ]
+      },
+      {
+        "lat": 40.23389,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.08896,
+            -96.89409
+          ],
+          [
+            40.37882,
+            -96.51111
+          ]
+        ]
+      },
+      {
+        "lat": 40.23389,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.08896,
+            -96.51111
+          ],
+          [
+            40.37882,
+            -96.12813
+          ]
+        ]
+      },
+      {
+        "lat": 40.23389,
+        "lon": -95.93664,
+        "bounds": [
+          [
+            40.08896,
+            -96.12813
+          ],
+          [
+            40.37882,
+            -95.74515
+          ]
+        ]
+      },
+      {
+        "lat": 40.23389,
+        "lon": -95.55366,
+        "bounds": [
+          [
+            40.08896,
+            -95.74515
+          ],
+          [
+            40.37882,
+            -95.36217
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -97.85154,
+        "bounds": [
+          [
+            40.37882,
+            -98.04303
+          ],
+          [
+            40.66867,
+            -97.66005
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -97.46856,
+        "bounds": [
+          [
+            40.37882,
+            -97.66005
+          ],
+          [
+            40.66867,
+            -97.27707
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.37882,
+            -97.27707
+          ],
+          [
+            40.66867,
+            -96.89409
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.37882,
+            -96.89409
+          ],
+          [
+            40.66867,
+            -96.51111
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.37882,
+            -96.51111
+          ],
+          [
+            40.66867,
+            -96.12813
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -95.93664,
+        "bounds": [
+          [
+            40.37882,
+            -96.12813
+          ],
+          [
+            40.66867,
+            -95.74515
+          ]
+        ]
+      },
+      {
+        "lat": 40.52374,
+        "lon": -95.55366,
+        "bounds": [
+          [
+            40.37882,
+            -95.74515
+          ],
+          [
+            40.66867,
+            -95.36217
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -97.85154,
+        "bounds": [
+          [
+            40.66867,
+            -98.04303
+          ],
+          [
+            40.95853,
+            -97.66005
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -97.46856,
+        "bounds": [
+          [
+            40.66867,
+            -97.66005
+          ],
+          [
+            40.95853,
+            -97.27707
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.66867,
+            -97.27707
+          ],
+          [
+            40.95853,
+            -96.89409
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.66867,
+            -96.89409
+          ],
+          [
+            40.95853,
+            -96.51111
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.66867,
+            -96.51111
+          ],
+          [
+            40.95853,
+            -96.12813
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -95.93664,
+        "bounds": [
+          [
+            40.66867,
+            -96.12813
+          ],
+          [
+            40.95853,
+            -95.74515
+          ]
+        ]
+      },
+      {
+        "lat": 40.8136,
+        "lon": -95.55366,
+        "bounds": [
+          [
+            40.66867,
+            -95.74515
+          ],
+          [
+            40.95853,
+            -95.36217
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -97.85154,
+        "bounds": [
+          [
+            40.95853,
+            -98.04303
+          ],
+          [
+            41.24838,
+            -97.66005
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -97.46856,
+        "bounds": [
+          [
+            40.95853,
+            -97.66005
+          ],
+          [
+            41.24838,
+            -97.27707
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            40.95853,
+            -97.27707
+          ],
+          [
+            41.24838,
+            -96.89409
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            40.95853,
+            -96.89409
+          ],
+          [
+            41.24838,
+            -96.51111
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            40.95853,
+            -96.51111
+          ],
+          [
+            41.24838,
+            -96.12813
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -95.93664,
+        "bounds": [
+          [
+            40.95853,
+            -96.12813
+          ],
+          [
+            41.24838,
+            -95.74515
+          ]
+        ]
+      },
+      {
+        "lat": 41.10346,
+        "lon": -95.55366,
+        "bounds": [
+          [
+            40.95853,
+            -95.74515
+          ],
+          [
+            41.24838,
+            -95.36217
+          ]
+        ]
+      },
+      {
+        "lat": 41.39331,
+        "lon": -97.85154,
+        "bounds": [
+          [
+            41.24838,
+            -98.04303
+          ],
+          [
+            41.53824,
+            -97.66005
+          ]
+        ]
+      },
+      {
+        "lat": 41.39331,
+        "lon": -97.46856,
+        "bounds": [
+          [
+            41.24838,
+            -97.66005
+          ],
+          [
+            41.53824,
+            -97.27707
+          ]
+        ]
+      },
+      {
+        "lat": 41.39331,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            41.24838,
+            -97.27707
+          ],
+          [
+            41.53824,
+            -96.89409
+          ]
+        ]
+      },
+      {
+        "lat": 41.39331,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            41.24838,
+            -96.89409
+          ],
+          [
+            41.53824,
+            -96.51111
+          ]
+        ]
+      },
+      {
+        "lat": 41.39331,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            41.24838,
+            -96.51111
+          ],
+          [
+            41.53824,
+            -96.12813
+          ]
+        ]
+      },
+      {
+        "lat": 41.39331,
+        "lon": -95.93664,
+        "bounds": [
+          [
+            41.24838,
+            -96.12813
+          ],
+          [
+            41.53824,
+            -95.74515
+          ]
+        ]
+      },
+      {
+        "lat": 41.39331,
+        "lon": -95.55366,
+        "bounds": [
+          [
+            41.24838,
+            -95.74515
+          ],
+          [
+            41.53824,
+            -95.36217
+          ]
+        ]
+      },
+      {
+        "lat": 41.68317,
+        "lon": -97.85154,
+        "bounds": [
+          [
+            41.53824,
+            -98.04303
+          ],
+          [
+            41.82809,
+            -97.66005
+          ]
+        ]
+      },
+      {
+        "lat": 41.68317,
+        "lon": -97.46856,
+        "bounds": [
+          [
+            41.53824,
+            -97.66005
+          ],
+          [
+            41.82809,
+            -97.27707
+          ]
+        ]
+      },
+      {
+        "lat": 41.68317,
+        "lon": -97.08558,
+        "bounds": [
+          [
+            41.53824,
+            -97.27707
+          ],
+          [
+            41.82809,
+            -96.89409
+          ]
+        ]
+      },
+      {
+        "lat": 41.68317,
+        "lon": -96.7026,
+        "bounds": [
+          [
+            41.53824,
+            -96.89409
+          ],
+          [
+            41.82809,
+            -96.51111
+          ]
+        ]
+      },
+      {
+        "lat": 41.68317,
+        "lon": -96.31962,
+        "bounds": [
+          [
+            41.53824,
+            -96.51111
+          ],
+          [
+            41.82809,
+            -96.12813
+          ]
+        ]
+      },
+      {
+        "lat": 41.68317,
+        "lon": -95.93664,
+        "bounds": [
+          [
+            41.53824,
+            -96.12813
+          ],
+          [
+            41.82809,
+            -95.74515
+          ]
+        ]
+      },
+      {
+        "lat": 41.68317,
+        "lon": -95.55366,
+        "bounds": [
+          [
+            41.53824,
+            -95.74515
+          ],
+          [
+            41.82809,
+            -95.36217
+          ]
+        ]
+      }
+    ]
+  },
+  "buildForecastUrl": {
+    "url": "https://api.open-meteo.com/v1/forecast?latitude=40.8136,40.85&longitude=-96.7026,-96.65&hourly=temperature_2m,apparent_temperature,dew_point_2m,relative_humidity_2m,precipitation_probability,precipitation,cloud_cover,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,soil_temperature_0cm&daily=temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,precipitation_probability_max,weather_code,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,sunrise,sunset&forecast_days=16&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto",
+    "params": {
+      "latitude": "40.8136,40.85",
+      "longitude": "-96.7026,-96.65",
+      "hourly": "temperature_2m,apparent_temperature,dew_point_2m,relative_humidity_2m,precipitation_probability,precipitation,cloud_cover,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,soil_temperature_0cm",
+      "daily": "temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,precipitation_probability_max,weather_code,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,sunrise,sunset",
+      "forecast_days": "16",
+      "temperature_unit": "fahrenheit",
+      "wind_speed_unit": "mph",
+      "precipitation_unit": "inch",
+      "timezone": "auto"
+    }
+  }
+}

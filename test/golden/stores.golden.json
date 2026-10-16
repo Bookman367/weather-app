@@ -1,0 +1,272 @@
+{
+  "frozenAt": "2026-10-16T18:00:00.000Z",
+  "spraySettings": {
+    "empty": {
+      "schemaVersion": 1,
+      "app": "hero",
+      "kind": "spray-settings",
+      "scope": "user",
+      "jobId": null,
+      "fieldId": null,
+      "exportedAt": null,
+      "activeId": "recommended",
+      "settings": [
+        {
+          "id": "recommended",
+          "name": "Recommended",
+          "builtIn": true,
+          "productKey": "general",
+          "limits": {
+            "max_wind_mph": 15,
+            "max_gust_mph": 20,
+            "min_temp_f": 50,
+            "max_temp_f": 95,
+            "min_rh": 30,
+            "max_rh": 95,
+            "max_precip_pct": 30,
+            "min_delta_t": 2,
+            "max_delta_t": 8,
+            "avoid_inversion": true
+          },
+          "notes": "Built-in Hero recommended preset (General Ag Guidelines)",
+          "createdAt": null,
+          "updatedAt": null
+        }
+      ]
+    },
+    "normalizeNull": {
+      "schemaVersion": 1,
+      "app": "hero",
+      "kind": "spray-settings",
+      "scope": "user",
+      "jobId": null,
+      "fieldId": null,
+      "exportedAt": null,
+      "activeId": "recommended",
+      "settings": [
+        {
+          "id": "recommended",
+          "name": "Recommended",
+          "builtIn": true,
+          "productKey": "general",
+          "limits": {
+            "max_wind_mph": 15,
+            "max_gust_mph": 20,
+            "min_temp_f": 50,
+            "max_temp_f": 95,
+            "min_rh": 30,
+            "max_rh": 95,
+            "max_precip_pct": 30,
+            "min_delta_t": 2,
+            "max_delta_t": 8,
+            "avoid_inversion": true
+          },
+          "notes": "Built-in Hero recommended preset (General Ag Guidelines)",
+          "createdAt": null,
+          "updatedAt": null
+        }
+      ]
+    },
+    "normalizeCustom": {
+      "schemaVersion": 1,
+      "app": "hero",
+      "kind": "spray-settings",
+      "scope": "user",
+      "jobId": null,
+      "fieldId": null,
+      "exportedAt": null,
+      "activeId": "custom-fixed",
+      "settings": [
+        {
+          "id": "recommended",
+          "name": "Recommended",
+          "builtIn": true,
+          "productKey": "general",
+          "limits": {
+            "max_wind_mph": 15,
+            "max_gust_mph": 20,
+            "min_temp_f": 50,
+            "max_temp_f": 95,
+            "min_rh": 30,
+            "max_rh": 95,
+            "max_precip_pct": 30,
+            "min_delta_t": 2,
+            "max_delta_t": 8,
+            "avoid_inversion": true
+          },
+          "notes": "Built-in Hero recommended preset (General Ag Guidelines)",
+          "createdAt": null,
+          "updatedAt": null
+        },
+        {
+          "id": "custom-fixed",
+          "name": "Herbicide - drift sensitive",
+          "builtIn": false,
+          "productKey": "general",
+          "limits": {
+            "max_wind_mph": 8,
+            "max_gust_mph": 12,
+            "min_temp_f": 50,
+            "max_temp_f": 95,
+            "min_rh": 40,
+            "max_rh": 95,
+            "max_precip_pct": 30,
+            "min_delta_t": 2,
+            "max_delta_t": 8,
+            "avoid_inversion": true
+          },
+          "notes": "Named setting fixture",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    },
+    "exportEmpty": {
+      "schemaVersion": 1,
+      "app": "hero",
+      "kind": "spray-settings",
+      "scope": "user",
+      "jobId": null,
+      "fieldId": null,
+      "exportedAt": "2026-10-16T18:00:00.000Z",
+      "activeId": "recommended",
+      "settings": [
+        {
+          "id": "recommended",
+          "name": "Recommended",
+          "builtIn": true,
+          "productKey": "general",
+          "limits": {
+            "max_wind_mph": 15,
+            "max_gust_mph": 20,
+            "min_temp_f": 50,
+            "max_temp_f": 95,
+            "min_rh": 30,
+            "max_rh": 95,
+            "max_precip_pct": 30,
+            "min_delta_t": 2,
+            "max_delta_t": 8,
+            "avoid_inversion": true
+          },
+          "notes": "Built-in Hero recommended preset (General Ag Guidelines)",
+          "createdAt": null,
+          "updatedAt": null
+        }
+      ]
+    },
+    "exportCustom": {
+      "schemaVersion": 1,
+      "app": "hero",
+      "kind": "spray-settings",
+      "scope": "user",
+      "jobId": null,
+      "fieldId": null,
+      "exportedAt": "2026-10-16T18:00:00.000Z",
+      "activeId": "custom-fixed",
+      "settings": [
+        {
+          "id": "recommended",
+          "name": "Recommended",
+          "builtIn": true,
+          "productKey": "general",
+          "limits": {
+            "max_wind_mph": 15,
+            "max_gust_mph": 20,
+            "min_temp_f": 50,
+            "max_temp_f": 95,
+            "min_rh": 30,
+            "max_rh": 95,
+            "max_precip_pct": 30,
+            "min_delta_t": 2,
+            "max_delta_t": 8,
+            "avoid_inversion": true
+          },
+          "notes": "Built-in Hero recommended preset (General Ag Guidelines)",
+          "createdAt": null,
+          "updatedAt": null
+        },
+        {
+          "id": "custom-fixed",
+          "name": "Herbicide - drift sensitive",
+          "builtIn": false,
+          "productKey": "general",
+          "limits": {
+            "max_wind_mph": 8,
+            "max_gust_mph": 12,
+            "min_temp_f": 50,
+            "max_temp_f": 95,
+            "min_rh": 40,
+            "max_rh": 95,
+            "max_precip_pct": 30,
+            "min_delta_t": 2,
+            "max_delta_t": 8,
+            "avoid_inversion": true
+          },
+          "notes": "Named setting fixture",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  },
+  "savedFields": {
+    "empty": {
+      "schemaVersion": 1,
+      "app": "hero",
+      "kind": "saved-fields",
+      "activeId": null,
+      "fields": []
+    },
+    "normalizeNull": {
+      "schemaVersion": 1,
+      "app": "hero",
+      "kind": "saved-fields",
+      "activeId": null,
+      "fields": []
+    },
+    "normalizeDocument": {
+      "schemaVersion": 1,
+      "app": "hero",
+      "kind": "saved-fields",
+      "activeId": "field-north",
+      "fields": [
+        {
+          "id": "field-north",
+          "name": "North 80",
+          "lat": 42.38756,
+          "lon": -97.77837,
+          "acres": 80.26,
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "field-mvb9w000-4fzzzx",
+          "name": "Home",
+          "lat": 40.8,
+          "lon": -96.7,
+          "acres": null,
+          "createdAt": "2026-10-16T18:00:00.000Z",
+          "updatedAt": "2026-10-16T18:00:00.000Z"
+        }
+      ]
+    },
+    "normalizeFieldAssigned": {
+      "id": "field-north",
+      "name": "North 80",
+      "lat": 42.38756,
+      "lon": -97.77837,
+      "acres": 80.26,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "normalizeFieldGenerated": {
+      "id": "field-mvb9w000-4fzzzx",
+      "name": "South 40",
+      "lat": 41.1,
+      "lon": -96.2,
+      "acres": 40,
+      "createdAt": "2026-10-16T18:00:00.000Z",
+      "updatedAt": "2026-10-16T18:00:00.000Z"
+    }
+  }
+}

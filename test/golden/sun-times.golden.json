@@ -1,0 +1,382 @@
+{
+  "format": [
+    {
+      "iso": "2024-06-21T05:16",
+      "parse": {
+        "year": 2024,
+        "month": 6,
+        "day": 21,
+        "hour": 5,
+        "minute": 16,
+        "second": 0,
+        "date": "2024-06-21"
+      },
+      "long": "5:16 AM",
+      "short": "5:16a"
+    },
+    {
+      "iso": "2024-06-21T20:29",
+      "parse": {
+        "year": 2024,
+        "month": 6,
+        "day": 21,
+        "hour": 20,
+        "minute": 29,
+        "second": 0,
+        "date": "2024-06-21"
+      },
+      "long": "8:29 PM",
+      "short": "8:29p"
+    },
+    {
+      "iso": "2024-12-21T07:15",
+      "parse": {
+        "year": 2024,
+        "month": 12,
+        "day": 21,
+        "hour": 7,
+        "minute": 15,
+        "second": 0,
+        "date": "2024-12-21"
+      },
+      "long": "7:15 AM",
+      "short": "7:15a"
+    },
+    {
+      "iso": "2024-12-21T16:23",
+      "parse": {
+        "year": 2024,
+        "month": 12,
+        "day": 21,
+        "hour": 16,
+        "minute": 23,
+        "second": 0,
+        "date": "2024-12-21"
+      },
+      "long": "4:23 PM",
+      "short": "4:23p"
+    },
+    {
+      "iso": "2024-06-21T00:05",
+      "parse": {
+        "year": 2024,
+        "month": 6,
+        "day": 21,
+        "hour": 0,
+        "minute": 5,
+        "second": 0,
+        "date": "2024-06-21"
+      },
+      "long": "12:05 AM",
+      "short": "12:05a"
+    },
+    {
+      "iso": "2024-06-21T12:00",
+      "parse": {
+        "year": 2024,
+        "month": 6,
+        "day": 21,
+        "hour": 12,
+        "minute": 0,
+        "second": 0,
+        "date": "2024-06-21"
+      },
+      "long": "12:00 PM",
+      "short": "12:00p"
+    },
+    {
+      "iso": "2024-06-21T12:00:00",
+      "parse": {
+        "year": 2024,
+        "month": 6,
+        "day": 21,
+        "hour": 12,
+        "minute": 0,
+        "second": 0,
+        "date": "2024-06-21"
+      },
+      "long": "12:00 PM",
+      "short": "12:00p"
+    },
+    {
+      "iso": "2024-06-21T00:00",
+      "parse": {
+        "year": 2024,
+        "month": 6,
+        "day": 21,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "date": "2024-06-21"
+      },
+      "long": "12:00 AM",
+      "short": "12:00a"
+    },
+    {
+      "iso": null,
+      "parse": null,
+      "long": null,
+      "short": null
+    },
+    {
+      "iso": "",
+      "parse": null,
+      "long": null,
+      "short": null
+    },
+    {
+      "iso": "N/A",
+      "parse": null,
+      "long": null,
+      "short": null
+    },
+    {
+      "iso": "2024-06-21",
+      "parse": null,
+      "long": null,
+      "short": null
+    },
+    {
+      "iso": "not-a-time",
+      "parse": null,
+      "long": null,
+      "short": null
+    }
+  ],
+  "daylight": {
+    "solstice": [
+      {
+        "iso": "2024-06-21T00:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T01:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T02:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T03:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T04:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T05:00",
+        "daylight": true,
+        "sunEvent": "sunrise"
+      },
+      {
+        "iso": "2024-06-21T06:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T07:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T08:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T09:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T10:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T11:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T12:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T13:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T14:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T15:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T16:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T17:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T18:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T19:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T20:00",
+        "daylight": true,
+        "sunEvent": "sunset"
+      },
+      {
+        "iso": "2024-06-21T21:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T22:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T23:00",
+        "daylight": false,
+        "sunEvent": null
+      }
+    ],
+    "winter": [
+      {
+        "iso": "2024-12-21T04:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-12-21T07:00",
+        "daylight": true,
+        "sunEvent": "sunrise"
+      },
+      {
+        "iso": "2024-12-21T12:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-12-21T16:00",
+        "daylight": true,
+        "sunEvent": "sunset"
+      },
+      {
+        "iso": "2024-12-21T17:00",
+        "daylight": false,
+        "sunEvent": null
+      }
+    ],
+    "spring": [
+      {
+        "iso": "2026-03-08T02:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2026-03-08T06:00",
+        "daylight": true,
+        "sunEvent": "sunrise"
+      },
+      {
+        "iso": "2026-03-08T07:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2026-03-08T18:00",
+        "daylight": true,
+        "sunEvent": "sunset"
+      }
+    ],
+    "fall": [
+      {
+        "iso": "2026-11-01T01:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2026-11-01T06:00",
+        "daylight": true,
+        "sunEvent": "sunrise"
+      },
+      {
+        "iso": "2026-11-01T12:00",
+        "daylight": true,
+        "sunEvent": null
+      },
+      {
+        "iso": "2026-11-01T16:00",
+        "daylight": true,
+        "sunEvent": "sunset"
+      }
+    ],
+    "wrap": [
+      {
+        "iso": "2024-06-21T00:00",
+        "daylight": true,
+        "sunEvent": "sunset"
+      },
+      {
+        "iso": "2024-06-21T12:00",
+        "daylight": false,
+        "sunEvent": null
+      },
+      {
+        "iso": "2024-06-21T23:00",
+        "daylight": true,
+        "sunEvent": "sunrise"
+      }
+    ],
+    "missing": {
+      "daylight": null,
+      "sunEvent": null
+    }
+  },
+  "index": {
+    "2024-06-21": {
+      "sunrise": "2024-06-21T05:16",
+      "sunset": "2024-06-21T20:29",
+      "windDir": "SW",
+      "windDirDeg": 225
+    },
+    "2024-06-22": {
+      "sunrise": null,
+      "sunset": null,
+      "windDir": null
+    }
+  },
+  "sunForDate": {
+    "hit": {
+      "sunrise": "2024-06-21T05:16",
+      "sunset": "2024-06-21T20:29"
+    },
+    "miss": null
+  }
+}
