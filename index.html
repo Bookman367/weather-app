@@ -69,6 +69,8 @@
     [data-theme="light"] .dr-spray.no-good   { color: #cc2222; background: rgba(255,77,77,0.15); }
     [data-theme="light"] .bottom-card .bc-title { color: rgba(20,30,60,0.6); }
     [data-theme="light"] .bc-sub { color: rgba(20,30,60,0.5); }
+    [data-theme="light"] .rs-metric { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.08); }
+    [data-theme="light"] .rs-note, [data-theme="light"] .rs-meta { color: rgba(20,30,60,0.55); }
     [data-theme="light"] .sw-title { color: #1a2035; }
     [data-theme="light"] .sw-subtitle { color: rgba(20,30,60,0.45); }
     [data-theme="light"] .sw-tab { color: rgba(20,30,60,0.6); background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); }
@@ -468,6 +470,17 @@
     .bc-value { font-size: 30px; font-weight: 700; line-height: 1; }
     .bc-unit  { font-size: 14px; color: var(--text-dim); }
     .bc-sub   { font-size: 11px; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
+    .rain-soil-card { margin-bottom: 14px; }
+    .rain-soil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 8px; }
+    .rs-metric {
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm); padding: 10px 6px; text-align: center;
+    }
+    .rs-label { font-size: 10px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
+    .rs-value { font-size: 18px; font-weight: 700; line-height: 1.1; }
+    .rs-unit  { font-size: 11px; color: var(--text-dim); margin-left: 1px; }
+    .rs-meta  { font-size: 12px; color: var(--text-dim); margin-top: 6px; line-height: 1.4; }
+    .rs-note  { font-size: 12px; color: var(--text-dim); margin-top: 8px; line-height: 1.4; }
     .precip-bar-bg   { background: rgba(255,255,255,0.1); border-radius: 4px; height: 6px; margin-top: 8px; overflow: hidden; }
     .precip-bar-fill { border-radius: 4px; height: 100%; transition: width 0.8s ease; }
     .humidity-arc    { margin: 4px 0 0; }
@@ -738,6 +751,7 @@
 
 <script src="/lib/spray-settings.js"></script>
 <script src="/lib/url-location.js"></script>
+<script src="/lib/rain-soil.js"></script>
 <script>
 // ════════════════════════════════════════════
 //  STATE
@@ -971,6 +985,26 @@ async function doSearch() {
   await fetchAndRender(loc, herb, meth, src, sunriseOffset, sunsetOffset);
 }
 
+async function loadRainSoil(data) {
+  if (typeof RainSoil === 'undefined') return null;
+  const loc = data && data.location;
+  if (!loc || loc.lat == null || loc.lon == null) return RainSoil.emptySummary();
+  try {
+    const url = RainSoil.openMeteoPastDaysUrl(loc.lat, loc.lon);
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`Open-Meteo rain/soil ${resp.status}`);
+    const raw = await resp.json();
+    const nowLocal = RainSoil.nowLocalFromInstant(new Date(), {
+      timezone: data.timezone,
+      utcOffsetSeconds: data.utcOffsetSeconds
+    });
+    return RainSoil.summarizeFromOpenMeteo(raw, nowLocal);
+  } catch (err) {
+    console.error(err);
+    return RainSoil.emptySummary();
+  }
+}
+
 async function fetchAndRender(loc, herb, meth, src, sunriseOffset = 0, sunsetOffset = 2) {
   showLoading();
   try {
@@ -989,6 +1023,7 @@ async function fetchAndRender(loc, herb, meth, src, sunriseOffset = 0, sunsetOff
       throw new Error(err.error || `Server error ${resp.status}`);
     }
     state.data = await resp.json();
+    state.data.rain_soil = await loadRainSoil(state.data);
     renderAll();
     initSprayBarSync();
   } catch(e) { showError(e.message); }
@@ -1117,6 +1152,7 @@ function renderAll() {
     ${renderCommandCenter(now, d, status, statusLabel, dt, dtF, dtCls, dtDesc)}
     ${renderExtButtons()}
     ${renderBottomCards(now)}
+    ${renderRainSoilCard(d.rain_soil)}
     ${renderThreshStrip(d.product)}
   `;
 
@@ -1679,6 +1715,56 @@ function renderBottomCards(now) {
       </div>
       <div class="bc-sub">Chance of rain<br>${precipNote}</div>
     </div>
+  </div>`;
+}
+
+function fmtInches(val) {
+  if (val == null || val === '' || Number.isNaN(Number(val))) return EMPTY;
+  return Number(val).toFixed(2);
+}
+
+function daysSinceRainLabel(days) {
+  if (days === 0) return 'Rained today (over 0.1 in)';
+  if (days === 1) return '1 day since last rain over 0.1 in';
+  if (typeof days === 'number' && Number.isFinite(days)) {
+    return `${days} days since last rain over 0.1 in`;
+  }
+  return 'No rain over 0.1 in in the last 7 days';
+}
+
+function renderRainSoilCard(rainSoil) {
+  const rs = rainSoil && typeof rainSoil === 'object' ? rainSoil : null;
+  const available = rs && rs.available;
+  const soilLabel = available && rs.soil_moisture_label
+    ? rs.soil_moisture_label
+    : EMPTY;
+  const soilTemp = available && rs.soil_temp_f != null
+    ? `${Math.round(rs.soil_temp_f)}°F`
+    : EMPTY;
+  const note = available && rs.spray_note
+    ? rs.spray_note
+    : 'Recent rain and soil is not available for this location.';
+
+  return `<div class="bottom-card glass rain-soil-card">
+    <div class="bc-icon">🌱</div>
+    <div class="bc-title">Recent rain and soil</div>
+    <div class="rain-soil-grid">
+      <div class="rs-metric">
+        <div class="rs-label">Last 24h</div>
+        <div class="rs-value">${fmtInches(available ? rs.rain_24h_in : null)}<span class="rs-unit">in</span></div>
+      </div>
+      <div class="rs-metric">
+        <div class="rs-label">3 days</div>
+        <div class="rs-value">${fmtInches(available ? rs.rain_3d_in : null)}<span class="rs-unit">in</span></div>
+      </div>
+      <div class="rs-metric">
+        <div class="rs-label">7 days</div>
+        <div class="rs-value">${fmtInches(available ? rs.rain_7d_in : null)}<span class="rs-unit">in</span></div>
+      </div>
+    </div>
+    <div class="rs-meta">${esc(daysSinceRainLabel(available ? rs.days_since_rain : null))}</div>
+    <div class="rs-meta">Soil ${esc(soilTemp)} · ${esc(soilLabel)}</div>
+    <div class="rs-note">${esc(note)}</div>
   </div>`;
 }
 

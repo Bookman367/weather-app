@@ -63,6 +63,33 @@ Hourly detail and the map popup show wind speed, gusts, and direction as an arro
 - Display only. This is not a second score and does not change map colors.
 - Wind toward a sensitive field edge is out of scope.
 
+## Recent rain and soil
+
+The main forecast shows a **Recent rain and soil** card for the selected location (search, GPS, last session location, or a `?lat=&lon=` link). It does not change go / caution / no-go.
+
+Open-Meteo already supplies the series (`timezone=auto`, naive local times, `precipitation_unit=inch`). The card fetches `past_days=7` plus hourly `soil_moisture_0_to_1cm` and `soil_temperature_6cm` for the selected field. That request is display-only — `/api/forecast` and spray scoring are unchanged.
+
+| Shown | Source |
+| --- | --- |
+| Rain last 24h | Hourly `precipitation`, trailing 24 local hours ending at the current field hour |
+| Rain last 3 / 7 days | Daily `precipitation_sum` for those local calendar days (today included) |
+| Days since last rain over 0.1 in | Walk daily `precipitation_sum` backward from today; `null` if none in the lookback |
+| Soil temperature | Current hour `soil_temperature_6cm` (°F) |
+| Soil moisture | Current hour `soil_moisture_0_to_1cm` (m³/m³) labeled dry / moist / wet |
+
+Generic 0–1 cm volumetric labels (not soil-texture specific):
+
+| VWC | Label |
+| --- | --- |
+| below 0.15 | dry |
+| 0.15 to 0.30 | moist |
+| 0.30 and above | wet |
+
+The one-line spray note is display only (wait for foliage to dry, check field access). It is not a second score.
+
+- Module: `lib/rain-soil.js`
+- Tests: `test/rain-soil.test.js` (fixtures, no network, frozen `2026-10-16T13:00` local)
+
 ## Saved fields
 
 Named locations (name, lat/lon, optional acres) live in browser `localStorage` only. No accounts.
