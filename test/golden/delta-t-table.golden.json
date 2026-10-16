@@ -1,0 +1,7230 @@
+{
+  "rows": [
+    {
+      "t": -10,
+      "rh": 0,
+      "dew": null,
+      "tw": -9.254230347655696,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 5,
+      "dew": null,
+      "tw": -12.39609722129156,
+      "dt": 2.3960972212915603,
+      "dtF": 4.312974998324809,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 10,
+      "dew": null,
+      "tw": -11.87553876392894,
+      "dt": 1.8755387639289403,
+      "dtF": 3.3759697750720923,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 15,
+      "dew": null,
+      "tw": -11.063165815293448,
+      "dt": 1.0631658152934484,
+      "dtF": 1.9136984675282072,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 20,
+      "dew": null,
+      "tw": -11.37960140618891,
+      "dt": 1.3796014061889093,
+      "dtF": 2.483282531140037,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 25,
+      "dew": null,
+      "tw": -11.653870107546519,
+      "dt": 1.6538701075465188,
+      "dtF": 2.976966193583734,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 30,
+      "dew": null,
+      "tw": -11.859061822538862,
+      "dt": 1.8590618225388624,
+      "dtF": 3.346311280569952,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 35,
+      "dew": null,
+      "tw": -11.999378804926625,
+      "dt": 1.999378804926625,
+      "dtF": 3.598881848867925,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 40,
+      "dew": null,
+      "tw": -12.081833140667262,
+      "dt": 2.0818331406672623,
+      "dtF": 3.7472996532010727,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 45,
+      "dew": null,
+      "tw": -12.11298631843881,
+      "dt": 2.1129863184388107,
+      "dtF": 3.8033753731898594,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 50,
+      "dew": null,
+      "tw": -12.098487882415622,
+      "dt": 2.098487882415622,
+      "dtF": 3.7772781883481192,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 55,
+      "dew": null,
+      "tw": -12.043106513699112,
+      "dt": 2.0431065136991116,
+      "dtF": 3.677591724658401,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 60,
+      "dew": null,
+      "tw": -11.95085354557856,
+      "dt": 1.9508535455785605,
+      "dtF": 3.5115363820414087,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 65,
+      "dew": null,
+      "tw": -11.825110989336192,
+      "dt": 1.825110989336192,
+      "dtF": 3.285199780805146,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 70,
+      "dew": null,
+      "tw": -11.668743694684466,
+      "dt": 1.6687436946844656,
+      "dtF": 3.0037386504320382,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 75,
+      "dew": null,
+      "tw": -11.484192547887844,
+      "dt": 1.4841925478878437,
+      "dtF": 2.6715465861981187,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 80,
+      "dew": null,
+      "tw": -11.273550325888223,
+      "dt": 1.2735503258882233,
+      "dtF": 2.2923905865988017,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 85,
+      "dew": null,
+      "tw": -11.038622929235512,
+      "dt": 1.0386229292355118,
+      "dtF": 1.8695212726239212,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 90,
+      "dew": null,
+      "tw": -10.780978700743356,
+      "dt": 0.780978700743356,
+      "dtF": 1.4057616613380408,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 95,
+      "dew": null,
+      "tw": -10.501988187530449,
+      "dt": 0.5019881875304488,
+      "dtF": 0.9035787375548079,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -10,
+      "rh": 100,
+      "dew": null,
+      "tw": -10.202856291781798,
+      "dt": 0.20285629178179754,
+      "dtF": 0.3651413252072356,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 0,
+      "dew": null,
+      "tw": -8.188849508051543,
+      "dt": 0.6888495080515433,
+      "dtF": 1.239929114492778,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 5,
+      "dew": null,
+      "tw": -10.94719644512221,
+      "dt": 3.4471964451222092,
+      "dtF": 6.204953601219977,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 10,
+      "dew": null,
+      "tw": -9.243647641087188,
+      "dt": 1.743647641087188,
+      "dtF": 3.1385657539569385,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 15,
+      "dew": null,
+      "tw": -9.41567642714018,
+      "dt": 1.9156764271401805,
+      "dtF": 3.448217568852325,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 20,
+      "dew": null,
+      "tw": -9.659736941446631,
+      "dt": 2.1597369414466314,
+      "dtF": 3.8875264946039367,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 25,
+      "dew": null,
+      "tw": -9.844223437299345,
+      "dt": 2.3442234372993447,
+      "dtF": 4.21960218713882,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 30,
+      "dew": null,
+      "tw": -9.966379270391144,
+      "dt": 2.466379270391144,
+      "dtF": 4.439482686704059,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 35,
+      "dew": null,
+      "tw": -10.03199241479222,
+      "dt": 2.531992414792221,
+      "dtF": 4.557586346625998,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 40,
+      "dew": null,
+      "tw": -10.047271739034697,
+      "dt": 2.547271739034697,
+      "dtF": 4.585089130262455,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 45,
+      "dew": null,
+      "tw": -10.017734041923319,
+      "dt": 2.517734041923319,
+      "dtF": 4.531921275461974,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 50,
+      "dew": null,
+      "tw": -9.948091509750899,
+      "dt": 2.448091509750899,
+      "dtF": 4.4065647175516185,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 55,
+      "dew": null,
+      "tw": -9.842328228251013,
+      "dt": 2.342328228251013,
+      "dtF": 4.216190810851823,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 60,
+      "dew": null,
+      "tw": -9.703808685223525,
+      "dt": 2.2038086852235246,
+      "dtF": 3.966855633402344,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 65,
+      "dew": null,
+      "tw": -9.535381342346428,
+      "dt": 2.0353813423464278,
+      "dtF": 3.6636864162235696,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 70,
+      "dew": null,
+      "tw": -9.339468418284417,
+      "dt": 1.839468418284417,
+      "dtF": 3.311043152911951,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 75,
+      "dew": null,
+      "tw": -9.118140853759131,
+      "dt": 1.6181408537591313,
+      "dtF": 2.9126535367664363,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 80,
+      "dew": null,
+      "tw": -8.873179815103006,
+      "dt": 1.373179815103006,
+      "dtF": 2.471723667185411,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 85,
+      "dew": null,
+      "tw": -8.606126730475065,
+      "dt": 1.106126730475065,
+      "dtF": 1.991028114855117,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 90,
+      "dew": null,
+      "tw": -8.318323860647252,
+      "dt": 0.8183238606472525,
+      "dtF": 1.4729829491650546,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 95,
+      "dew": null,
+      "tw": -8.010947188081495,
+      "dt": 0.5109471880814951,
+      "dtF": 0.9197049385466911,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -7.5,
+      "rh": 100,
+      "dew": null,
+      "tw": -7.685033127958047,
+      "dt": 0.1850331279580466,
+      "dtF": 0.3330596303244839,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 0,
+      "dew": null,
+      "tw": -7.091507520699695,
+      "dt": 2.091507520699695,
+      "dtF": 3.7647135372594507,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 5,
+      "dew": null,
+      "tw": -8.49111653653281,
+      "dt": 3.491116536532809,
+      "dtF": 6.284009765759056,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 10,
+      "dew": null,
+      "tw": -7.618935650665481,
+      "dt": 2.618935650665481,
+      "dtF": 4.714084171197866,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 15,
+      "dew": null,
+      "tw": -7.8001481867346065,
+      "dt": 2.8001481867346065,
+      "dtF": 5.040266736122292,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 20,
+      "dew": null,
+      "tw": -7.946449321546865,
+      "dt": 2.946449321546865,
+      "dtF": 5.303608778784357,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 25,
+      "dew": null,
+      "tw": -8.03694176173741,
+      "dt": 3.0369417617374097,
+      "dtF": 5.466495171127337,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 30,
+      "dew": null,
+      "tw": -8.074803370594836,
+      "dt": 3.074803370594836,
+      "dtF": 5.534646067070705,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 35,
+      "dew": null,
+      "tw": -8.065210465621314,
+      "dt": 3.0652104656213144,
+      "dtF": 5.517378838118366,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 40,
+      "dew": null,
+      "tw": -8.0130759389782,
+      "dt": 3.0130759389782007,
+      "dtF": 5.423536690160761,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 45,
+      "dew": null,
+      "tw": -7.922719520116312,
+      "dt": 2.9227195201163116,
+      "dtF": 5.260895136209361,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 50,
+      "dew": null,
+      "tw": -7.797858354061381,
+      "dt": 2.797858354061381,
+      "dtF": 5.036145037310486,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 55,
+      "dew": null,
+      "tw": -7.64166679782869,
+      "dt": 2.64166679782869,
+      "dtF": 4.755000236091642,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 60,
+      "dew": null,
+      "tw": -7.456850341950582,
+      "dt": 2.456850341950582,
+      "dtF": 4.422330615511047,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 65,
+      "dew": null,
+      "tw": -7.245717531564923,
+      "dt": 2.2457175315649227,
+      "dtF": 4.042291556816861,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 70,
+      "dew": null,
+      "tw": -7.010244397626215,
+      "dt": 2.0102443976262148,
+      "dtF": 3.618439915727187,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 75,
+      "dew": null,
+      "tw": -6.752129841774607,
+      "dt": 1.7521298417746074,
+      "dtF": 3.1538337151942932,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 80,
+      "dew": null,
+      "tw": -6.472842132525663,
+      "dt": 1.4728421325256633,
+      "dtF": 2.651115838546194,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 85,
+      "dew": null,
+      "tw": -6.1736574044720465,
+      "dt": 1.1736574044720465,
+      "dtF": 2.1125833280496833,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 90,
+      "dew": null,
+      "tw": -5.85569129563609,
+      "dt": 0.85569129563609,
+      "dtF": 1.5402443321449621,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 95,
+      "dew": null,
+      "tw": -5.519924857885702,
+      "dt": 0.5199248578857016,
+      "dtF": 0.9358647441942629,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -5,
+      "rh": 100,
+      "dew": null,
+      "tw": -5.167225765715417,
+      "dt": 0.16722576571541659,
+      "dtF": 0.30100637828774984,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 0,
+      "dew": null,
+      "tw": -5.87589874363857,
+      "dt": 3.3758987436385697,
+      "dtF": 6.076617738549425,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 5,
+      "dew": null,
+      "tw": -6.035036627943411,
+      "dt": 3.535036627943411,
+      "dtF": 6.36306593029814,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 10,
+      "dew": null,
+      "tw": -6.112490449953053,
+      "dt": 3.612490449953053,
+      "dtF": 6.502482809915494,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 15,
+      "dew": null,
+      "tw": -6.19766415935562,
+      "dt": 3.69766415935562,
+      "dtF": 6.655795486840115,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 20,
+      "dew": null,
+      "tw": -6.236936142213953,
+      "dt": 3.7369361422139526,
+      "dtF": 6.726485055985114,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 25,
+      "dew": null,
+      "tw": -6.231239292384764,
+      "dt": 3.731239292384764,
+      "dtF": 6.716230726292575,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 30,
+      "dew": null,
+      "tw": -6.18403293281788,
+      "dt": 3.68403293281788,
+      "dtF": 6.631259279072184,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 35,
+      "dew": null,
+      "tw": -6.098893671783402,
+      "dt": 3.5988936717834017,
+      "dtF": 6.478008609210123,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 40,
+      "dew": null,
+      "tw": -5.979172697689252,
+      "dt": 3.4791726976892523,
+      "dtF": 6.262510855840654,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 45,
+      "dew": null,
+      "tw": -5.827900830431279,
+      "dt": 3.327900830431279,
+      "dtF": 5.990221494776302,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 50,
+      "dew": null,
+      "tw": -5.647762660840688,
+      "dt": 3.147762660840688,
+      "dtF": 5.665972789513239,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 55,
+      "dew": null,
+      "tw": -5.441105537579129,
+      "dt": 2.941105537579129,
+      "dtF": 5.293989967642433,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 60,
+      "dew": null,
+      "tw": -5.20996723580303,
+      "dt": 2.7099672358030302,
+      "dtF": 4.877941024445454,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 65,
+      "dew": null,
+      "tw": -4.956111659521211,
+      "dt": 2.456111659521211,
+      "dtF": 4.42100098713818,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 70,
+      "dew": null,
+      "tw": -4.681065939395067,
+      "dt": 2.181065939395067,
+      "dtF": 3.9259186909111206,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 75,
+      "dew": null,
+      "tw": -4.386155304564024,
+      "dt": 1.8861553045640242,
+      "dtF": 3.395079548215244,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 80,
+      "dew": null,
+      "tw": -4.0725341019749,
+      "dt": 1.5725341019748997,
+      "dtF": 2.8305613835548193,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 85,
+      "dew": null,
+      "tw": -3.7412125087504333,
+      "dt": 1.2412125087504333,
+      "dtF": 2.23418251575078,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 90,
+      "dew": null,
+      "tw": -3.393079096764603,
+      "dt": 0.8930790967646032,
+      "dtF": 1.6075423741762858,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 95,
+      "dew": null,
+      "tw": -3.0289196834659027,
+      "dt": 0.5289196834659027,
+      "dtF": 0.9520554302386248,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": -2.5,
+      "rh": 100,
+      "dew": null,
+      "tw": -2.649432989725108,
+      "dt": 0.1494329897251081,
+      "dtF": 0.26897938150519457,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 0,
+      "dew": null,
+      "tw": -3.6531108341573972,
+      "dt": 3.6531108341573972,
+      "dtF": 6.575599501483315,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 5,
+      "dew": null,
+      "tw": -4.58613585177406,
+      "dt": 4.58613585177406,
+      "dtF": 8.255044533193308,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 10,
+      "dew": null,
+      "tw": -4.6380063969883185,
+      "dt": 4.6380063969883185,
+      "dtF": 8.348411514578974,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 15,
+      "dew": null,
+      "tw": -4.601756976819145,
+      "dt": 4.601756976819145,
+      "dtF": 8.28316255827446,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 20,
+      "dew": null,
+      "tw": -4.5297879575662785,
+      "dt": 4.5297879575662785,
+      "dtF": 8.153618323619302,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 25,
+      "dew": null,
+      "tw": -4.426643475383528,
+      "dt": 4.426643475383528,
+      "dtF": 7.967958255690351,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 30,
+      "dew": null,
+      "tw": -4.29386693600442,
+      "dt": 4.29386693600442,
+      "dtF": 7.728960484807956,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 35,
+      "dew": null,
+      "tw": -4.132942479521558,
+      "dt": 4.132942479521558,
+      "dtF": 7.439296463138805,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 40,
+      "dew": null,
+      "tw": -3.9455072111087874,
+      "dt": 3.9455072111087874,
+      "dtF": 7.101912979995818,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 45,
+      "dew": null,
+      "tw": -3.733245357721452,
+      "dt": 3.733245357721452,
+      "dtF": 6.719841643898614,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 50,
+      "dew": null,
+      "tw": -3.497783822645773,
+      "dt": 3.497783822645773,
+      "dtF": 6.296010880762391,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 55,
+      "dew": null,
+      "tw": -3.240630794411665,
+      "dt": 3.240630794411665,
+      "dtF": 5.833135429940997,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 60,
+      "dew": null,
+      "tw": -2.963149965863736,
+      "dt": 2.963149965863736,
+      "dtF": 5.333669938554725,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 65,
+      "dew": null,
+      "tw": -2.6665570432193464,
+      "dt": 2.6665570432193464,
+      "dtF": 4.7998026777948235,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 70,
+      "dew": null,
+      "tw": -2.3519281633081093,
+      "dt": 2.3519281633081093,
+      "dtF": 4.2334706939545965,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 75,
+      "dew": null,
+      "tw": -2.020213595561318,
+      "dt": 2.020213595561318,
+      "dtF": 3.6363844720103726,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 80,
+      "dew": null,
+      "tw": -1.6722529441815688,
+      "dt": 1.6722529441815688,
+      "dtF": 3.0100552995268237,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 85,
+      "dew": null,
+      "tw": -1.3087898881137607,
+      "dt": 1.3087898881137607,
+      "dtF": 2.3558217986047696,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 90,
+      "dew": null,
+      "tw": -0.9304855671462744,
+      "dt": 0.9304855671462744,
+      "dtF": 1.6748740208632937,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 95,
+      "dew": null,
+      "tw": -0.5379303106272237,
+      "dt": 0.5379303106272237,
+      "dtF": 0.9682745591290027,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": 100,
+      "dew": null,
+      "tw": -0.13165370616985594,
+      "dt": 0.13165370616985594,
+      "dtF": 0.2369766711057407,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 0,
+      "dew": null,
+      "tw": -1.4303229246762248,
+      "dt": 3.930322924676225,
+      "dtF": 7.074581264417205,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 5,
+      "dew": null,
+      "tw": -3.2555018653139864,
+      "dt": 5.755501865313986,
+      "dtF": 10.359903357565177,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 10,
+      "dew": null,
+      "tw": -3.176566557050172,
+      "dt": 5.676566557050172,
+      "dtF": 10.217819802690311,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 15,
+      "dew": null,
+      "tw": -3.0096242348495243,
+      "dt": 5.509624234849524,
+      "dtF": 9.917323622729144,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 20,
+      "dew": null,
+      "tw": -2.8242189791278935,
+      "dt": 5.3242189791278935,
+      "dtF": 9.583594162430208,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 25,
+      "dew": null,
+      "tw": -2.6228531204016448,
+      "dt": 5.122853120401645,
+      "dtF": 9.221135616722961,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 30,
+      "dew": null,
+      "tw": -2.4041660945239554,
+      "dt": 4.904166094523955,
+      "dtF": 8.82749897014312,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 35,
+      "dew": null,
+      "tw": -2.1672838460272623,
+      "dt": 4.667283846027262,
+      "dtF": 8.401110922849071,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 40,
+      "dew": null,
+      "tw": -1.9120375566502972,
+      "dt": 4.412037556650297,
+      "dtF": 7.941667601970535,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 45,
+      "dew": null,
+      "tw": -1.6387273474804496,
+      "dt": 4.138727347480449,
+      "dtF": 7.449709225464808,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 50,
+      "dew": null,
+      "tw": -1.3479051546236187,
+      "dt": 3.8479051546236187,
+      "dtF": 6.926229278322514,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 55,
+      "dew": null,
+      "tw": -1.0402312883695908,
+      "dt": 3.540231288369591,
+      "dtF": 6.372416319065263,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 60,
+      "dew": null,
+      "tw": -0.7163906346622353,
+      "dt": 3.2163906346622353,
+      "dtF": 5.789503142392023,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 65,
+      "dew": null,
+      "tw": -0.3770479893445362,
+      "dt": 2.877047989344536,
+      "dtF": 5.1786863808201655,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 70,
+      "dew": null,
+      "tw": -0.02282686199509243,
+      "dt": 2.5228268619950924,
+      "dtF": 4.541088351591166,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 0.3456984614148091,
+      "dt": 2.154301538585191,
+      "dtF": 3.8777427694533437,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 0.7280037833303581,
+      "dt": 1.771996216669642,
+      "dtF": 3.1895931900053553,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 1.1236123663832345,
+      "dt": 1.3763876336167655,
+      "dtF": 2.477497740510178,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 1.5320908066960577,
+      "dt": 0.9679091933039423,
+      "dtF": 1.7422365479470963,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 1.9530444759591328,
+      "dt": 0.5469555240408672,
+      "dtF": 0.984519943273561,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 2.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 2.386113072071544,
+      "dt": 0.11388692792845578,
+      "dtF": 0.20499647027122042,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 0,
+      "dew": null,
+      "tw": -0.21471414761509955,
+      "dt": 5.2147141476150995,
+      "dtF": 9.386485465707178,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 5,
+      "dew": null,
+      "tw": -1.9568290266016066,
+      "dt": 6.956829026601607,
+      "dtF": 12.522292247882893,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 10,
+      "dew": null,
+      "tw": -1.7217035619545369,
+      "dt": 6.721703561954537,
+      "dtF": 12.099066411518166,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 15,
+      "dew": null,
+      "tw": -1.4198564875651405,
+      "dt": 6.4198564875651405,
+      "dtF": 11.555741677617252,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 20,
+      "dew": null,
+      "tw": -1.1197566530409202,
+      "dt": 6.11975665304092,
+      "dtF": 11.015561975473656,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 25,
+      "dew": null,
+      "tw": -0.819667206383258,
+      "dt": 5.819667206383258,
+      "dtF": 10.475400971489865,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 30,
+      "dew": null,
+      "tw": -0.514830854619559,
+      "dt": 5.514830854619559,
+      "dtF": 9.926695538315206,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 35,
+      "dew": null,
+      "tw": -0.2018629672414498,
+      "dt": 5.20186296724145,
+      "dtF": 9.36335334103461,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 40,
+      "dew": null,
+      "tw": 0.12126888083298759,
+      "dt": 4.878731119167012,
+      "dtF": 8.781716014500622,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 45,
+      "dew": null,
+      "tw": 0.45567380773477595,
+      "dt": 4.544326192265224,
+      "dtF": 8.179787146077404,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 50,
+      "dew": null,
+      "tw": 0.8018869963164388,
+      "dt": 4.198113003683561,
+      "dtF": 7.55660340663041,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 55,
+      "dew": null,
+      "tw": 1.1601023814642257,
+      "dt": 3.8398976185357743,
+      "dtF": 6.911815713364393,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 60,
+      "dew": null,
+      "tw": 1.5303174407974174,
+      "dt": 3.4696825592025826,
+      "dtF": 6.245428606564649,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 65,
+      "dew": null,
+      "tw": 1.9124203823860828,
+      "dt": 3.087579617613917,
+      "dtF": 5.557643311705052,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 70,
+      "dew": null,
+      "tw": 2.3062416111100488,
+      "dt": 2.6937583888899512,
+      "dtF": 4.848765100001912,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 75,
+      "dew": null,
+      "tw": 2.711583645633503,
+      "dt": 2.288416354366497,
+      "dtF": 4.1191494378596945,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 80,
+      "dew": null,
+      "tw": 3.128238235757344,
+      "dt": 1.871761764242656,
+      "dtF": 3.369171175636781,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 85,
+      "dew": null,
+      "tw": 3.5559959516270716,
+      "dt": 1.4440040483729284,
+      "dtF": 2.599207287071271,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 90,
+      "dew": null,
+      "tw": 3.994651378957272,
+      "dt": 1.005348621042728,
+      "dtF": 1.8096275178769106,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 95,
+      "dew": null,
+      "tw": 4.444005770110433,
+      "dt": 0.555994229889567,
+      "dtF": 1.0007896138012207,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 5,
+      "rh": 100,
+      "dew": null,
+      "tw": 4.903868238123696,
+      "dt": 0.09613176187630401,
+      "dtF": 0.17303717137734723,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 0,
+      "dew": null,
+      "tw": 0.882627839736748,
+      "dt": 6.617372160263252,
+      "dtF": 11.911269888473853,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 5,
+      "dew": null,
+      "tw": -0.671200400915815,
+      "dt": 8.171200400915815,
+      "dtF": 14.708160721648465,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 10,
+      "dew": null,
+      "tw": -0.2706150074257545,
+      "dt": 7.7706150074257545,
+      "dtF": 13.987107013366359,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 15,
+      "dew": null,
+      "tw": 0.16833205350995417,
+      "dt": 7.331667946490046,
+      "dtF": 13.197002303682083,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 20,
+      "dew": null,
+      "tw": 0.5839002110267035,
+      "dt": 6.9160997889732965,
+      "dtF": 12.448979620151935,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 25,
+      "dew": null,
+      "tw": 0.9830535523021346,
+      "dt": 6.516946447697865,
+      "dtF": 11.730503605856157,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 30,
+      "dew": null,
+      "tw": 1.3742118265172891,
+      "dt": 6.125788173482711,
+      "dtF": 11.02641871226888,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 35,
+      "dew": null,
+      "tw": 1.7633620794223868,
+      "dt": 5.736637920577613,
+      "dtF": 10.325948257039704,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 40,
+      "dew": null,
+      "tw": 2.1544378558474477,
+      "dt": 5.345562144152552,
+      "dtF": 9.622011859474593,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 45,
+      "dew": null,
+      "tw": 2.549974792777239,
+      "dt": 4.950025207222761,
+      "dtF": 8.910045373000969,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 50,
+      "dew": null,
+      "tw": 2.951603910131107,
+      "dt": 4.548396089868893,
+      "dtF": 8.187112961764008,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 55,
+      "dew": null,
+      "tw": 3.36037811256025,
+      "dt": 4.13962188743975,
+      "dtF": 7.451319397391551,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 60,
+      "dew": null,
+      "tw": 3.776979953830013,
+      "dt": 3.723020046169987,
+      "dtF": 6.7014360831059765,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 65,
+      "dew": null,
+      "tw": 4.201852279342763,
+      "dt": 3.298147720657237,
+      "dtF": 5.936665897183027,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 70,
+      "dew": null,
+      "tw": 4.635280432188612,
+      "dt": 2.864719567811388,
+      "dtF": 5.1564952220604985,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 5.077444399570796,
+      "dt": 2.422555600429204,
+      "dtF": 4.360600080772568,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 5.528452322044652,
+      "dt": 1.971547677955348,
+      "dtF": 3.548785820319627,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 5.988362381094916,
+      "dt": 1.511637618905084,
+      "dtF": 2.720947714029151,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 6.457197364966161,
+      "dt": 1.0428026350338389,
+      "dtF": 1.8770447430609098,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 6.934954558947883,
+      "dt": 0.5650454410521171,
+      "dtF": 1.0170817938938108,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 7.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 7.421612602042423,
+      "dt": 0.07838739795757732,
+      "dtF": 0.14109731632363917,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 0,
+      "dew": null,
+      "tw": 1.9480086793409006,
+      "dt": 8.051991320659099,
+      "dtF": 14.493584377186377,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 5,
+      "dew": null,
+      "tw": 0.6078513799274656,
+      "dt": 9.392148620072534,
+      "dtF": 16.905867516130563,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 10,
+      "dew": null,
+      "tw": 1.1781085524177888,
+      "dt": 8.82189144758221,
+      "dtF": 15.879404605647977,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 15,
+      "dew": null,
+      "tw": 1.7554139422336368,
+      "dt": 8.244586057766362,
+      "dtF": 14.840254903979451,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 20,
+      "dew": null,
+      "tw": 2.286952634130829,
+      "dt": 7.713047365869171,
+      "dtF": 13.883485258564509,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 25,
+      "dew": null,
+      "tw": 2.785408709411458,
+      "dt": 7.214591290588542,
+      "dtF": 12.986264323059377,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 30,
+      "dew": null,
+      "tw": 3.2630167529456546,
+      "dt": 6.736983247054345,
+      "dtF": 12.126569844697823,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 35,
+      "dew": null,
+      "tw": 3.7284239091110187,
+      "dt": 6.271576090888981,
+      "dtF": 11.288836963600167,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 40,
+      "dew": null,
+      "tw": 4.187489975836131,
+      "dt": 5.812510024163869,
+      "dtF": 10.462518043494963,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 45,
+      "dew": null,
+      "tw": 4.6441892607376065,
+      "dt": 5.3558107392623935,
+      "dtF": 9.640459330672309,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 50,
+      "dew": null,
+      "tw": 5.101254987737516,
+      "dt": 4.898745012262484,
+      "dtF": 8.817741022072472,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 55,
+      "dew": null,
+      "tw": 5.560602587914426,
+      "dt": 4.439397412085574,
+      "dtF": 7.990915341754034,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 60,
+      "dew": null,
+      "tw": 6.023601784718423,
+      "dt": 3.976398215281577,
+      "dtF": 7.157516787506839,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 65,
+      "dew": null,
+      "tw": 6.491251348091566,
+      "dt": 3.5087486519084337,
+      "dtF": 6.31574757343518,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 70,
+      "dew": null,
+      "tw": 6.96429238050974,
+      "dt": 3.0357076194902604,
+      "dtF": 5.464273715082468,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 75,
+      "dew": null,
+      "tw": 7.443282878423144,
+      "dt": 2.556717121576856,
+      "dtF": 4.602090818838341,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 80,
+      "dew": null,
+      "tw": 7.928647739078805,
+      "dt": 2.071352260921195,
+      "dtF": 3.728434069658151,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 85,
+      "dew": null,
+      "tw": 8.420713008981636,
+      "dt": 1.579286991018364,
+      "dtF": 2.842716583833055,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 90,
+      "dew": null,
+      "tw": 8.919729858539995,
+      "dt": 1.080270141460005,
+      "dtF": 1.9444862546280093,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 95,
+      "dew": null,
+      "tw": 9.42589173559608,
+      "dt": 0.5741082644039199,
+      "dtF": 1.033394875927056,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 10,
+      "rh": 100,
+      "dew": null,
+      "tw": 9.93934690025275,
+      "dt": 0.06065309974725075,
+      "dtF": 0.10917557954505135,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 0,
+      "dew": null,
+      "tw": 3.000345305918466,
+      "dt": 9.499654694081535,
+      "dtF": 17.099378449346762,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 5,
+      "dew": null,
+      "tw": 1.8831287202038922,
+      "dt": 10.616871279796108,
+      "dtF": 19.110368303632992,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 10,
+      "dew": null,
+      "tw": 2.625252906052043,
+      "dt": 9.874747093947956,
+      "dtF": 17.77454476910632,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 15,
+      "dew": null,
+      "tw": 3.3416903689379662,
+      "dt": 9.158309631062034,
+      "dtF": 16.484957335911663,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 20,
+      "dew": null,
+      "tw": 3.98953990190196,
+      "dt": 8.51046009809804,
+      "dtF": 15.31882817657647,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 25,
+      "dew": null,
+      "tw": 4.587471307753233,
+      "dt": 7.912528692246767,
+      "dtF": 14.24255164604418,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 30,
+      "dew": null,
+      "tw": 5.151625847252044,
+      "dt": 7.348374152747956,
+      "dtF": 13.22707347494632,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 35,
+      "dew": null,
+      "tw": 5.693348276330827,
+      "dt": 6.806651723669173,
+      "dtF": 12.251973102604513,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 40,
+      "dew": null,
+      "tw": 6.220441925652052,
+      "dt": 6.279558074347948,
+      "dtF": 11.303204533826307,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 45,
+      "dew": null,
+      "tw": 6.7383284915725845,
+      "dt": 5.7616715084274155,
+      "dtF": 10.371008715169348,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 50,
+      "dew": null,
+      "tw": 7.250848126606133,
+      "dt": 5.249151873393867,
+      "dtF": 9.44847337210896,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 55,
+      "dew": null,
+      "tw": 7.760781500841546,
+      "dt": 4.739218499158454,
+      "dtF": 8.530593298485218,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 60,
+      "dew": null,
+      "tw": 8.270187140832887,
+      "dt": 4.229812859167113,
+      "dtF": 7.613663146500803,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 65,
+      "dew": null,
+      "tw": 8.78062076481379,
+      "dt": 3.71937923518621,
+      "dtF": 6.694882623335178,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 70,
+      "dew": null,
+      "tw": 9.293279898549464,
+      "dt": 3.2067201014505358,
+      "dtF": 5.772096182610964,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 9.809100991135818,
+      "dt": 2.690899008864182,
+      "dtF": 4.843618215955528,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 10.328826000336958,
+      "dt": 2.1711739996630417,
+      "dtF": 3.908113199393475,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 10.853049050616036,
+      "dt": 1.6469509493839638,
+      "dtF": 2.964511708891135,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 11.382249846799976,
+      "dt": 1.1177501532000242,
+      "dtF": 2.011950275760044,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 11.916818110110857,
+      "dt": 0.5831818898891434,
+      "dtF": 1.049727401800458,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 12.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 12.457071803728724,
+      "dt": 0.04292819627127642,
+      "dtF": 0.07727075328829755,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 0,
+      "dew": null,
+      "tw": 4.046105087653521,
+      "dt": 10.95389491234648,
+      "dtF": 19.717010842223665,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 5,
+      "dew": null,
+      "tw": 3.1560410657950815,
+      "dt": 11.843958934204919,
+      "dtF": 21.319126081568854,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 10,
+      "dew": null,
+      "tw": 4.071290607334886,
+      "dt": 10.928709392665114,
+      "dtF": 19.671676906797206,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 15,
+      "dew": null,
+      "tw": 4.927362354678802,
+      "dt": 10.072637645321198,
+      "dtF": 18.130747761578156,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 20,
+      "dew": null,
+      "tw": 5.691761568097023,
+      "dt": 9.308238431902977,
+      "dtF": 16.754829177425357,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 25,
+      "dew": null,
+      "tw": 6.389296151386526,
+      "dt": 8.610703848613474,
+      "dtF": 15.499266927504252,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 30,
+      "dew": null,
+      "tw": 7.04007172458323,
+      "dt": 7.95992827541677,
+      "dtF": 14.327870895750186,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 35,
+      "dew": null,
+      "tw": 7.658155788524855,
+      "dt": 7.341844211475145,
+      "dtF": 13.215319580655262,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 40,
+      "dew": null,
+      "tw": 8.253307358385877,
+      "dt": 6.746692641614123,
+      "dtF": 12.144046754905421,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 45,
+      "dew": null,
+      "tw": 8.832401886199303,
+      "dt": 6.167598113800697,
+      "dtF": 11.101676604841254,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 50,
+      "dew": null,
+      "tw": 9.400390009732902,
+      "dt": 5.599609990267098,
+      "dtF": 10.079297982480776,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 55,
+      "dew": null,
+      "tw": 9.960919731624479,
+      "dt": 5.039080268375521,
+      "dtF": 9.070344483075939,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 60,
+      "dew": null,
+      "tw": 10.51673966873948,
+      "dt": 4.483260331260521,
+      "dtF": 8.069868596268938,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 65,
+      "dew": null,
+      "tw": 11.069963308778581,
+      "dt": 3.930036691221419,
+      "dtF": 7.074066044198554,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 70,
+      "dew": null,
+      "tw": 11.622245141504251,
+      "dt": 3.3777548584957486,
+      "dtF": 6.079958745292347,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 75,
+      "dew": null,
+      "tw": 12.174900434595337,
+      "dt": 2.8250995654046633,
+      "dtF": 5.085179217728394,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 80,
+      "dew": null,
+      "tw": 12.728988460013998,
+      "dt": 2.2710115399860022,
+      "dtF": 4.087820771974804,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 85,
+      "dew": null,
+      "tw": 13.285371599815381,
+      "dt": 1.714628400184619,
+      "dtF": 3.0863311203323143,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 90,
+      "dew": null,
+      "tw": 13.84475822287071,
+      "dt": 1.1552417771292909,
+      "dtF": 2.0794351988327238,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 95,
+      "dew": null,
+      "tw": 14.407734418917226,
+      "dt": 0.5922655810827742,
+      "dtF": 1.0660780459489936,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 15,
+      "rh": 100,
+      "dew": null,
+      "tw": 14.97478792510653,
+      "dt": 0.02521207489347077,
+      "dtF": 0.045381734808247386,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 0,
+      "dew": null,
+      "tw": 5.088090428821721,
+      "dt": 12.41190957117828,
+      "dtF": 22.341437228120903,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 5,
+      "dew": null,
+      "tw": 4.42737420517698,
+      "dt": 13.07262579482302,
+      "dtF": 23.530726430681437,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 10,
+      "dew": null,
+      "tw": 5.516522846598377,
+      "dt": 11.983477153401623,
+      "dtF": 21.57025887612292,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 15,
+      "dew": null,
+      "tw": 6.512569185086642,
+      "dt": 10.987430814913358,
+      "dtF": 19.777375466844042,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 20,
+      "dew": null,
+      "tw": 7.393690675524537,
+      "dt": 10.106309324475463,
+      "dtF": 18.191356784055834,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 25,
+      "dew": null,
+      "tw": 8.190925162897843,
+      "dt": 9.309074837102157,
+      "dtF": 16.756334706783882,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 30,
+      "dew": null,
+      "tw": 8.928380139445588,
+      "dt": 8.571619860554412,
+      "dtF": 15.428915748997941,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 35,
+      "dew": null,
+      "tw": 9.622863130546126,
+      "dt": 7.877136869453874,
+      "dtF": 14.178846365016975,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 40,
+      "dew": null,
+      "tw": 10.286097553994312,
+      "dt": 7.213902446005688,
+      "dtF": 12.98502440281024,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 45,
+      "dew": null,
+      "tw": 10.926417342088227,
+      "dt": 6.573582657911773,
+      "dtF": 11.83244878424119,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 50,
+      "dew": null,
+      "tw": 11.549886330432614,
+      "dt": 5.950113669567386,
+      "dtF": 10.710204605221296,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 55,
+      "dew": null,
+      "tw": 12.161021487633466,
+      "dt": 5.338978512366534,
+      "dtF": 9.610161322259762,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 60,
+      "dew": null,
+      "tw": 12.763262544619494,
+      "dt": 4.736737455380506,
+      "dtF": 8.526127419684912,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 65,
+      "dew": null,
+      "tw": 13.359281422461969,
+      "dt": 4.140718577538031,
+      "dtF": 7.453293439568457,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 70,
+      "dew": null,
+      "tw": 13.951190018319359,
+      "dt": 3.548809981680641,
+      "dtF": 6.387857967025154,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 14.540682722278856,
+      "dt": 2.9593172777211443,
+      "dtF": 5.3267710998980595,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 15.129136333438712,
+      "dt": 2.370863666561288,
+      "dtF": 4.267554599810318,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 15.717681643700875,
+      "dt": 1.7823183562991254,
+      "dtF": 3.2081730413384255,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 16.307255796808022,
+      "dt": 1.1927442031919782,
+      "dtF": 2.1469395657455608,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 16.898641332989254,
+      "dt": 0.6013586670107465,
+      "dtF": 1.0824456006193437,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 17.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 17.49249582488967,
+      "dt": 0.007504175110330635,
+      "dtF": 0.013507515198595143,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 0,
+      "dew": null,
+      "tw": 6.127710775304683,
+      "dt": 13.872289224695317,
+      "dtF": 24.970120604451573,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 5,
+      "dew": null,
+      "tw": 5.697600692207468,
+      "dt": 14.302399307792532,
+      "dtF": 25.74431875402656,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 10,
+      "dew": null,
+      "tw": 6.961150644898371,
+      "dt": 13.038849355101629,
+      "dtF": 23.469928839182934,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 15,
+      "dew": null,
+      "tw": 8.097410413918412,
+      "dt": 11.902589586081588,
+      "dtF": 21.42466125494686,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 20,
+      "dew": null,
+      "tw": 9.095382028243568,
+      "dt": 10.904617971756432,
+      "dtF": 19.62831234916158,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 25,
+      "dew": null,
+      "tw": 9.992390957433955,
+      "dt": 10.007609042566045,
+      "dtF": 18.01369627661888,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 30,
+      "dew": null,
+      "tw": 10.816571699282173,
+      "dt": 9.183428300717827,
+      "dtF": 16.530170941292088,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 35,
+      "dew": null,
+      "tw": 11.587483955485297,
+      "dt": 8.412516044514703,
+      "dtF": 15.142528880126466,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 40,
+      "dew": null,
+      "tw": 12.31882191339449,
+      "dt": 7.6811780866055095,
+      "dtF": 13.826120555889919,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 45,
+      "dew": null,
+      "tw": 13.020381542235306,
+      "dt": 6.979618457764694,
+      "dtF": 12.563313223976449,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 50,
+      "dew": null,
+      "tw": 13.699341968988136,
+      "dt": 6.300658031011864,
+      "dtF": 11.341184455821354,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 55,
+      "dew": null,
+      "tw": 14.361090415434578,
+      "dt": 5.638909584565422,
+      "dtF": 10.15003725221776,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 60,
+      "dew": null,
+      "tw": 15.009758547742074,
+      "dt": 4.990241452257926,
+      "dtF": 8.982434614064267,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 65,
+      "dew": null,
+      "tw": 15.648577261060417,
+      "dt": 4.351422738939583,
+      "dtF": 7.832560930091249,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 70,
+      "dew": null,
+      "tw": 16.280116225881308,
+      "dt": 3.719883774118692,
+      "dtF": 6.695790793413646,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 75,
+      "dew": null,
+      "tw": 16.906449208381257,
+      "dt": 3.0935507916187426,
+      "dtF": 5.568391424913736,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 80,
+      "dew": null,
+      "tw": 17.529270714428367,
+      "dt": 2.4707292855716325,
+      "dtF": 4.447312714028938,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 85,
+      "dew": null,
+      "tw": 18.149980075397117,
+      "dt": 1.8500199246028828,
+      "dtF": 3.330035864285189,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 90,
+      "dew": null,
+      "tw": 18.769743305036926,
+      "dt": 1.2302566949630744,
+      "dtF": 2.214462050933534,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 95,
+      "dew": null,
+      "tw": 19.389539464963104,
+      "dt": 0.6104605350368963,
+      "dtF": 1.0988289630664134,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 100,
+      "dew": null,
+      "tw": 20.010196016878677,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 0,
+      "dew": null,
+      "tw": 7.1657519155783564,
+      "dt": 15.334248084421644,
+      "dtF": 27.601646551958957,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 5,
+      "dew": null,
+      "tw": 6.967021717218605,
+      "dt": 15.532978282781395,
+      "dtF": 27.959360909006513,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 10,
+      "dew": null,
+      "tw": 8.405313287865372,
+      "dt": 14.094686712134628,
+      "dtF": 25.370436081842332,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 15,
+      "dew": null,
+      "tw": 9.681959083982637,
+      "dt": 12.818040916017363,
+      "dtF": 23.072473648831256,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 20,
+      "dew": null,
+      "tw": 10.796877548840627,
+      "dt": 11.703122451159373,
+      "dtF": 21.065620412086872,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 25,
+      "dew": null,
+      "tw": 11.793719289501247,
+      "dt": 10.706280710498753,
+      "dtF": 19.271305278897756,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 30,
+      "dew": null,
+      "tw": 12.704663088945988,
+      "dt": 9.795336911054012,
+      "dtF": 17.63160643989722,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 35,
+      "dew": null,
+      "tw": 13.552029543299078,
+      "dt": 8.947970456700922,
+      "dtF": 16.10634682206166,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 40,
+      "dew": null,
+      "tw": 14.35148833405687,
+      "dt": 8.14851166594313,
+      "dtF": 14.667320998697633,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 45,
+      "dew": null,
+      "tw": 15.114300179955329,
+      "dt": 7.385699820044671,
+      "dtF": 13.294259676080406,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 50,
+      "dew": null,
+      "tw": 15.848761132769724,
+      "dt": 6.651238867230276,
+      "dtF": 11.972229961014497,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 55,
+      "dew": null,
+      "tw": 16.561129691209114,
+      "dt": 5.938870308790886,
+      "dtF": 10.689966555823593,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 60,
+      "dew": null,
+      "tw": 17.256230120583247,
+      "dt": 5.243769879416753,
+      "dtF": 9.438785782950156,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 65,
+      "dew": null,
+      "tw": 17.937852733519183,
+      "dt": 4.562147266480817,
+      "dtF": 8.211865079665472,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 70,
+      "dew": null,
+      "tw": 18.609025277667264,
+      "dt": 3.890974722332736,
+      "dtF": 7.003754500198925,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 19.272201108231336,
+      "dt": 3.227798891768664,
+      "dtF": 5.810038005183595,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 19.92939259010417,
+      "dt": 2.5706074098958283,
+      "dtF": 4.627093337812491,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 20.582267704959936,
+      "dt": 1.9177322950400644,
+      "dtF": 3.451918131072116,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 21.232221418531488,
+      "dt": 1.2677785814685123,
+      "dtF": 2.282001446643322,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 21.880429375342292,
+      "dt": 0.6195706246577082,
+      "dtF": 1.1152271243838747,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 22.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 22.52788897293603,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 0,
+      "dew": null,
+      "tw": 8.202686403500618,
+      "dt": 16.797313596499382,
+      "dtF": 30.235164473698887,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 5,
+      "dew": null,
+      "tw": 8.235838301266245,
+      "dt": 16.764161698733755,
+      "dtF": 30.175491057720755,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 10,
+      "dew": null,
+      "tw": 9.849110329256304,
+      "dt": 15.150889670743696,
+      "dtF": 27.271601407338654,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 15,
+      "dew": null,
+      "tw": 11.266269999338377,
+      "dt": 13.733730000661623,
+      "dtF": 24.72071400119092,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 20,
+      "dew": null,
+      "tw": 12.498209852462473,
+      "dt": 12.501790147537527,
+      "dtF": 22.503222265567548,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 25,
+      "dew": null,
+      "tw": 13.594930766542756,
+      "dt": 11.405069233457244,
+      "dtF": 20.529124620223037,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 30,
+      "dew": null,
+      "tw": 14.592667961527717,
+      "dt": 10.407332038472283,
+      "dtF": 18.73319766925011,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 35,
+      "dew": null,
+      "tw": 15.516509294904605,
+      "dt": 9.483490705095395,
+      "dtF": 17.07028326917171,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 40,
+      "dew": null,
+      "tw": 16.384103498977407,
+      "dt": 8.615896501022593,
+      "dtF": 15.508613701840668,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 45,
+      "dew": null,
+      "tw": 17.208178135531163,
+      "dt": 7.791821864468837,
+      "dtF": 14.025279356043905,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 50,
+      "dew": null,
+      "tw": 17.99814746834343,
+      "dt": 7.001852531656571,
+      "dtF": 12.603334556981826,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 55,
+      "dew": null,
+      "tw": 18.761142094226216,
+      "dt": 6.238857905773784,
+      "dtF": 11.229944230392812,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 60,
+      "dew": null,
+      "tw": 19.502679418339483,
+      "dt": 5.497320581660517,
+      "dtF": 9.89517704698893,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 65,
+      "dew": null,
+      "tw": 20.227109536724797,
+      "dt": 4.772890463275203,
+      "dtF": 8.591202833895366,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 70,
+      "dew": null,
+      "tw": 20.9379185278721,
+      "dt": 4.0620814721279,
+      "dtF": 7.311746649830221,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 75,
+      "dew": null,
+      "tw": 21.637939515646355,
+      "dt": 3.362060484353645,
+      "dtF": 6.051708871836561,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 80,
+      "dew": null,
+      "tw": 22.32950285359073,
+      "dt": 2.6704971464092715,
+      "dtF": 4.806894863536689,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 85,
+      "dew": null,
+      "tw": 23.014545268814352,
+      "dt": 1.9854547311856479,
+      "dtF": 3.5738185161341662,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 90,
+      "dew": null,
+      "tw": 23.694690749927872,
+      "dt": 1.3053092500721277,
+      "dtF": 2.3495566501298297,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 95,
+      "dew": null,
+      "tw": 24.371311577927347,
+      "dt": 0.6286884220726527,
+      "dtF": 1.131639159730775,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 100,
+      "dew": null,
+      "tw": 25.045575127179422,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 0,
+      "dew": null,
+      "tw": 9.238815429403529,
+      "dt": 18.26118457059647,
+      "dtF": 32.87013222707365,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 5,
+      "dew": null,
+      "tw": 9.50418972998089,
+      "dt": 17.99581027001911,
+      "dtF": 32.3924584860344,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 10,
+      "dew": null,
+      "tw": 11.292614811879687,
+      "dt": 16.207385188120313,
+      "dtF": 29.173293338616567,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 15,
+      "dew": null,
+      "tw": 12.850385082572142,
+      "dt": 14.649614917427858,
+      "dtF": 26.369306851370148,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 20,
+      "dew": null,
+      "tw": 14.199404693615502,
+      "dt": 13.300595306384498,
+      "dtF": 23.941071551492094,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 25,
+      "dew": null,
+      "tw": 15.3960420734115,
+      "dt": 12.1039579265885,
+      "dtF": 21.787124267859298,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 30,
+      "dew": null,
+      "tw": 16.480597596984047,
+      "dt": 11.019402403015953,
+      "dtF": 19.834924325428716,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 35,
+      "dew": null,
+      "tw": 17.48093110777233,
+      "dt": 10.019068892227668,
+      "dtF": 18.034324006009804,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 40,
+      "dew": null,
+      "tw": 18.416673101470888,
+      "dt": 9.083326898529112,
+      "dtF": 16.3499884173524,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 45,
+      "dew": null,
+      "tw": 19.302019616333055,
+      "dt": 8.197980383666945,
+      "dtF": 14.7563646906005,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 50,
+      "dew": null,
+      "tw": 20.147504151890555,
+      "dt": 7.352495848109445,
+      "dtF": 13.234492526597,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 55,
+      "dew": null,
+      "tw": 20.961130066961914,
+      "dt": 6.538869933038086,
+      "dtF": 11.769965879468554,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 60,
+      "dew": null,
+      "tw": 21.74910834995604,
+      "dt": 5.750891650043961,
+      "dtF": 10.35160497007913,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 65,
+      "dew": null,
+      "tw": 22.516349184154414,
+      "dt": 4.983650815845586,
+      "dtF": 8.970571468522055,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 70,
+      "dew": null,
+      "tw": 23.26679719182461,
+      "dt": 4.233202808175388,
+      "dtF": 7.6197650547157,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 24.003665417747523,
+      "dt": 3.4963345822524765,
+      "dtF": 6.293402248054457,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 24.729602314943865,
+      "dt": 2.7703976850561354,
+      "dtF": 4.9867158331010435,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 25.44681343793442,
+      "dt": 2.05318656206558,
+      "dtF": 3.695735811718044,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 26.15715185972959,
+      "dt": 1.3428481402704087,
+      "dtF": 2.4171266524867354,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 26.862186544580748,
+      "dt": 0.637813455419252,
+      "dtF": 1.1480642197546538,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 27.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 27.563254879681732,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 0,
+      "dew": null,
+      "tw": 10.274340014342942,
+      "dt": 19.72565998565706,
+      "dtF": 35.50618797418271,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 5,
+      "dew": null,
+      "tw": 10.772175557119466,
+      "dt": 19.227824442880532,
+      "dtF": 34.61008399718496,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 10,
+      "dew": null,
+      "tw": 12.735881539794587,
+      "dt": 17.264118460205413,
+      "dtF": 31.075413228369747,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 15,
+      "dew": null,
+      "tw": 14.434336948830701,
+      "dt": 15.565663051169299,
+      "dtF": 28.01819349210474,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 20,
+      "dew": null,
+      "tw": 15.900482679742751,
+      "dt": 14.099517320257249,
+      "dtF": 25.379131176463048,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 25,
+      "dew": null,
+      "tw": 17.197066863198156,
+      "dt": 12.802933136801844,
+      "dtF": 23.04527964624332,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 30,
+      "dew": null,
+      "tw": 18.368461396232128,
+      "dt": 11.631538603767872,
+      "dtF": 20.93676948678217,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 35,
+      "dew": null,
+      "tw": 19.445301664898217,
+      "dt": 10.554698335101783,
+      "dtF": 18.998457003183212,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 40,
+      "dew": null,
+      "tw": 20.44920202182018,
+      "dt": 9.55079797817982,
+      "dtF": 17.191436360723674,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 45,
+      "dew": null,
+      "tw": 21.395828268927072,
+      "dt": 8.604171731072928,
+      "dtF": 15.48750911593127,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 50,
+      "dew": null,
+      "tw": 22.296833962680253,
+      "dt": 7.703166037319747,
+      "dtF": 13.865698867175544,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 55,
+      "dew": null,
+      "tw": 23.161095764612675,
+      "dt": 6.838904235387325,
+      "dtF": 12.310027623697184,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 60,
+      "dew": null,
+      "tw": 23.99551861231944,
+      "dt": 6.00448138768056,
+      "dtF": 10.808066497825006,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 65,
+      "dew": null,
+      "tw": 24.80557303000291,
+      "dt": 5.194426969997089,
+      "dtF": 9.34996854599476,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 70,
+      "dew": null,
+      "tw": 25.59566236334207,
+      "dt": 4.404337636657932,
+      "dtF": 7.927807745984277,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 75,
+      "dew": null,
+      "tw": 26.369379707659448,
+      "dt": 3.630620292340552,
+      "dtF": 6.5351165262129935,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 80,
+      "dew": null,
+      "tw": 27.12969171058859,
+      "dt": 2.8703082894114083,
+      "dtF": 5.166554920940535,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 85,
+      "dew": null,
+      "tw": 27.879072824956314,
+      "dt": 2.120927175043686,
+      "dtF": 3.8176689150786354,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 90,
+      "dew": null,
+      "tw": 28.61960526173718,
+      "dt": 1.3803947382628188,
+      "dtF": 2.484710528873074,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 95,
+      "dew": null,
+      "tw": 29.35305470942019,
+      "dt": 0.6469452905798114,
+      "dtF": 1.1645015230436606,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": 100,
+      "dew": null,
+      "tw": 30.08092859974416,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 0,
+      "dew": null,
+      "tw": 11.309399443949362,
+      "dt": 21.19060055605064,
+      "dtF": 38.14308100089115,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 5,
+      "dew": null,
+      "tw": 12.039868825490501,
+      "dt": 20.4601311745095,
+      "dtF": 36.828236114117104,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 10,
+      "dew": null,
+      "tw": 14.178952435587512,
+      "dt": 18.32104756441249,
+      "dtF": 32.977885615942476,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 15,
+      "dew": null,
+      "tw": 16.018151352620436,
+      "dt": 16.481848647379564,
+      "dtF": 29.667327565283216,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 20,
+      "dew": null,
+      "tw": 17.601460495697236,
+      "dt": 14.898539504302764,
+      "dtF": 26.817371107744975,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 25,
+      "dew": null,
+      "tw": 18.998016415859418,
+      "dt": 13.501983584140582,
+      "dtF": 24.303570451453048,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 30,
+      "dew": null,
+      "tw": 20.256267256742408,
+      "dt": 12.243732743257592,
+      "dtF": 22.038718937863667,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 35,
+      "dew": null,
+      "tw": 21.409626659597045,
+      "dt": 11.090373340402955,
+      "dtF": 19.962672012725317,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 40,
+      "dew": null,
+      "tw": 22.48169446739553,
+      "dt": 10.018305532604469,
+      "dtF": 18.032949958688043,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 45,
+      "dew": null,
+      "tw": 23.48960726949451,
+      "dt": 9.01039273050549,
+      "dtF": 16.21870691490988,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 50,
+      "dew": null,
+      "tw": 24.446139343188545,
+      "dt": 8.053860656811455,
+      "dtF": 14.496949182260618,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 55,
+      "dew": null,
+      "tw": 25.361041096123753,
+      "dt": 7.138958903876247,
+      "dtF": 12.850126026977245,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 60,
+      "dew": null,
+      "tw": 26.241911718906845,
+      "dt": 6.258088281093155,
+      "dtF": 11.264558905967679,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 65,
+      "dew": null,
+      "tw": 27.094782289599085,
+      "dt": 5.405217710400915,
+      "dtF": 9.729391878721648,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 70,
+      "dew": null,
+      "tw": 27.92451502954567,
+      "dt": 4.57548497045433,
+      "dtF": 8.235872946817793,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 28.73508319543794,
+      "dt": 3.764916804562059,
+      "dtF": 6.776850248211707,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 29.52977171149897,
+      "dt": 2.97022828850103,
+      "dtF": 5.346410919301854,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 30.311323990383546,
+      "dt": 2.1886760096164544,
+      "dtF": 3.9396168173096178,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 31.082051427813116,
+      "dt": 1.4179485721868836,
+      "dtF": 2.5523074299363904,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 31.843916472518554,
+      "dt": 0.6560835274814458,
+      "dtF": 1.1809503494666025,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 32.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 32.59859662879886,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 0,
+      "dew": null,
+      "tw": 12.344093271979709,
+      "dt": 22.65590672802029,
+      "dtF": 40.78063211043652,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 5,
+      "dew": null,
+      "tw": 13.307324339153041,
+      "dt": 21.69267566084696,
+      "dtF": 39.04681618952453,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 10,
+      "dew": null,
+      "tw": 15.621860114405234,
+      "dt": 19.378139885594766,
+      "dtF": 34.88065179407058,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 15,
+      "dew": null,
+      "tw": 17.601848901384393,
+      "dt": 17.398151098615607,
+      "dtF": 31.316671977508094,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 20,
+      "dew": null,
+      "tw": 19.302351794569628,
+      "dt": 15.697648205430372,
+      "dtF": 28.25576676977467,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 25,
+      "dew": null,
+      "tw": 20.798900132312422,
+      "dt": 14.201099867687578,
+      "dtF": 25.56197976183764,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 30,
+      "dew": null,
+      "tw": 22.144021861510847,
+      "dt": 12.855978138489153,
+      "dtF": 23.140760649280473,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 35,
+      "dew": null,
+      "tw": 23.37391097215168,
+      "dt": 11.62608902784832,
+      "dtF": 20.926960250126974,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 40,
+      "dew": null,
+      "tw": 24.514154084763003,
+      "dt": 10.485845915236997,
+      "dtF": 18.874522647426595,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 45,
+      "dew": null,
+      "tw": 25.583359397304513,
+      "dt": 9.416640602695487,
+      "dtF": 16.949953084851877,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 50,
+      "dew": null,
+      "tw": 26.595422448611895,
+      "dt": 8.404577551388105,
+      "dtF": 15.128239592498588,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 55,
+      "dew": null,
+      "tw": 27.560967758381675,
+      "dt": 7.4390322416183245,
+      "dtF": 13.390258034912984,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 60,
+      "dew": null,
+      "tw": 28.488289023913136,
+      "dt": 6.511710976086864,
+      "dtF": 11.721079756956353,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 65,
+      "dew": null,
+      "tw": 29.383978056760203,
+      "dt": 5.616021943239797,
+      "dtF": 10.108839497831635,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 70,
+      "dew": null,
+      "tw": 30.253356083560025,
+      "dt": 4.746643916439975,
+      "dtF": 8.543959049591956,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 75,
+      "dew": null,
+      "tw": 31.100776617508036,
+      "dt": 3.8992233824919644,
+      "dtF": 7.018602088485537,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 80,
+      "dew": null,
+      "tw": 31.929842930311185,
+      "dt": 3.0701570696888147,
+      "dtF": 5.5262827254398665,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 85,
+      "dew": null,
+      "tw": 32.74356744801665,
+      "dt": 2.2564325519833517,
+      "dtF": 4.061578593570033,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 90,
+      "dew": null,
+      "tw": 33.544490792075095,
+      "dt": 1.455509207924905,
+      "dtF": 2.619916574264829,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 95,
+      "dew": null,
+      "tw": 34.33477220317704,
+      "dt": 0.6652277968229612,
+      "dtF": 1.19741003428133,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 35,
+      "rh": 100,
+      "dew": null,
+      "tw": 35.11625928298915,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 0,
+      "dew": null,
+      "tw": 13.378494541242514,
+      "dt": 24.121505458757486,
+      "dtF": 43.41870982576348,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 5,
+      "dew": null,
+      "tw": 14.574584020693614,
+      "dt": 22.925415979306386,
+      "dtF": 41.2657487627515,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 10,
+      "dew": null,
+      "tw": 17.064630330754127,
+      "dt": 20.435369669245873,
+      "dtF": 36.78366540464257,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 15,
+      "dew": null,
+      "tw": 19.185446279975586,
+      "dt": 18.314553720024414,
+      "dtF": 32.966196696043944,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 20,
+      "dew": null,
+      "tw": 21.003167856316626,
+      "dt": 16.496832143683374,
+      "dtF": 29.694297858630073,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 25,
+      "dew": null,
+      "tw": 22.59972591002763,
+      "dt": 14.90027408997237,
+      "dtF": 26.820493361950263,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 30,
+      "dew": null,
+      "tw": 24.031730903852225,
+      "dt": 13.468269096147775,
+      "dtF": 24.242884373065998,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 35,
+      "dew": null,
+      "tw": 25.33815880993238,
+      "dt": 12.16184119006762,
+      "dtF": 21.891314142121715,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 40,
+      "dew": null,
+      "tw": 26.5465840501039,
+      "dt": 10.953415949896101,
+      "dtF": 19.71614870981298,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 45,
+      "dew": null,
+      "tw": 27.677087094833116,
+      "dt": 9.822912905166884,
+      "dtF": 17.681243229300392,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 50,
+      "dew": null,
+      "tw": 28.744685187895566,
+      "dt": 8.755314812104434,
+      "dtF": 15.75956666178798,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 55,
+      "dew": null,
+      "tw": 29.760877264863606,
+      "dt": 7.7391227351363945,
+      "dtF": 13.93042092324551,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 60,
+      "dew": null,
+      "tw": 30.734651742667094,
+      "dt": 6.7653482573329065,
+      "dtF": 12.177626863199231,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 65,
+      "dew": null,
+      "tw": 31.673161318607466,
+      "dt": 5.826838681392534,
+      "dtF": 10.48830962650656,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 70,
+      "dew": null,
+      "tw": 32.58218633544095,
+      "dt": 4.9178136645590484,
+      "dtF": 8.852064596206286,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 33.46646064484378,
+      "dt": 4.033539355156222,
+      "dtF": 7.260370839281199,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 34.32990592752873,
+      "dt": 3.1700940724712723,
+      "dtF": 5.70616933044829,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 35.17580366971808,
+      "dt": 2.3241963302819215,
+      "dtF": 4.183553394507459,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 36.00692375459599,
+      "dt": 1.493076245404012,
+      "dtF": 2.6875372417272216,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 36.82562224282778,
+      "dt": 0.6743777571722234,
+      "dtF": 1.213879962910002,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 37.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 37.63391685546816,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 0,
+      "dew": null,
+      "tw": 14.412658055796829,
+      "dt": 25.58734194420317,
+      "dtF": 46.05721549956571,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 5,
+      "dew": null,
+      "tw": 15.841680485258976,
+      "dt": 24.158319514741024,
+      "dtF": 43.48497512653385,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 10,
+      "dew": null,
+      "tw": 18.507283692077245,
+      "dt": 21.492716307922755,
+      "dtF": 38.68688935426096,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 15,
+      "dew": null,
+      "tw": 20.768957141484687,
+      "dt": 19.231042858515313,
+      "dtF": 34.61587714532756,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 20,
+      "dew": null,
+      "tw": 22.70391808185537,
+      "dt": 17.29608191814463,
+      "dtF": 31.132947452660336,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 25,
+      "dew": null,
+      "tw": 24.400500432000996,
+      "dt": 15.599499567999004,
+      "dtF": 28.079099222398206,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 30,
+      "dew": null,
+      "tw": 25.919399264049417,
+      "dt": 14.080600735950583,
+      "dtF": 25.34508132471105,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 35,
+      "dew": null,
+      "tw": 27.302373819505203,
+      "dt": 12.697626180494797,
+      "dtF": 22.855727124890635,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 40,
+      "dew": null,
+      "tw": 28.578987142687364,
+      "dt": 11.421012857312636,
+      "dtF": 20.557823143162743,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 45,
+      "dew": null,
+      "tw": 29.770792517276778,
+      "dt": 10.229207482723222,
+      "dtF": 18.4125734689018,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 50,
+      "dew": null,
+      "tw": 30.893929257926086,
+      "dt": 9.106070742073914,
+      "dtF": 16.390927335733046,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 55,
+      "dew": null,
+      "tw": 31.960770969764408,
+      "dt": 8.039229030235592,
+      "dtF": 14.470612254424065,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 60,
+      "dew": null,
+      "tw": 32.981000968985995,
+      "dt": 7.018999031014005,
+      "dtF": 12.634198255825208,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 65,
+      "dew": null,
+      "tw": 33.962332968265486,
+      "dt": 6.0376670317345145,
+      "dtF": 10.867800657122126,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 70,
+      "dew": null,
+      "tw": 34.91100652161349,
+      "dt": 5.088993478386513,
+      "dtF": 9.160188261095723,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 75,
+      "dew": null,
+      "tw": 35.83213589008135,
+      "dt": 4.1678641099186535,
+      "dtF": 7.502155397853576,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 80,
+      "dew": null,
+      "tw": 36.729961216952134,
+      "dt": 3.270038783047866,
+      "dtF": 5.886069809486159,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 85,
+      "dew": null,
+      "tw": 37.60803308960557,
+      "dt": 2.39196691039443,
+      "dtF": 4.305540438709974,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 90,
+      "dew": null,
+      "tw": 38.469350684676996,
+      "dt": 1.5306493153230036,
+      "dtF": 2.7551687675814067,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 95,
+      "dew": null,
+      "tw": 39.316466907614114,
+      "dt": 0.6835330923858862,
+      "dtF": 1.2303595662945952,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 40,
+      "rh": 100,
+      "dew": null,
+      "tw": 40.151569618451404,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 0,
+      "dew": null,
+      "tw": 15.446625738229177,
+      "dt": 27.053374261770823,
+      "dtF": 48.69607367118748,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 5,
+      "dew": null,
+      "tw": 17.108639487355518,
+      "dt": 25.391360512644482,
+      "dtF": 45.70444892276007,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 10,
+      "dew": null,
+      "tw": 19.9498368832276,
+      "dt": 22.5501631167724,
+      "dtF": 40.59029361019032,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 15,
+      "dew": null,
+      "tw": 22.352392765868398,
+      "dt": 20.147607234131602,
+      "dtF": 36.26569302143689,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 20,
+      "dew": null,
+      "tw": 24.404610368656318,
+      "dt": 18.095389631343682,
+      "dtF": 32.57170133641863,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 25,
+      "dew": null,
+      "tw": 26.201229391547308,
+      "dt": 16.298770608452692,
+      "dtF": 29.337787095214843,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 30,
+      "dew": null,
+      "tw": 27.807031149472675,
+      "dt": 14.692968850527325,
+      "dtF": 26.447343930949188,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 35,
+      "dew": null,
+      "tw": 29.266559177051445,
+      "dt": 13.233440822948555,
+      "dtF": 23.8201934813074,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 40,
+      "dew": null,
+      "tw": 30.611365804989422,
+      "dt": 11.888634195010578,
+      "dtF": 21.39954155101904,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 45,
+      "dew": null,
+      "tw": 31.86447757358076,
+      "dt": 10.63552242641924,
+      "dtF": 19.14394036755463,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 50,
+      "dew": null,
+      "tw": 33.043156172180616,
+      "dt": 9.456843827819384,
+      "dtF": 17.022318890074892,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 55,
+      "dew": null,
+      "tw": 34.16065008841291,
+      "dt": 8.339349911587092,
+      "dtF": 15.010829840856767,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 60,
+      "dew": null,
+      "tw": 35.227337689991046,
+      "dt": 7.272662310008954,
+      "dtF": 13.090792158016118,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 65,
+      "dew": null,
+      "tw": 36.251493815790084,
+      "dt": 6.248506184209916,
+      "dtF": 11.247311131577849,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 70,
+      "dew": null,
+      "tw": 37.23981731305166,
+      "dt": 5.26018268694834,
+      "dtF": 9.468328836507013,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 75,
+      "dew": null,
+      "tw": 38.19780291372426,
+      "dt": 4.30219708627574,
+      "dtF": 7.743954755296332,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 80,
+      "dew": null,
+      "tw": 39.13000927044389,
+      "dt": 3.3699907295561076,
+      "dtF": 6.065983313200993,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 85,
+      "dew": null,
+      "tw": 40.04025610775197,
+      "dt": 2.459743892248028,
+      "dtF": 4.42753900604645,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 90,
+      "dew": null,
+      "tw": 40.93177192375029,
+      "dt": 1.56822807624971,
+      "dtF": 2.8228105372494783,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 95,
+      "dew": null,
+      "tw": 41.80730649068917,
+      "dt": 0.6926935093108284,
+      "dtF": 1.246848316759491,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 42.5,
+      "rh": 100,
+      "dew": null,
+      "tw": 42.66921782505314,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 0,
+      "dew": null,
+      "tw": 16.480430203686314,
+      "dt": 28.519569796313686,
+      "dtF": 51.33522563336463,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 5,
+      "dew": null,
+      "tw": 18.375481634426283,
+      "dt": 26.624518365573717,
+      "dtF": 47.924133058032695,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 10,
+      "dew": null,
+      "tw": 21.39230355729586,
+      "dt": 23.60769644270414,
+      "dtF": 42.49385359686745,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 15,
+      "dew": null,
+      "tw": 23.93576255404385,
+      "dt": 21.06423744595615,
+      "dtF": 37.915627402721064,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 20,
+      "dew": null,
+      "tw": 26.10525139971542,
+      "dt": 18.89474860028458,
+      "dtF": 34.010547480512244,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 25,
+      "dew": null,
+      "tw": 28.00191766894942,
+      "dt": 16.99808233105058,
+      "dtF": 30.59654819589104,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 30,
+      "dew": null,
+      "tw": 29.694630206688043,
+      "dt": 15.305369793311957,
+      "dtF": 27.549665627961524,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 35,
+      "dew": null,
+      "tw": 31.230717661840256,
+      "dt": 13.769282338159744,
+      "dtF": 24.78470820868754,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 40,
+      "dew": null,
+      "tw": 32.64372219220654,
+      "dt": 12.356277807793461,
+      "dtF": 22.24130005402823,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 45,
+      "dew": null,
+      "tw": 33.95814396063159,
+      "dt": 11.041856039368412,
+      "dtF": 19.87534087086314,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 50,
+      "dew": null,
+      "tw": 35.192367284854015,
+      "dt": 9.807632715145985,
+      "dtF": 17.653738887262772,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 55,
+      "dew": null,
+      "tw": 36.36051571462633,
+      "dt": 8.639484285373669,
+      "dtF": 15.551071713672604,
+      "rhFromDew": null,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 60,
+      "dew": null,
+      "tw": 37.473662798806856,
+      "dt": 7.526337201193144,
+      "dtF": 13.547406962147658,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 65,
+      "dew": null,
+      "tw": 38.540644597606274,
+      "dt": 6.459355402393726,
+      "dtF": 11.626839724308706,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 70,
+      "dew": null,
+      "tw": 39.56861932239167,
+      "dt": 5.431380677608331,
+      "dtF": 9.776485219694996,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 75,
+      "dew": null,
+      "tw": 40.563462229573034,
+      "dt": 4.436537770426966,
+      "dtF": 7.985767986768539,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 80,
+      "dew": null,
+      "tw": 41.5300505221217,
+      "dt": 3.469949477878302,
+      "dtF": 6.245909060180944,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 85,
+      "dew": null,
+      "tw": 42.472473093458504,
+      "dt": 2.527526906541496,
+      "dtF": 4.549548431774693,
+      "rhFromDew": null,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 90,
+      "dew": null,
+      "tw": 43.394187787959154,
+      "dt": 1.6058122120408456,
+      "dtF": 2.890461981673522,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 95,
+      "dew": null,
+      "tw": 44.298141264268466,
+      "dt": 0.701858735731534,
+      "dtF": 1.2633457243167612,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 45,
+      "rh": 100,
+      "dew": null,
+      "tw": 45.18686171093296,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": null,
+      "dew": -5,
+      "tw": null,
+      "dt": 2.413495920801218,
+      "dtF": 4.3442926574421925,
+      "rhFromDew": 69.04303006919726,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 0,
+      "rh": null,
+      "dew": 0,
+      "tw": null,
+      "dt": 0.13165370616985594,
+      "dtF": 0.2369766711057407,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": null,
+      "dew": 5,
+      "tw": null,
+      "dt": 0.13165370616985594,
+      "dtF": 0.2369766711057407,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": null,
+      "dew": 10,
+      "tw": null,
+      "dt": 0.13165370616985594,
+      "dtF": 0.2369766711057407,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": null,
+      "dew": 15,
+      "tw": null,
+      "dt": 0.13165370616985594,
+      "dtF": 0.2369766711057407,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 0,
+      "rh": null,
+      "dew": 0,
+      "tw": null,
+      "dt": 0.13165370616985594,
+      "dtF": 0.2369766711057407,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 10,
+      "rh": null,
+      "dew": -5,
+      "tw": null,
+      "dt": 6.3281654029593675,
+      "dtF": 11.390697725326863,
+      "rhFromDew": 34.38734140682258,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": null,
+      "dew": 0,
+      "tw": null,
+      "dt": 4.916541874260449,
+      "dtF": 8.849775373668809,
+      "rhFromDew": 49.80566665796449,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": null,
+      "dew": 5,
+      "tw": null,
+      "dt": 2.9337428959827605,
+      "dtF": 5.280737212768969,
+      "rhFromDew": 71.06976250052686,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 10,
+      "rh": null,
+      "dew": 10,
+      "tw": null,
+      "dt": 0.06065309974725075,
+      "dtF": 0.10917557954505135,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 10,
+      "rh": null,
+      "dew": 15,
+      "tw": null,
+      "dt": 0.06065309974725075,
+      "dtF": 0.10917557954505135,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 10,
+      "rh": null,
+      "dew": 10,
+      "tw": null,
+      "dt": 0.06065309974725075,
+      "dtF": 0.10917557954505135,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": null,
+      "dew": -5,
+      "tw": null,
+      "dt": 11.278474601546504,
+      "dtF": 20.30125428278371,
+      "rhFromDew": 18.057361912742806,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": null,
+      "dew": 0,
+      "tw": null,
+      "dt": 9.811789620244474,
+      "dtF": 17.661221316440052,
+      "rhFromDew": 26.153779598961847,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 20,
+      "rh": null,
+      "dew": 5,
+      "tw": null,
+      "dt": 8.06893539163594,
+      "dtF": 14.52408370494469,
+      "rhFromDew": 37.31990814125784,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 20,
+      "rh": null,
+      "dew": 10,
+      "tw": null,
+      "dt": 5.966373085977434,
+      "dtF": 10.739471554759382,
+      "rhFromDew": 52.51165450423614,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": null,
+      "dew": 15,
+      "tw": null,
+      "dt": 3.353869739031996,
+      "dtF": 6.036965530257593,
+      "rhFromDew": 72.91775824653782,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 20,
+      "rh": null,
+      "dew": 20,
+      "tw": null,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": null,
+      "dew": -5,
+      "tw": null,
+      "dt": 17.286367694625667,
+      "dtF": 31.1154618503262,
+      "rhFromDew": 9.939547782441444,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": null,
+      "dew": 0,
+      "tw": null,
+      "dt": 15.757013950836075,
+      "dtF": 28.362625111504933,
+      "rhFromDew": 14.396163917602825,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": null,
+      "dew": 5,
+      "tw": null,
+      "dt": 13.951580125332331,
+      "dtF": 25.112844225598195,
+      "rhFromDew": 20.54248078976525,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": null,
+      "dew": 10,
+      "tw": null,
+      "dt": 11.879164471447403,
+      "dtF": 21.382496048605326,
+      "rhFromDew": 28.904670660202306,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 30,
+      "rh": null,
+      "dew": 15,
+      "tw": null,
+      "dt": 9.524145103327825,
+      "dtF": 17.143461185990084,
+      "rhFromDew": 40.1370668529669,
+      "classify": {
+        "band": "marginal",
+        "label": "Marginal",
+        "className": "dt-caution"
+      }
+    },
+    {
+      "t": 30,
+      "rh": null,
+      "dew": 30,
+      "tw": null,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": 100,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": null,
+      "rh": 50,
+      "dew": null,
+      "tw": null,
+      "dt": null,
+      "dtF": null,
+      "rhFromDew": null,
+      "classify": {
+        "band": "unknown",
+        "label": "—",
+        "className": "dt-unknown"
+      }
+    },
+    {
+      "t": 20,
+      "rh": null,
+      "dew": null,
+      "tw": 6.127710775304683,
+      "dt": null,
+      "dtF": null,
+      "rhFromDew": null,
+      "classify": {
+        "band": "unknown",
+        "label": "—",
+        "className": "dt-unknown"
+      }
+    },
+    {
+      "t": 20,
+      "rh": "nope",
+      "dew": null,
+      "tw": null,
+      "dt": null,
+      "dtF": null,
+      "rhFromDew": null,
+      "classify": {
+        "band": "unknown",
+        "label": "—",
+        "className": "dt-unknown"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 100,
+      "dew": null,
+      "tw": 20.010196016878677,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": -5,
+      "dew": null,
+      "tw": {
+        "$num": "NaN"
+      },
+      "dt": 13.872289224695317,
+      "dtF": 24.970120604451573,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-dry",
+        "label": "Too dry",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 105,
+      "dew": null,
+      "tw": 20.632416195528517,
+      "dt": 0,
+      "dtF": 0,
+      "rhFromDew": null,
+      "classify": {
+        "band": "too-low",
+        "label": "Too low",
+        "className": "dt-bad"
+      }
+    },
+    {
+      "t": 20,
+      "rh": 50,
+      "dew": 0,
+      "tw": 13.699341968988136,
+      "dt": 6.300658031011864,
+      "dtF": 11.341184455821354,
+      "rhFromDew": 26.153779598961847,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": 25,
+      "rh": 50,
+      "dew": 13.9,
+      "tw": 17.99814746834343,
+      "dt": 7.001852531656571,
+      "dtF": 12.603334556981826,
+      "rhFromDew": 50.10527282433236,
+      "classify": {
+        "band": "ideal",
+        "label": "Ideal",
+        "className": "dt-optimal"
+      }
+    },
+    {
+      "t": null,
+      "rh": null,
+      "dew": null,
+      "tw": null,
+      "dt": null,
+      "dtF": null,
+      "rhFromDew": null,
+      "classify": {
+        "band": "unknown",
+        "label": "—",
+        "className": "dt-unknown"
+      }
+    }
+  ]
+}

@@ -3,6 +3,6 @@
   "private": true,
   "description": "Hero spray weather app",
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js test/golden/*.test.js && node test-spray-map.js"
   }
 }

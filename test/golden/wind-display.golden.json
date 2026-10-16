@@ -1,0 +1,2284 @@
+{
+  "generalMaxWindMph": 15,
+  "compass": [
+    {
+      "deg": null,
+      "compass": "N/A",
+      "arrow": null
+    },
+    {
+      "deg": "",
+      "compass": "N/A",
+      "arrow": null
+    },
+    {
+      "deg": 0,
+      "compass": "N",
+      "arrow": 0
+    },
+    {
+      "deg": 11.2,
+      "compass": "N",
+      "arrow": 11.199999999999989
+    },
+    {
+      "deg": 22.5,
+      "compass": "NNE",
+      "arrow": 22.5
+    },
+    {
+      "deg": 45,
+      "compass": "NE",
+      "arrow": 45
+    },
+    {
+      "deg": 90,
+      "compass": "E",
+      "arrow": 90
+    },
+    {
+      "deg": 180,
+      "compass": "S",
+      "arrow": 180
+    },
+    {
+      "deg": 270,
+      "compass": "W",
+      "arrow": 270
+    },
+    {
+      "deg": 315,
+      "compass": "NW",
+      "arrow": 315
+    },
+    {
+      "deg": 337.5,
+      "compass": "NNW",
+      "arrow": 337.5
+    },
+    {
+      "deg": 360,
+      "compass": "N",
+      "arrow": 0
+    },
+    {
+      "deg": -45,
+      "arrow": 315
+    },
+    {
+      "deg": 405,
+      "compass": "NE",
+      "arrow": 45
+    },
+    {
+      "deg": "NW",
+      "compass": "NW",
+      "arrow": null
+    },
+    {
+      "deg": "nw",
+      "compass": "NW",
+      "arrow": null
+    }
+  ],
+  "drift": [
+    {
+      "name": "general",
+      "wind": null,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Wind data unavailable"
+      }
+    },
+    {
+      "name": "general",
+      "wind": null,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": null,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": null,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": null,
+      "gust": 20,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": null,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 0,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 0,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 0,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 0,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 0,
+      "gust": 20,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 0,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 3,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 3,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 3,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 3,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 3,
+      "gust": 20,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 3,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 8,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 8,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 8,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 8,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 8,
+      "gust": 20,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 8,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 12,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 12,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 12,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 12,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 12,
+      "gust": 20,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 12,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 13,
+      "gust": null,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 13,
+      "gust": 0,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 13,
+      "gust": 10,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 13,
+      "gust": 15,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 13,
+      "gust": 20,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 13,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 14,
+      "gust": null,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 14,
+      "gust": 0,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 14,
+      "gust": 10,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 14,
+      "gust": 15,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 14,
+      "gust": 20,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 14,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 15,
+      "gust": null,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 15,
+      "gust": 0,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 15,
+      "gust": 10,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 15,
+      "gust": 15,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 15,
+      "gust": 20,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 15,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 16,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 16,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 16,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 16,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 16,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 16,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 20,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 20,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 20,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 20,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 20,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "general",
+      "wind": 20,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": null,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Wind data unavailable"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": null,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": null,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": null,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": null,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": null,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 0,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 0,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 0,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 0,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 0,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 0,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 3,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 3,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 3,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 3,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 3,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 3,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 8,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 8,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 8,
+      "gust": 10,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 8,
+      "gust": 15,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 8,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 8,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 12,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 12,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 12,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 12,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 12,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 12,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 13,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 13,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 13,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 13,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 13,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 13,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 14,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 14,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 14,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 14,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 14,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 14,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 15,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 15,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 15,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 15,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 15,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 15,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 16,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 16,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 16,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 16,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 16,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 16,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 20,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 20,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 20,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 20,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 20,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "dicamba",
+      "wind": 20,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (10 / 15 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": null,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Wind data unavailable"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": null,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": null,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": null,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": null,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": null,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 0,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 0,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 0,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 0,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 0,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 0,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 3,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 3,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 3,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 3,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 3,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 3,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 8,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 8,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 8,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 8,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 8,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 8,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 12,
+      "gust": null,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 12,
+      "gust": 0,
+      "risk": {
+        "band": "within",
+        "note": "Drift risk within the spray wind limits (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 12,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 12,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 12,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 12,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 13,
+      "gust": null,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 13,
+      "gust": 0,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 13,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 13,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 13,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 13,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 14,
+      "gust": null,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 14,
+      "gust": 0,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 14,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 14,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 14,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 14,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 15,
+      "gust": null,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 15,
+      "gust": 0,
+      "risk": {
+        "band": "approaching",
+        "note": "Watch drift — wind approaching the spray limit (15 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 15,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 15,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 15,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 15,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 16,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 16,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 16,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 16,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 16,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 16,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 20,
+      "gust": null,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 20,
+      "gust": 0,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — wind or gusts over the spray limit (15 / 0 mph)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 20,
+      "gust": 10,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (10 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 20,
+      "gust": 15,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (15 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 20,
+      "gust": 20,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (20 mph gust)"
+      }
+    },
+    {
+      "name": "zero-gust",
+      "wind": 20,
+      "gust": 21,
+      "risk": {
+        "band": "over-limit",
+        "note": "High drift risk — this setting allows no gusts (21 mph gust)"
+      }
+    },
+    {
+      "name": "none",
+      "wind": null,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Wind data unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": null,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": null,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": null,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": null,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": null,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 0,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 0,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 0,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 0,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 0,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 0,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 3,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 3,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 3,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 3,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 3,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 3,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 8,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 8,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 8,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 8,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 8,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 8,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 12,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 12,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 12,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 12,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 12,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 12,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 13,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 13,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 13,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 13,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 13,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 13,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 14,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 14,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 14,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 14,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 14,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 14,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 15,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 15,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 15,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 15,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 15,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 15,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 16,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 16,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 16,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 16,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 16,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 16,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 20,
+      "gust": null,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 20,
+      "gust": 0,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 20,
+      "gust": 10,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 20,
+      "gust": 15,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 20,
+      "gust": 20,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    },
+    {
+      "name": "none",
+      "wind": 20,
+      "gust": 21,
+      "risk": {
+        "band": "unknown",
+        "note": "Spray wind limits unavailable"
+      }
+    }
+  ],
+  "describe": [
+    {
+      "wind": 8,
+      "gust": 12,
+      "windDirDeg": 315,
+      "windDir": "NW",
+      "arrowDeg": 315,
+      "driftBand": "within",
+      "driftNote": "Drift risk within the spray wind limits (15 / 20 mph)"
+    },
+    {
+      "wind": 16,
+      "gust": 10,
+      "windDirDeg": 180,
+      "windDir": "S",
+      "arrowDeg": 180,
+      "driftBand": "over-limit",
+      "driftNote": "High drift risk — wind or gusts over the spray limit (15 / 20 mph)"
+    },
+    {
+      "wind": null,
+      "gust": null,
+      "windDirDeg": null,
+      "windDir": "N/A",
+      "arrowDeg": null,
+      "driftBand": "unknown",
+      "driftNote": "Wind data unavailable"
+    },
+    {
+      "wind": 8,
+      "gust": 10,
+      "windDirDeg": 90,
+      "windDir": "E",
+      "arrowDeg": 90,
+      "driftBand": "unknown",
+      "driftNote": "Spray wind limits unavailable"
+    }
+  ]
+}

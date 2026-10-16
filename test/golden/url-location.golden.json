@@ -1,0 +1,143 @@
+{
+  "fromSearch": [
+    {
+      "search": "?lat=42.38756&lon=-97.77837&name=North%2080",
+      "result": {
+        "lat": 42.38756,
+        "lon": -97.77837,
+        "name": "North 80"
+      }
+    },
+    {
+      "search": "lat=42.38756&lon=-97.77837",
+      "result": {
+        "lat": 42.38756,
+        "lon": -97.77837,
+        "name": null
+      }
+    },
+    {
+      "search": "?lat=91&lon=-97.77837",
+      "result": null
+    },
+    {
+      "search": "?lat=42.38756&lon=-181",
+      "result": null
+    },
+    {
+      "search": "?lat=nope&lon=-97.77837",
+      "result": null
+    },
+    {
+      "search": "?lat=42.38756",
+      "result": null
+    },
+    {
+      "search": "?lon=-97.77837",
+      "result": null
+    },
+    {
+      "search": "?name=North%2080",
+      "result": null
+    },
+    {
+      "search": "",
+      "result": null
+    },
+    {
+      "search": "?lat=40.8136&lon=-96.7026",
+      "result": {
+        "lat": 40.8136,
+        "lon": -96.7026,
+        "name": null
+      }
+    },
+    {
+      "search": "?lat=-90&lon=-180&name=edge",
+      "result": {
+        "lat": -90,
+        "lon": -180,
+        "name": "edge"
+      }
+    },
+    {
+      "search": "?lat=90&lon=180",
+      "result": {
+        "lat": 90,
+        "lon": 180,
+        "name": null
+      }
+    },
+    {
+      "search": "?lat=0&lon=0&name=",
+      "result": {
+        "lat": 0,
+        "lon": 0,
+        "name": null
+      }
+    },
+    {
+      "search": "lat=42.38756&lon=-97.77837&name=North+80",
+      "result": {
+        "lat": 42.38756,
+        "lon": -97.77837,
+        "name": "North 80"
+      }
+    }
+  ],
+  "fromQuery": [
+    {
+      "query": {
+        "lat": 42.38756,
+        "lon": -97.77837,
+        "name": "   "
+      },
+      "result": {
+        "lat": 42.38756,
+        "lon": -97.77837,
+        "name": null
+      }
+    },
+    {
+      "query": {
+        "lat": [
+          "42.38756"
+        ],
+        "lon": [
+          "-97.77837"
+        ],
+        "name": [
+          "North 80"
+        ]
+      },
+      "result": {
+        "lat": 42.38756,
+        "lon": -97.77837,
+        "name": "North 80"
+      }
+    },
+    {
+      "query": {
+        "lat": 42.38756,
+        "lon": -97.77837,
+        "name": "North 80"
+      },
+      "result": {
+        "lat": 42.38756,
+        "lon": -97.77837,
+        "name": "North 80"
+      }
+    },
+    {
+      "query": {
+        "lat": "",
+        "lon": "-97.77837"
+      },
+      "result": null
+    },
+    {
+      "query": null,
+      "result": null
+    }
+  ]
+}
